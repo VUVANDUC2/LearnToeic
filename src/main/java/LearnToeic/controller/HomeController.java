@@ -9,7 +9,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("pageTitle", "Trang chủ • TOEIC Center");
-        return "home";  // templates/home.html
+        return "Home";  // templates/home.html
     }
 }
 
