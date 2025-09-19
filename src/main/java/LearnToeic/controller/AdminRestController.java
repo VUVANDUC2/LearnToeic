@@ -16,7 +16,7 @@ public class AdminRestController {
     @Autowired
     private TestService testService;
 
-    @GetMapping("/admin")
+    @GetMapping("/tests")
     public List<Test> getAllTests() {
         return testService.getAllTests();
     }
