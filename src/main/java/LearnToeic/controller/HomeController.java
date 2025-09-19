@@ -11,6 +11,13 @@ public class HomeController {
         model.addAttribute("pageTitle", "Trang chủ • TOEIC Center");
         return "Home";  // templates/home.html
     }
+
+    @GetMapping("/test_page")
+    public String test(Model model) {
+        model.addAttribute("pageTitle", "Trang chủ • TOEIC Center");
+        return "test_page";
+    }
+
 }
 
 
