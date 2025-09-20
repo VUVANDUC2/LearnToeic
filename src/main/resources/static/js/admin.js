@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <span class="badge text-bg-light">${
                     test.totalQuestions
                   } câu hỏi</span>
-                  <a class="btn btn-sm btn-danger" href="/admin/test/${
+                  <a class="btn btn-sm btn-danger" href="/admin/test_page?testId=${
                     test.testId
                   }">Xem chi tiết</a>
                 </div>

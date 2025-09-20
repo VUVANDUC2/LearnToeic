@@ -36,6 +36,10 @@ public class AdminController {
         model.addAttribute("pageTitle", "Đáp án");
         return "admin/test_transcript"; 
     }
+
+    @GetMapping("/admin/test_page")
+    public String testPage(Model model) {
+        model.addAttribute("pageTitle", "Trang kiểm tra");
+        return "admin/test_page"; 
+    }
 }
-
-

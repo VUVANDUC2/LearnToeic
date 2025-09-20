@@ -2,402 +2,166 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${pageTitle} ?: 'Trang chủ • TOEIC Center'">
-      Trang chủ • TOEIC Center
-    </title>
-
-    <!-- Bootstrap 5 & Icons -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test Information</title>
+    <!-- Bootstrap CSS -->
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-
-    <!-- Swiper (hero & testimonials) -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
-    />
-
-    <link rel="stylesheet" th:href="@{/css/home.css}" />
   </head>
-  <body>
+  <body class="bg-light">
     <div th:replace="fragments/header :: siteHeader"></div>
 
-    <main>
-      <div class="content-wrapper">
-        <div class="container">
-          <div class="row">
-            <div class="col">
-              <div class="practice-test-wrapper contentblock">
-                <div>
-                  <span class="tag gray">TOEIC</span>
-                </div>
-
-                <h1 id="new-economy-toeic-test-1">
-                  New Economy TOEIC Test 1
-                  <span class="mr-1 fas fa-check-circle text-success"></span>
-                </h1>
-
-                <ul class="mt-3 nav nav-horizontal nav-pills">
-                  <li class="nav-item">
-                    <a
-                      class="nav-link active"
-                      data-bs-toggle="tab"
-                      href="#test-info"
-                      role="tab"
-                    >
-                      Thông tin đề thi
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      class="nav-link"
-                      data-bs-toggle="tab"
-                      href="#test-solutions"
-                      role="tab"
-                    >
-                      Đáp án/transcript
-                    </a>
-                  </li>
-                </ul>
-
-                <div class="tab-content" id="nav-tabContent">
-                  <!-- Solutions tab -->
-                  <div
-                    class="tab-pane fade"
-                    id="test-solutions"
-                    role="tabpanel"
-                  >
-                    <br />
-                    <div>
-                      <a href="/tests/224/new-economy-toeic-test-1/solutions/">
-                        Xem đáp án đề thi
-                      </a>
-                    </div>
-
-                    <br />
-                    <div>Các phần thi:</div>
-                    <ul>
-                      <li>
-                        <span class="mr-2">Part 1:</span>
-                        <a
-                          href="/tests/224/new-economy-toeic-test-1/parts/729/solutions/"
-                          >Đáp án</a
-                        >
-                      </li>
-                      <li>
-                        <span class="mr-2">Part 2:</span>
-                        <a
-                          href="/tests/224/new-economy-toeic-test-1/parts/730/solutions/"
-                          >Đáp án</a
-                        >
-                      </li>
-                      <li>
-                        <span class="mr-2">Part 3:</span>
-                        <a
-                          href="/tests/224/new-economy-toeic-test-1/parts/731/solutions/"
-                          >Đáp án</a
-                        >
-                      </li>
-                      <li>
-                        <span class="mr-2">Part 4:</span>
-                        <a
-                          href="/tests/224/new-economy-toeic-test-1/parts/732/solutions/"
-                          >Đáp án</a
-                        >
-                      </li>
-                      <li>
-                        <span class="mr-2">Part 5:</span>
-                        <a
-                          href="/tests/224/new-economy-toeic-test-1/parts/733/solutions/"
-                          >Đáp án</a
-                        >
-                      </li>
-                      <li>
-                        <span class="mr-2">Part 6:</span>
-                        <a
-                          href="/tests/224/new-economy-toeic-test-1/parts/734/solutions/"
-                          >Đáp án</a
-                        >
-                      </li>
-                      <li>
-                        <span class="mr-2">Part 7:</span>
-                        <a
-                          href="/tests/224/new-economy-toeic-test-1/parts/735/solutions/"
-                          >Đáp án</a
-                        >
-                      </li>
-                    </ul>
-
-                    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-                  </div>
-
-                  <!-- Info tab -->
-                  <div
-                    class="tab-pane fade show active"
-                    id="test-info"
-                    role="tabpanel"
-                  >
-                    <br />
-
-                    <div>
-                      <span class="far fa-clock mr-1"></span>
-                      <span>Thời gian làm bài: 120 phút</span> |
-                      <span>7 phần thi</span> |
-                      <span>200 câu hỏi</span>
-                    </div>
-
-                    <div>
-                      <span class="fad fa-user-edit mr-1"></span>
-                      # người đã luyện tập đề thi này
-                    </div>
-
-                    <br /><br />
-
-                    <ul class="nav nav-tabs">
-                      <li class="nav-item">
-                        <a
-                          class="nav-link active"
-                          data-bs-toggle="tab"
-                          href="#nav-practice"
-                          role="tab"
-                          aria-controls="nav-notes"
-                          aria-selected="true"
-                        >
-                          Luyện tập
-                        </a>
-                      </li>
-                    </ul>
-
-                    <br />
-
-                    <div class="tab-content" id="nav-tabContent">
-                      <!-- Practice tab -->
-                      <div
-                        class="tab-pane fade show active"
-                        id="nav-practice"
-                        role="tabpanel"
-                      >
-                        <div class="alert alert-success">
-                          <span class="far fa-lightbulb-on mr-2"></span>
-                          Pro tips: Hình thức luyện tập từng phần và chọn mức
-                          thời gian phù hợp sẽ giúp bạn tập trung vào giải đúng
-                          các câu hỏi thay vì phải chịu áp lực hoàn thành bài
-                          thi.
-                        </div>
-
-                        <br />
-
-                        <form method="GET" action="/tests/224/practice/">
-                          <div class="form-group">
-                            <label class="label" for="part"
-                              >Chọn phần thi bạn muốn làm</label
-                            >
-
-                            <!-- Checkbox list -->
-                            <div class="checkbox-group">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  id="part-729"
-                                  type="checkbox"
-                                  name="part"
-                                  value="729"
-                                />
-                                <div class="checkbox-group-content">
-                                  <label class="form-check-label" for="part-729"
-                                    >Part 1 (6 câu hỏi)</label
-                                  >
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="checkbox-group">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  id="part-730"
-                                  type="checkbox"
-                                  name="part"
-                                  value="730"
-                                />
-                                <div class="checkbox-group-content">
-                                  <label class="form-check-label" for="part-730"
-                                    >Part 2 (25 câu hỏi)</label
-                                  >
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="checkbox-group">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  id="part-731"
-                                  type="checkbox"
-                                  name="part"
-                                  value="731"
-                                />
-                                <div class="checkbox-group-content">
-                                  <label class="form-check-label" for="part-731"
-                                    >Part 3 (39 câu hỏi)</label
-                                  >
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="checkbox-group">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  id="part-732"
-                                  type="checkbox"
-                                  name="part"
-                                  value="732"
-                                />
-                                <div class="checkbox-group-content">
-                                  <label class="form-check-label" for="part-732"
-                                    >Part 4 (30 câu hỏi)</label
-                                  >
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="checkbox-group">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  id="part-733"
-                                  type="checkbox"
-                                  name="part"
-                                  value="733"
-                                />
-                                <div class="checkbox-group-content">
-                                  <label class="form-check-label" for="part-733"
-                                    >Part 5 (30 câu hỏi)</label
-                                  >
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="checkbox-group">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  id="part-734"
-                                  type="checkbox"
-                                  name="part"
-                                  value="734"
-                                />
-                                <div class="checkbox-group-content">
-                                  <label class="form-check-label" for="part-734"
-                                    >Part 6 (16 câu hỏi)</label
-                                  >
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="checkbox-group">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  id="part-735"
-                                  type="checkbox"
-                                  name="part"
-                                  value="735"
-                                />
-                                <div class="checkbox-group-content">
-                                  <label class="form-check-label" for="part-735"
-                                    >Part 7 (54 câu hỏi)</label
-                                  >
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <!-- Time limit -->
-                          <div class="form-group">
-                            <label class="label" for="time_limit"
-                              >Giới hạn thời gian (Để trống để làm bài không
-                              giới hạn)</label
-                            >
-                            <select name="time_limit" class="custom-select">
-                              <option value="" disabled selected>
-                                -- Chọn thời gian --
-                              </option>
-                              <option value="0">0 phút</option>
-                              <option value="5">5 phút</option>
-                              <option value="10">10 phút</option>
-                              <option value="15">15 phút</option>
-                              <option value="20">20 phút</option>
-                              <option value="25">25 phút</option>
-                              <option value="30">30 phút</option>
-                              <option value="35">35 phút</option>
-                              <option value="40">40 phút</option>
-                              <option value="45">45 phút</option>
-                              <option value="50">50 phút</option>
-                              <option value="55">55 phút</option>
-                              <option value="60">60 phút</option>
-                              <option value="65">65 phút</option>
-                              <option value="70">70 phút</option>
-                              <option value="75">75 phút</option>
-                              <option value="80">80 phút</option>
-                              <option value="85">85 phút</option>
-                              <option value="90">90 phút</option>
-                              <option value="95">95 phút</option>
-                              <option value="100">100 phút</option>
-                              <option value="105">105 phút</option>
-                              <option value="110">110 phút</option>
-                              <option value="115">115 phút</option>
-                              <option value="120">120 phút</option>
-                              <option value="125">125 phút</option>
-                              <option value="130">130 phút</option>
-                              <option value="135">135 phút</option>
-                            </select>
-                          </div>
-
-                          <button class="btn btn-primary" type="submit">
-                            LUYỆN TẬP
-                          </button>
-                        </form>
-                      </div>
-
-                      <!-- Take test tab -->
-                      <div
-                        class="tab-pane fade"
-                        id="nav-taketest"
-                        role="tabpanel"
-                      >
-                        <div class="alert alert-warning">
-                          <span class="far fa-exclamation-circle mr-2"></span>
-                          Sẵn sàng để bắt đầu làm full test? Để đạt được kết quả
-                          tốt nhất, bạn cần dành ra 120 phút cho bài test này.
-                        </div>
-
-                        <br />
-
-                        <a class="btn btn-primary" href="/tests/224/start/">
-                          BẮT ĐẦU THI
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <br />
-            </div>
+    <br /><br /><br /><br /><br />
+    <div class="container py-5">
+      <h2 class="text-center mb-4">Test Information</h2>
+      <!-- Test Summary Card -->
+      <div class="card shadow-sm mb-4" id="testSummaryCard">
+        <div class="card-header bg-primary text-white" id="testName">
+          Loading...
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-4"><strong>Test ID:</strong></div>
+            <div class="col-md-8" id="testId">...</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4"><strong>Test Date:</strong></div>
+            <div class="col-md-8" id="testDate">...</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4"><strong>Total Questions:</strong></div>
+            <div class="col-md-8" id="totalQuestions">...</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4"><strong>Max Score:</strong></div>
+            <div class="col-md-8" id="maxScore">...</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4"><strong>Description:</strong></div>
+            <div class="col-md-8" id="description">...</div>
           </div>
         </div>
+        <a id="editTestLink" class="btn btn-outline-primary me-2">Edit Test</a>
       </div>
-    </main>
 
-    <!-- Footer fragment -->
+      <!-- Test Parts -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+          Test Parts Overview
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped mb-0">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Part</th>
+                <th scope="col">Section</th>
+                <th scope="col">Number of Questions</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Part 1</td>
+                <td>Listening – Photographs</td>
+                <td>6</td>
+                <td>
+                  Listen to a short description and choose the best picture.
+                </td>
+              </tr>
+              <tr>
+                <td>Part 2</td>
+                <td>Listening – Question & Response</td>
+                <td>25</td>
+                <td>
+                  Listen to a question and choose the most appropriate response.
+                </td>
+              </tr>
+              <tr>
+                <td>Part 3</td>
+                <td>Listening – Conversations</td>
+                <td>39</td>
+                <td>
+                  Listen to conversations and answer multiple-choice questions.
+                </td>
+              </tr>
+              <tr>
+                <td>Part 4</td>
+                <td>Listening – Talks</td>
+                <td>30</td>
+                <td>Listen to short talks and answer related questions.</td>
+              </tr>
+              <tr>
+                <td>Part 5</td>
+                <td>Reading – Incomplete Sentences</td>
+                <td>30</td>
+                <td>Fill in blanks with correct grammar or vocabulary.</td>
+              </tr>
+              <tr>
+                <td>Part 6</td>
+                <td>Reading – Text Completion</td>
+                <td>16</td>
+                <td>Read short texts with missing sentences/phrases.</td>
+              </tr>
+              <tr>
+                <td>Part 7</td>
+                <td>Reading – Single & Multiple Passages</td>
+                <td>54</td>
+                <td>Read passages and answer comprehension questions.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     <div th:replace="fragments/footer :: siteFooter"></div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Get testId from URL
+      function getTestIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("testId");
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const testId = getTestIdFromUrl();
+        if (!testId) {
+          document.getElementById("testName").textContent = "Test not found";
+          return;
+        }
+        fetch(`/api/admin/tests/${testId}`)
+          .then((response) => response.json())
+          .then((test) => {
+            document.getElementById("testName").textContent =
+              test.testName || "No name";
+            document.getElementById("testId").textContent =
+              test.testId || testId;
+            document.getElementById("testDate").textContent =
+              test.testDate || "N/A";
+            document.getElementById("totalQuestions").textContent =
+              test.totalQuestions || "N/A";
+            document.getElementById("maxScore").textContent =
+              test.maxScore || "N/A";
+            document.getElementById("description").textContent =
+              test.description || "Không có mô tả";
+          })
+          .catch((err) => {
+            document.getElementById("testName").textContent = "Test not found";
+            document.getElementById("description").textContent =
+              "Không thể tải dữ liệu";
+          });
+      });
+    </script>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const testId = params.get("testId");
+      if (testId) {
+        document.getElementById(
+          "editTestLink"
+        ).href = `/admin/test_transcript?testId=${testId}`;
+      }
+    </script>
   </body>
 </html>

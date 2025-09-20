@@ -27,6 +27,12 @@ public class AdminRestController {
         return testService.getAllTests();
     }
 
+    @GetMapping("/tests/{testId}")
+    public ResponseEntity<Test> getTestById(@PathVariable Integer testId) {
+        Optional<Test> test = testService.getTestById(testId);
+        return test.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/questions/test/{testId}")
     public List<Question> getQuestionsByTestId(@PathVariable Integer testId) {
         return questionService.getQuestionsByTestId(testId);
