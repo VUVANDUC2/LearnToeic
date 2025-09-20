@@ -32,7 +32,22 @@ public class AdminRestController {
         return questionService.getQuestionsByTestId(testId);
     }
 
-    
+    @PutMapping("/questions/{testId}/{questionNumber}")
+    public ResponseEntity<?> updateQuestion(
+        @PathVariable Integer testId,
+        @PathVariable Integer questionNumber,
+        @RequestBody Question updatedQuestion
+    ) {
+        Optional<Question> existing = questionService.getQuestionById(testId, questionNumber);
+        if (existing.isPresent()) {
+            updatedQuestion.setTestId(testId);
+            updatedQuestion.setQuestionNumber(questionNumber);
+            questionService.saveQuestion(updatedQuestion);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     
 }
