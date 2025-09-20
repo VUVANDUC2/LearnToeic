@@ -17,9 +17,9 @@
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         background-color: #fff;
-        padding: 30px;
+        padding: 64px 48px;
         margin: auto;
-        max-width: 1000px;
+        max-width: 1800px;
       }
       .correct-answer {
         color: #28a745;
@@ -31,6 +31,21 @@
       }
       .accordion-button {
         font-weight: bold;
+      }
+      /* Fix for long content in all columns except Edit */
+      .table td:not(.edit-cell) {
+        word-break: break-word;
+        max-width: 180px;
+        white-space: pre-line;
+        overflow-wrap: break-word;
+      }
+      .table th {
+        white-space: nowrap;
+      }
+      .edit-cell {
+        width: 1%;
+        white-space: nowrap;
+        text-align: center;
       }
     </style>
   </head>
@@ -76,6 +91,7 @@
                       <th>OptionD</th>
                       <th>Correct Answer</th>
                       <th>Notes</th>
+                      <th class="edit-cell">Edit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -333,6 +349,7 @@
                   <thead class="table-light">
                     <tr>
                       <th>Question Number</th>
+                      zz
                       <th>Question</th>
                       <th>OptionA</th>
                       <th>OptionB</th>
@@ -370,6 +387,7 @@
 
           data.forEach((q) => {
             const tr = document.createElement("tr");
+            tr.setAttribute("data-id", q.id);
             tr.innerHTML = `
               <th>${q.questionNumber}</th>
               <td>${q.questionText}</td>
@@ -379,10 +397,86 @@
               <td>${q.optionD}</td>
               <td class="correct-answer">${q.correctOption}</td>
               <td>${q.note || ""}</td>
+              <td class="edit-cell"><button class="btn btn-sm btn-primary edit-btn">Edit</button></td>
             `;
             if (partTableBodies[q.part]) {
               partTableBodies[q.part].appendChild(tr);
             }
+          });
+
+          function attachEditHandler(btn) {
+            btn.addEventListener("click", function editHandler() {
+              const tr = this.closest("tr");
+              if (!tr) return;
+              if (tr.classList.contains("editing")) return;
+              tr.classList.add("editing");
+              const cells = tr.querySelectorAll("td, th");
+              const values = Array.from(cells).map((cell) => cell.innerText);
+              for (let i = 0; i < cells.length - 1; i++) {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = values[i];
+                input.className = "form-control form-control-sm";
+                cells[i].innerHTML = "";
+                cells[i].appendChild(input);
+              }
+              const editCell = cells[cells.length - 1];
+              editCell.innerHTML = `<button class='btn btn-sm btn-success save-btn'>Save</button> <button class='btn btn-sm btn-secondary cancel-btn'>Cancel</button>`;
+              // Save handler
+              editCell
+                .querySelector(".save-btn")
+                .addEventListener("click", function saveHandler() {
+                  for (let i = 0; i < cells.length - 1; i++) {
+                    values[i] = cells[i].querySelector("input").value;
+                    cells[i].innerText = values[i];
+                  }
+                  tr.classList.remove("editing");
+                  editCell.innerHTML = `<button class='btn btn-sm btn-primary edit-btn'>Edit</button>`;
+                  attachEditHandler(editCell.querySelector(".edit-btn"));
+                  // Send update to backend (PUT)
+                  const testId = 1;
+                  const questionNumber = values[0];
+                  const payload = {
+                    part: null, // You may want to add part if needed
+                    questionText: values[1],
+                    optionA: values[2],
+                    optionB: values[3],
+                    optionC: values[4],
+                    optionD: values[5],
+                    correctOption: values[6],
+                    note: values[7],
+                  };
+                  fetch(`/api/admin/questions/${testId}/${questionNumber}`, {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                  })
+                    .then((res) => (res.ok ? res : Promise.reject(res)))
+                    .then(() => {
+                      // Optionally show success message
+                      // alert("Row updated successfully!");
+                    })
+                    .catch((err) => {
+                      alert("Failed to update row!");
+                    });
+                });
+              // Cancel handler
+              editCell
+                .querySelector(".cancel-btn")
+                .addEventListener("click", function cancelHandler() {
+                  for (let i = 0; i < cells.length - 1; i++) {
+                    cells[i].innerText = values[i];
+                  }
+                  tr.classList.remove("editing");
+                  editCell.innerHTML = `<button class='btn btn-sm btn-primary edit-btn'>Edit</button>`;
+                  attachEditHandler(editCell.querySelector(".edit-btn"));
+                });
+            });
+          }
+          document.querySelectorAll(".edit-btn").forEach((btn) => {
+            attachEditHandler(btn);
           });
         });
     </script>
