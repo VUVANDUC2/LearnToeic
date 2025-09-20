@@ -29,6 +29,13 @@ public class AdminController {
         model.addAttribute("pageTitle", "Quản trị");
         return "admin/document"; 
     }
+
+
+    @GetMapping("/admin/test_transcript")
+    public String testTranscript(Model model) {
+        model.addAttribute("pageTitle", "Đáp án");
+        return "admin/test_transcript"; 
+    }
 }
 
 
