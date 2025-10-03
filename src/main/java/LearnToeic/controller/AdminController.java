@@ -3,6 +3,7 @@ package LearnToeic.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class AdminController {
@@ -37,9 +38,19 @@ public class AdminController {
         return "admin/test_transcript"; 
     }
 
-    @GetMapping("/admin/test_page")
-    public String testPage(Model model) {
-        model.addAttribute("pageTitle", "Trang kiểm tra");
+    @GetMapping("/admin/test_page/{testId}")
+    public String testPage(@PathVariable Integer testId, Model model) {
+        
+        model.addAttribute("testId", testId); 
+
+        model.addAttribute("pageTitle", "Trang kiểm tra: " + testId);
+        
         return "admin/test_page"; 
+    }
+
+    @GetMapping("/admin/test_creation")
+    public String testCreation(Model model) {
+        model.addAttribute("pageTitle", "Trang kiểm tra");
+        return "admin/test_create"; 
     }
 }

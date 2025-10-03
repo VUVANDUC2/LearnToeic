@@ -2,166 +2,469 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Test Information</title>
-    <!-- Bootstrap CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin TOEIC Test Viewer (Single Question View)</title>
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
     />
-  </head>
-  <body class="bg-light">
-    <div th:replace="fragments/header :: siteHeader"></div>
-
-    <br /><br /><br /><br /><br />
-    <div class="container py-5">
-      <h2 class="text-center mb-4">Test Information</h2>
-      <!-- Test Summary Card -->
-      <div class="card shadow-sm mb-4" id="testSummaryCard">
-        <div class="card-header bg-primary text-white" id="testName">
-          Loading...
-        </div>
-        <div class="card-body">
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>Test ID:</strong></div>
-            <div class="col-md-8" id="testId">...</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>Test Date:</strong></div>
-            <div class="col-md-8" id="testDate">...</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>Total Questions:</strong></div>
-            <div class="col-md-8" id="totalQuestions">...</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>Max Score:</strong></div>
-            <div class="col-md-8" id="maxScore">...</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>Description:</strong></div>
-            <div class="col-md-8" id="description">...</div>
-          </div>
-        </div>
-        <a id="editTestLink" class="btn btn-outline-primary me-2">Edit Test</a>
-      </div>
-
-      <!-- Test Parts -->
-      <div class="card shadow-sm">
-        <div class="card-header bg-secondary text-white">
-          Test Parts Overview
-        </div>
-        <div class="card-body p-0">
-          <table class="table table-striped mb-0">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">Part</th>
-                <th scope="col">Section</th>
-                <th scope="col">Number of Questions</th>
-                <th scope="col">Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Part 1</td>
-                <td>Listening – Photographs</td>
-                <td>6</td>
-                <td>
-                  Listen to a short description and choose the best picture.
-                </td>
-              </tr>
-              <tr>
-                <td>Part 2</td>
-                <td>Listening – Question & Response</td>
-                <td>25</td>
-                <td>
-                  Listen to a question and choose the most appropriate response.
-                </td>
-              </tr>
-              <tr>
-                <td>Part 3</td>
-                <td>Listening – Conversations</td>
-                <td>39</td>
-                <td>
-                  Listen to conversations and answer multiple-choice questions.
-                </td>
-              </tr>
-              <tr>
-                <td>Part 4</td>
-                <td>Listening – Talks</td>
-                <td>30</td>
-                <td>Listen to short talks and answer related questions.</td>
-              </tr>
-              <tr>
-                <td>Part 5</td>
-                <td>Reading – Incomplete Sentences</td>
-                <td>30</td>
-                <td>Fill in blanks with correct grammar or vocabulary.</td>
-              </tr>
-              <tr>
-                <td>Part 6</td>
-                <td>Reading – Text Completion</td>
-                <td>16</td>
-                <td>Read short texts with missing sentences/phrases.</td>
-              </tr>
-              <tr>
-                <td>Part 7</td>
-                <td>Reading – Single & Multiple Passages</td>
-                <td>54</td>
-                <td>Read passages and answer comprehension questions.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div th:replace="fragments/footer :: siteFooter"></div>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Get testId from URL
-      function getTestIdFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        return params.get("testId");
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJd47xGgJv3/R5/HhL7u8M8tK+cQ8QyK/m8+3sEw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        min-height: 100vh;
+        background-color: #f8f9fa;
       }
+      .test-wrapper {
+        display: flex;
+        min-height: calc(100vh - 56px);
+      }
+      .sidebar {
+        flex: 0 0 280px;
+        background-color: #ffffff;
+        border-right: 1px solid #dee2e6;
+        padding-top: 1rem;
+        position: sticky;
+        top: 56px;
+        height: calc(100vh - 56px);
+        overflow-y: auto;
+      }
+      .main-content {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+      }
+      .question-number-button {
+        width: 40px;
+        height: 40px;
+        margin: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-align: center;
+        line-height: 25px;
+        cursor: pointer; /* Allow clicking for question jump */
+      }
+      /* Admin-specific styles for correct answer visualization */
+      .list-group-item {
+        background-color: #f0f0f0;
+      }
+      .correct-option {
+        background-color: #d1e7dd !important; /* Light green */
+        border-color: #badbcc !important;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#"
+          ><i class="fas fa-user-shield me-2"></i>ADMIN Test Content Viewer</a
+        >
+        <span class="navbar-text text-light ms-auto"
+          >Master Content: TOEIC Full Practice Test</span
+        >
+      </div>
+    </nav>
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const testId = getTestIdFromUrl();
-        if (!testId) {
-          document.getElementById("testName").textContent = "Test not found";
-          return;
-        }
-        fetch(`/api/admin/tests/${testId}`)
-          .then((response) => response.json())
-          .then((test) => {
-            document.getElementById("testName").textContent =
-              test.testName || "No name";
-            document.getElementById("testId").textContent =
-              test.testId || testId;
-            document.getElementById("testDate").textContent =
-              test.testDate || "N/A";
-            document.getElementById("totalQuestions").textContent =
-              test.totalQuestions || "N/A";
-            document.getElementById("maxScore").textContent =
-              test.maxScore || "N/A";
-            document.getElementById("description").textContent =
-              test.description || "Không có mô tả";
-          })
-          .catch((err) => {
-            document.getElementById("testName").textContent = "Test not found";
-            document.getElementById("description").textContent =
-              "Không thể tải dữ liệu";
+    <div class="test-wrapper">
+      <aside class="sidebar">
+        <h6 class="text-uppercase text-muted px-3 mb-3">
+          <i class="fas fa-sitemap me-1"></i> Navigate Test Sections
+        </h6>
+        <div class="list-group list-group-flush px-2" id="part-navigation">
+          <a
+            href="#"
+            class="list-group-item list-group-item-action active"
+            data-start-q="1"
+            data-end-q="6"
+            data-part="1"
+          >
+            <span class="badge bg-danger me-2">Part 1</span> Photographs (Q1-6)
+          </a>
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            data-start-q="7"
+            data-end-q="31"
+            data-part="2"
+          >
+            <span class="badge bg-danger me-2">Part 2</span> Q-Response (Q7-31)
+          </a>
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            data-start-q="32"
+            data-end-q="70"
+            data-part="3"
+          >
+            <span class="badge bg-danger me-2">Part 3</span> Conversations
+            (Q32-70)
+          </a>
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            data-start-q="71"
+            data-end-q="100"
+            data-part="4"
+          >
+            <span class="badge bg-danger me-2">Part 4</span> Talks (Q71-100)
+          </a>
+
+          <h6 class="text-uppercase text-muted px-3 mt-3 mb-1 small">
+            Reading Section
+          </h6>
+
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            data-start-q="101"
+            data-end-q="130"
+            data-part="5"
+          >
+            <span class="badge bg-primary me-2">Part 5</span> Incomplete
+            Sentences (Q101-130)
+          </a>
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            data-start-q="131"
+            data-end-q="146"
+            data-part="6"
+          >
+            <span class="badge bg-primary me-2">Part 6</span> Text Completion
+            (Q131-146)
+          </a>
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            data-start-q="147"
+            data-end-q="200"
+            data-part="7"
+          >
+            <span class="badge bg-primary me-2">Part 7</span> Reading
+            Comprehension (Q147-200)
+          </a>
+        </div>
+
+        <hr class="mx-3 my-3" />
+
+        <h6 class="text-uppercase text-muted px-3 mb-3">
+          <i class="fas fa-list-ol me-1"></i> Question Jump
+        </h6>
+        <div class="d-flex flex-wrap px-3 pb-3" id="individual-question-nav">
+          <button
+            class="btn btn-primary question-number-button"
+            data-question-id="1"
+          >
+            1
+          </button>
+          <button
+            class="btn btn-outline-secondary question-number-button"
+            data-question-id="2"
+          >
+            2
+          </button>
+          <button
+            class="btn btn-outline-secondary question-number-button"
+            data-question-id="3"
+          >
+            3
+          </button>
+          <button
+            class="btn btn-outline-secondary question-number-button"
+            data-question-id="4"
+          >
+            4
+          </button>
+          <button
+            class="btn btn-outline-secondary question-number-button"
+            data-question-id="5"
+          >
+            5
+          </button>
+          <button
+            class="btn btn-outline-secondary question-number-button"
+            data-question-id="6"
+          >
+            6
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <div id="question-viewer">
+          <div class="question-block" data-question-id="1" data-part="1">
+            <h2 class="mb-4 text-dark pt-3">
+              <span class="badge bg-danger me-2">Part 1</span> Photographs
+            </h2>
+            <h4 class="text-muted mb-4 small">Question 1</h4>
+            <div class="card shadow-lg mb-5 border-0">
+              <div class="card-header bg-white h5 py-3 border-bottom">
+                Choose the best description for the image.
+              </div>
+              <div class="card-body">
+                <div class="mb-3 text-center border p-3 bg-light">
+                  [Placeholder: Image of Photograph 1]
+                </div>
+                <ul class="list-group list-group-flush mb-4">
+                  <li class="list-group-item">
+                    A) The man is walking on the street.
+                  </li>
+                  <li class="list-group-item">B) The car is parked outside.</li>
+                  <li class="list-group-item correct-option">
+                    C) A woman is gesturing toward a monitor.
+                    <i class="fas fa-check-circle text-success ms-2"></i>
+                  </li>
+                  <li class="list-group-item">
+                    D) Boxes have been stacked on the cart.
+                  </li>
+                </ul>
+                <div class="alert alert-success small mt-3" role="alert">
+                  <h6 class="alert-heading small fw-bold text-success">
+                    <i class="fas fa-lightbulb me-1"></i> Correct Answer &
+                    Explanation
+                  </h6>
+                  <p class="mb-0 small">
+                    **Answer:** C.
+                    <br />
+                    **Explanation:** Statement C accurately describes the main
+                    action in the photograph.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="question-block d-none" data-question-id="2" data-part="1">
+            <h2 class="mb-4 text-dark pt-3">
+              <span class="badge bg-danger me-2">Part 1</span> Photographs
+            </h2>
+            <h4 class="text-muted mb-4 small">Question 2</h4>
+            <div class="card shadow-lg mb-5 border-0">
+              <div class="card-header bg-white h5 py-3 border-bottom">
+                Choose the best description for the image.
+              </div>
+              <div class="card-body">
+                <div class="mb-3 text-center border p-3 bg-light">
+                  [Placeholder: Image of Photograph 2]
+                </div>
+                <ul class="list-group list-group-flush mb-4">
+                  <li class="list-group-item correct-option">
+                    A) The ladder is leaning against the wall.
+                    <i class="fas fa-check-circle text-success ms-2"></i>
+                  </li>
+                  <li class="list-group-item">
+                    B) Workers are painting the ceiling.
+                  </li>
+                  <li class="list-group-item">
+                    C) The equipment has been moved.
+                  </li>
+                  <li class="list-group-item">
+                    D) Tools are scattered on the floor.
+                  </li>
+                </ul>
+                <div class="alert alert-success small mt-3" role="alert">
+                  <h6 class="alert-heading small fw-bold text-success">
+                    <i class="fas fa-lightbulb me-1"></i> Correct Answer &
+                    Explanation
+                  </h6>
+                  <p class="mb-0 small">
+                    **Answer:** A.
+                    <br />
+                    **Explanation:** The only visible and accurate statement
+                    about the setup.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="question-block d-none"
+            data-question-id="147"
+            data-part="7"
+          >
+            <h2 class="mb-4 text-primary pt-3">
+              <span class="badge bg-primary me-2">Part 7</span> Reading
+              Comprehension
+            </h2>
+            <h4 class="text-muted mb-4 small">Question 147</h4>
+
+            <div class="card shadow-sm mb-4 bg-light border-0">
+              <div class="card-header bg-secondary text-white fw-bold">
+                Single Passage: Memorandum (Questions 147–148)
+              </div>
+              <div class="card-body">
+                <p class="h6 mb-3 text-secondary">MEMORANDUM</p>
+                <p class="card-text border-start border-3 ps-3 text-dark">
+                  Please note that the annual performance review period will
+                  **commence on November 1st** and conclude on **November
+                  30th**...
+                </p>
+              </div>
+            </div>
+
+            <div class="card shadow-lg mb-5 border-0">
+              <div class="card-header bg-white h5 py-3 border-bottom">
+                When will the performance review period begin?
+              </div>
+              <div class="card-body">
+                <ul class="list-group list-group-flush mb-4">
+                  <li class="list-group-item">A) On November 30th</li>
+                  <li class="list-group-item correct-option">
+                    C) On November 1st
+                    <i class="fas fa-check-circle text-success ms-2"></i>
+                  </li>
+                  <li class="list-group-item">
+                    D) After the self-assessment form is submitted
+                  </li>
+                </ul>
+                <div class="alert alert-success small mt-3" role="alert">
+                  <h6 class="alert-heading small fw-bold text-success">
+                    <i class="fas fa-lightbulb me-1"></i> Correct Answer &
+                    Explanation
+                  </h6>
+                  <p class="mb-0 small">
+                    **Answer:** C.
+                    <br />
+                    **Explanation:** The memo explicitly states, "The annual
+                    performance review period will **commence on November
+                    1st**."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="d-flex justify-content-between pt-3 border-top"
+          id="nav-footer"
+        >
+          <button class="btn btn-outline-secondary" id="prev-q-btn" disabled>
+            <i class="fas fa-chevron-left me-2"></i> Previous Question
+          </button>
+          <button class="btn btn-primary" id="next-q-btn">
+            Next Question <i class="fas fa-chevron-right ms-2"></i>
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const questionBlocks = document.querySelectorAll(".question-block");
+        const partNavLinks = document.querySelectorAll(
+          "#part-navigation .list-group-item"
+        );
+        const qJumpContainer = document.getElementById(
+          "individual-question-nav"
+        );
+        const nextBtn = document.getElementById("next-q-btn");
+        const prevBtn = document.getElementById("prev-q-btn");
+        const totalQuestions = 200; // Assuming a full TOEIC test size
+        let currentQ = 1;
+
+        // --- Core Display Logic ---
+        function showQuestion(qId) {
+          // Ensure qId is within bounds
+          if (qId < 1) qId = 1;
+          if (qId > totalQuestions) qId = totalQuestions;
+          currentQ = qId;
+
+          // Hide all and show the selected one
+          questionBlocks.forEach((block) => {
+            if (parseInt(block.dataset.questionId) === qId) {
+              block.classList.remove("d-none");
+              // Update sidebar part/Q links after showing the question
+              updateNavigation(block.dataset.part, qId);
+            } else {
+              block.classList.add("d-none");
+            }
           });
+
+          // Update next/prev buttons status
+          prevBtn.disabled = qId === 1;
+          nextBtn.disabled = qId === totalQuestions;
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        // --- Navigation Update Logic ---
+        function updateNavigation(partNum, qId) {
+          // 1. Update Part Navigation Links
+          partNavLinks.forEach((link) => {
+            link.classList.remove("active");
+            if (link.dataset.part === partNum) {
+              link.classList.add("active");
+
+              // 2. Generate Question Jump Buttons for the current Part
+              qJumpContainer.innerHTML = "";
+              const start = parseInt(link.dataset.startQ);
+              const end = parseInt(link.dataset.endQ);
+
+              for (let i = start; i <= end; i++) {
+                const btn = document.createElement("button");
+                btn.classList.add("btn", "question-number-button");
+                btn.textContent = i;
+                btn.dataset.questionId = i;
+
+                if (i === qId) {
+                  btn.classList.add("btn-primary");
+                } else {
+                  btn.classList.add("btn-outline-secondary");
+                }
+
+                // Attach click handler for individual question jump
+                btn.addEventListener("click", () => showQuestion(i));
+                qJumpContainer.appendChild(btn);
+              }
+            }
+          });
+        }
+
+        // --- Event Listeners ---
+
+        // 1. Part Navigation Click Handler
+        partNavLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            // Jump to the first question of the clicked part
+            const startQ = parseInt(link.dataset.startQ);
+            showQuestion(startQ);
+          });
+        });
+
+        // 2. Next/Previous Button Handlers
+        nextBtn.addEventListener("click", () => showQuestion(currentQ + 1));
+        prevBtn.addEventListener("click", () => showQuestion(currentQ - 1));
+
+        // --- Initialization ---
+        // If question blocks exist, show the first one and initialize navigation
+        if (questionBlocks.length > 0) {
+          showQuestion(1);
+        }
       });
     </script>
-    <script>
-      const params = new URLSearchParams(window.location.search);
-      const testId = params.get("testId");
-      if (testId) {
-        document.getElementById(
-          "editTestLink"
-        ).href = `/admin/test_transcript?testId=${testId}`;
-      }
+
+    <script th:inline="javascript">
+      // Define a global variable here. Thymeleaf will replace this with the number.
+      // Example: const GLOBAL_TEST_ID = 1;
+      const GLOBAL_TEST_ID = /*[[${testId}]]*/ 0;
     </script>
+
+    <script th:src="@{/js/test_page.js}"></script>
   </body>
 </html>

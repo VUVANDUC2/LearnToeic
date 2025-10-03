@@ -1,35 +1,68 @@
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/api/admin/tests")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("API data:", data);
-      const container = document.getElementById("testsContainer");
+const api_base_url = "http://localhost:8080/api/admin";
+const allTestsENDPOINT = "/tests";
 
-      data.forEach((test) => {
-        const card = `
-          <div class="col-12 col-md-6 col-lg-4">
-            <article class="course-card h-100">
-              <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=1200&auto=format&fit=crop" 
-                   alt="${test.testName}" />
-              <div class="p-3">
-                <h5 class="fw-bold">${test.testName}</h5>
-                <p class="small text-secondary">${
-                  test.description || "Không có mô tả"
-                }</p>
-                <div class="d-flex align-items-center justify-content-between">
-                  <span class="badge text-bg-light">${
-                    test.totalQuestions
-                  } câu hỏi</span>
-                  <a class="btn btn-sm btn-danger" href="/admin/test_page?testId=${
-                    test.testId
-                  }">Xem chi tiết</a>
-                </div>
-              </div>
-            </article>
-          </div>
+tableBody = document.getElementById("test-table-body");
+
+function getActionButtons(testId) {
+  let buttons = `
+        <a href="test_page?id=${testId}" class="btn btn-sm btn-primary" title="Edit Test">
+            <i class="bi bi-pencil"></i>
+        </a>
+    `;
+  if (status === "Live") {
+    buttons += `
+            <a href="results.html?id=${testId}" class="btn btn-sm btn-info" title="View Student Results">
+                <i class="bi bi-bar-chart"></i>
+            </a>
         `;
-        container.innerHTML += card;
-      });
+  }
+  return `<div class="btn-group" role="group">${buttons}</div>`;
+}
+
+function displayTests(tests) {
+  if (!tableBody) return;
+
+  tableBody.innerHTML = "";
+  if (tests.length === 0) {
+    tableBody.innerHTML =
+      '<tr><td colspan="6" class="text-center py-3 text-info">No tests found.</td></tr>';
+    return;
+  }
+  const rowsHTML = tests
+    .map((test) => {
+      const formattedId = `T-${String(test.testId).padStart(5, "0")}`;
+      const actionButtons = getActionButtons(test.testId);
+      return `
+            <tr>
+                <td><strong>${formattedId}</strong></td>
+                <td>${test.testName}</td>
+                <td>'N/A'</td>
+                <td>${test.totalQuestions || "N/A"}</td>
+                <td>${test.testDate || "N/A"}</td>
+                <td>${actionButtons}</td>
+            </tr>
+        `;
     })
-    .catch((err) => console.error("Fetch error:", err));
-});
+    .join("");
+
+  tableBody.innerHTML = rowsHTML;
+}
+
+async function fetchAllTests() {
+  try {
+    const response = await fetch(api_base_url + allTestsENDPOINT);
+
+    if (!response.ok) {
+      throw new Error(
+        "Server returned error code ${response.status}. Check again"
+      );
+    }
+
+    const tests = await response.json();
+    displayTests(tests);
+  } catch (error) {
+    console.error("Fetch failed:", error);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", fetchAllTests);
