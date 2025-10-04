@@ -363,9 +363,16 @@
       crossorigin="anonymous"
     ></script>
 
+    <script th:inline="javascript">
+      // Define a global variable here. Thymeleaf will replace this with the number.
+      // Example: const GLOBAL_TEST_ID = 1;
+      const GLOBAL_TEST_ID = /*[[${testId}]]*/ 0;
+    </script>
+
+    <script th:src="@{/js/test_page.js}"></script>
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const questionBlocks = document.querySelectorAll(".question-block");
         const partNavLinks = document.querySelectorAll(
           "#part-navigation .list-group-item"
         );
@@ -374,97 +381,78 @@
         );
         const nextBtn = document.getElementById("next-q-btn");
         const prevBtn = document.getElementById("prev-q-btn");
-        const totalQuestions = 200; // Assuming a full TOEIC test size
         let currentQ = 1;
 
-        // --- Core Display Logic ---
         function showQuestion(qId) {
-          // Ensure qId is within bounds
-          if (qId < 1) qId = 1;
-          if (qId > totalQuestions) qId = totalQuestions;
+          const questionBlocks = document.querySelectorAll(".question-block"); // live NodeList
           currentQ = qId;
 
           // Hide all and show the selected one
           questionBlocks.forEach((block) => {
             if (parseInt(block.dataset.questionId) === qId) {
               block.classList.remove("d-none");
-              // Update sidebar part/Q links after showing the question
               updateNavigation(block.dataset.part, qId);
             } else {
               block.classList.add("d-none");
             }
           });
 
-          // Update next/prev buttons status
           prevBtn.disabled = qId === 1;
-          nextBtn.disabled = qId === totalQuestions;
+          nextBtn.disabled = qId === questionBlocks.length;
 
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        // --- Navigation Update Logic ---
         function updateNavigation(partNum, qId) {
-          // 1. Update Part Navigation Links
+          const allQuestionBlocks = document.querySelectorAll(
+            `.question-block[data-part="${partNum}"]`
+          );
+          qJumpContainer.innerHTML = "";
+
+          allQuestionBlocks.forEach((block) => {
+            const i = parseInt(block.dataset.questionId);
+            const btn = document.createElement("button");
+            btn.classList.add("btn", "question-number-button");
+            btn.textContent = i;
+            btn.dataset.questionId = i;
+
+            if (i === qId) btn.classList.add("btn-primary");
+            else btn.classList.add("btn-outline-secondary");
+
+            btn.addEventListener("click", () => showQuestion(i));
+            qJumpContainer.appendChild(btn);
+          });
+
+          // Update active part in sidebar
           partNavLinks.forEach((link) => {
             link.classList.remove("active");
-            if (link.dataset.part === partNum) {
-              link.classList.add("active");
-
-              // 2. Generate Question Jump Buttons for the current Part
-              qJumpContainer.innerHTML = "";
-              const start = parseInt(link.dataset.startQ);
-              const end = parseInt(link.dataset.endQ);
-
-              for (let i = start; i <= end; i++) {
-                const btn = document.createElement("button");
-                btn.classList.add("btn", "question-number-button");
-                btn.textContent = i;
-                btn.dataset.questionId = i;
-
-                if (i === qId) {
-                  btn.classList.add("btn-primary");
-                } else {
-                  btn.classList.add("btn-outline-secondary");
-                }
-
-                // Attach click handler for individual question jump
-                btn.addEventListener("click", () => showQuestion(i));
-                qJumpContainer.appendChild(btn);
-              }
-            }
+            if (link.dataset.part === partNum) link.classList.add("active");
           });
         }
 
-        // --- Event Listeners ---
-
-        // 1. Part Navigation Click Handler
+        // Part navigation
         partNavLinks.forEach((link) => {
           link.addEventListener("click", (e) => {
             e.preventDefault();
-            // Jump to the first question of the clicked part
-            const startQ = parseInt(link.dataset.startQ);
-            showQuestion(startQ);
+            const firstQ = document.querySelector(
+              `.question-block[data-part="${link.dataset.part}"]`
+            );
+            if (firstQ) showQuestion(parseInt(firstQ.dataset.questionId));
           });
         });
 
-        // 2. Next/Previous Button Handlers
+        // Next / Prev
         nextBtn.addEventListener("click", () => showQuestion(currentQ + 1));
         prevBtn.addEventListener("click", () => showQuestion(currentQ - 1));
 
-        // --- Initialization ---
-        // If question blocks exist, show the first one and initialize navigation
-        if (questionBlocks.length > 0) {
-          showQuestion(1);
-        }
+        // Initialize after questions are dynamically rendered
+        const checkQuestionsExist = setInterval(() => {
+          if (document.querySelectorAll(".question-block").length > 0) {
+            clearInterval(checkQuestionsExist);
+            showQuestion(1); // show first question
+          }
+        }, 100);
       });
     </script>
-
-    <script th:inline="javascript">
-      // Define a global variable here. Thymeleaf will replace this with the number.
-      // Example: const GLOBAL_TEST_ID = 1;
-      const GLOBAL_TEST_ID = /*[[${testId}]]*/ 0;
-    </script>
-
-    <script th:src="@{/js/test_page.js}"></script>
   </body>
 </html>
