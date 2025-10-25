@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Đăng ký • LearnToeic</title>
+
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/bootstrap-icons.css}" />
+
+  <style>
+    /* ===== Nền tổng thể ===== */
+    body {
+      background: linear-gradient(135deg, #2463eb 0%, #6610f2 100%);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    /* ===== Form card ===== */
+    .signup-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 500px;
+      padding: 60px 50px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .signup-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ===== Tiêu đề ===== */
+    .signup-title {
+      text-align: center;
+      color: #0d6efd;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    /* ===== Label & Input ===== */
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      padding: 12px 15px;
+      font-size: 1rem;
+      border: 1.5px solid #ccc;
+      transition: all 0.25s ease;
+    }
+
+    .form-control:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 6px rgba(13, 110, 253, 0.3);
+    }
+
+    /* ===== Input group (mật khẩu + icon mắt) ===== */
+    .input-group {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .btn-eye {
+      border: 1px solid #ced4da;
+      border-left: none;
+      background: #f8f9fa;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-eye:hover {
+      background-color: #e9ecef;
+    }
+
+    /* ===== Nút đăng ký ===== */
+    .btn-signup {
+      display: block;
+      width: 100%;
+      background: linear-gradient(90deg, #198754, #20c997);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      padding: 12px;
+      font-size: 1.1rem;
+      margin-top: 1.2rem;
+      transition: all 0.25s ease;
+    }
+
+    .btn-signup:hover {
+      background: linear-gradient(90deg, #20c997, #198754);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(25, 135, 84, 0.4);
+    }
+
+    /* ===== Link đăng nhập ===== */
+    .login-text {
+      text-align: center;
+      margin-top: 1.8rem;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    a.text-link {
+      color: #6610f2;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    a.text-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .signup-card {
+        padding: 40px 30px;
+      }
+      .signup-title {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="signup-card">
+      <h2 class="signup-title">Đăng ký tài khoản</h2>
+
+      <form th:action="@{/auth/signup}" th:object="${form}" method="post" novalidate>
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <!-- Thông báo -->
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${msg}" class="alert alert-success" th:text="${msg}"></div>
+        <div th:if="${#fields.hasGlobalErrors()}"
+     class="alert alert-danger"
+     th:each="e : ${#fields.globalErrors()}"
+     th:text="${e}">Lỗi chung</div>
+
+
+        <!-- Họ tên (tuỳ chọn) -->
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Họ tên</label>
+          <input id="fullName" type="text" th:field="*{fullName}" class="form-control" placeholder="Nhập họ tên" />
+          <div th:if="${#fields.hasErrors('fullName')}" class="text-danger small" th:errors="*{fullName}"></div>
+        </div>
+
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input id="email" type="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required />
+          <div th:if="${#fields.hasErrors('email')}" class="text-danger small" th:errors="*{email}"></div>
+        </div>
+
+        <!-- Mật khẩu -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Mật khẩu</label>
+          <div class="input-group">
+            <input id="password" type="password" th:field="*{password}" class="form-control" placeholder="Nhập mật khẩu" required />
+            <button class="btn-eye" type="button" onclick="togglePassword('password', this)" aria-label="Hiện/ẩn mật khẩu">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+          <div th:if="${#fields.hasErrors('password')}" class="text-danger small" th:errors="*{password}"></div>
+        </div>
+
+        <!-- Xác nhận mật khẩu -->
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+          <div class="input-group">
+            <input id="confirmPassword" type="password" th:field="*{confirmPassword}" class="form-control" placeholder="Nhập lại mật khẩu" required />
+            <button class="btn-eye" type="button" onclick="togglePassword('confirmPassword', this)" aria-label="Hiện/ẩn mật khẩu">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+          <div th:if="${#fields.hasErrors('confirmPassword')}" class="text-danger small" th:errors="*{confirmPassword}"></div>
+        </div>
+
+        <button type="submit" class="btn-signup">Đăng ký</button>
+      </form>
+
+      <div class="login-text">
+        Đã có tài khoản?
+        <a th:href="@{/auth/login}" class="text-link">Đăng nhập ngay</a>
+      </div>
+    </div>
+  </main>
+
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+  <script>
+    function togglePassword(id, btn) {
+      const input = document.getElementById(id);
+      const icon = btn.querySelector('i');
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      icon.classList.toggle('bi-eye', !isHidden);
+      icon.classList.toggle('bi-eye-slash', isHidden);
+    }
+  </script>
+</body>
+</html>

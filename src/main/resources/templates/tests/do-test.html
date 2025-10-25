@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${view != null ? view.testName : 'Bài thi'}">Bài thi</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    :root{ --sidebar-w: 320px; --header-h: 72px; }
+    body{ background:#f7f8fb; }
+    .exam-header{position:sticky;top:0;z-index:1030;background:#fff;border-bottom:1px solid #eee;height:var(--header-h)}
+    .exam-wrapper{display:grid;grid-template-columns:1fr var(--sidebar-w);gap:1.25rem}
+    @media (max-width: 992px){.exam-wrapper{grid-template-columns:1fr}}
+    /* chỉ khối câu hỏi cuộn */
+    .questions-scroll{
+      max-height: calc(100vh - 160px);
+      overflow: auto;
+      padding-right: 6px;
+    }
+    /* sidebar dán cố định */
+    aside .sticky{ position: sticky; top: 88px; }
+    .question-card{border:none;box-shadow:0 6px 20px rgba(0,0,0,.06);border-radius:1rem}
+    .option{border:1px solid #e9ecef;border-radius:.75rem;padding:.75rem 1rem;cursor:pointer;transition:background .2s,border-color .2s}
+    .option:hover{background:#f5f9ff;border-color:#bcd2ff}
+    .option input{display:none}
+    .option.active{background:#e8f0ff;border-color:#93b4ff}
+    .nav-pills .nav-link{border-radius:.75rem}
+    .nav-link.answered{background:#d1e7dd !important;color:#0f5132 !important}
+    .q-anchor{scroll-margin-top:90px}
+  </style>
+</head>
+<body>
+
+<header class="exam-header d-flex align-items-center">
+  <div class="container d-flex align-items-center justify-content-between gap-3">
+    <div class="d-flex align-items-center gap-3">
+      <a th:href="@{/tests}" class="btn btn-outline-secondary btn-sm">Danh sách đề</a>
+      <div>
+        <h6 class="mb-0" th:text="${view.testName}">TOEIC Practice Test</h6>
+        <small class="text-muted">
+          Mã đề: <span th:text="${view.testId}">0</span> • Tổng câu: <span th:text="${view.totalQuestions}">0</span>
+        </small>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <div class="text-center">
+        <div class="small text-muted">Thời gian còn lại</div>
+        <div id="countdown" class="fs-5 fw-bold" th:text="${timeRemaining != null ? timeRemaining : '--:--:--'}">--:--:--</div>
+      </div>
+      <form th:action="@{|/tests/${view.takeId}/submit|}" method="post">
+        <button type="submit" class="btn btn-primary">Nộp bài</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<!-- Tabs Part 1..7 -->
+<div class="bg-white border-bottom">
+  <div class="container py-2">
+    <ul class="nav nav-pills gap-2">
+      <li class="nav-item" th:each="p : ${#numbers.sequence(1,7)}">
+        <a class="nav-link"
+           th:classappend="${p} == ${currentPart} ? 'active'"
+           th:href="@{|/tests/${view.takeId}?part=${p}|}">Part [[${p}]]</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<main class="container my-3">
+  <div class="exam-wrapper">
+
+    <!-- LEFT: chỉ phần câu hỏi cuộn -->
+    <section class="vstack gap-3 questions-scroll">
+
+      <!-- AUDIO BAR (nếu có) -->
+      <!-- <div class="card question-card p-3" th:if="${view.audioUrl}">
+        <div class="d-flex align-items-center gap-3">
+          <audio id="player" th:src="${view.audioUrl}" preload="auto"></audio>
+          <button id="btnPlay" class="btn btn-outline-secondary btn-sm" type="button"><span id="icoPlay">▶</span></button>
+          <input id="seek" type="range" min="0" value="0" step="1" style="width:55%">
+          <span id="clock" class="small text-muted">00:00</span>
+          <input id="vol" type="range" min="0" max="1" step="0.02" value="1" style="width:120px">
+        </div>
+      </div> -->
+
+      <!-- CÂU HỎI: lọc theo currentPart -->
+      <div th:each="q, iterStat : ${partQuestions}"
+        class="card question-card p-3 p-lg-4"
+        th:id="${'q' + (iterStat.index + 1)}">
+      <div class="q-anchor"></div>
+
+
+        <!-- Header câu -->
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="badge text-bg-secondary">
+            Câu <span th:text="${iterStat.index + 1}">1</span> /
+            <span th:text="${partTotal}">0</span>
+          </span>
+          <button class="btn btn-outline-secondary btn-sm btn-clear" type="button"
+                  th:data-qn="${q.questionNumber}">Xoá đáp án</button>
+        </div>
+
+        <!-- Nội dung -->
+        <div class="mb-3">
+          <p class="lead mb-2" th:utext="${q.questionText}">Question text ...</p>
+          <!-- <img th:if="${q.imageUrl != null}" th:src="${q.imageUrl}" alt=""
+               style="width:100%;max-width:860px;border-radius:.75rem;display:block"> -->
+        </div>
+
+        <!-- Lựa chọn -->
+        <form class="vstack gap-2 answer-form"
+              th:action="@{|/tests/${view.takeId}/answer|}"
+              method="post"
+              th:data-qn="${q.questionNumber}">
+          <input type="hidden" name="qn" th:value="${q.questionNumber}"/>
+
+          <label class="option" th:classappend="${q.selectedOption}=='A' ? ' active'">
+            <input type="radio" name="opt" value="A" th:checked="${q.selectedOption}=='A'"/>
+            <div class="d-flex gap-2"><div class="fw-bold">A.</div><div th:utext="${q.optionA}">Option A</div></div>
+          </label>
+          <label class="option" th:classappend="${q.selectedOption}=='B' ? ' active'">
+            <input type="radio" name="opt" value="B" th:checked="${q.selectedOption}=='B'"/>
+            <div class="d-flex gap-2"><div class="fw-bold">B.</div><div th:utext="${q.optionB}">Option B</div></div>
+          </label>
+          <label class="option" th:classappend="${q.selectedOption}=='C' ? ' active'">
+            <input type="radio" name="opt" value="C" th:checked="${q.selectedOption}=='C'"/>
+            <div class="d-flex gap-2"><div class="fw-bold">C.</div><div th:utext="${q.optionC}">Option C</div></div>
+          </label>
+          <label class="option" th:classappend="${q.selectedOption}=='D' ? ' active'">
+            <input type="radio" name="opt" value="D" th:checked="${q.selectedOption}=='D'"/>
+            <div class="d-flex gap-2"><div class="fw-bold">D.</div><div th:utext="${q.optionD}">Option D</div></div>
+          </label>
+        </form>
+      </div>
+    </section>
+
+    <!-- RIGHT: Sidebar sticky (không cuộn) -->
+    <aside>
+      <div class="card p-3 mb-3 sticky" style="border:none; box-shadow:0 6px 20px rgba(0,0,0,.06); border-radius:1rem;">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h6 class="mb-0">Bảng câu hỏi</h6>
+          <a class="btn btn-sm btn-outline-primary" href="#top"
+             onclick="document.querySelector('.questions-scroll').scrollTo({top:0,behavior:'smooth'})">Lên đầu</a>
+        </div>
+
+        <!-- Palette theo part -->
+        <div th:each="p : ${#numbers.sequence(1,7)}" class="mb-2">
+        <div class="fw-semibold mb-1">Part [[${p}]]</div>
+        <ul class="nav nav-pills flex-wrap gap-2" style="--bs-nav-link-padding-x:.5rem; --bs-nav-link-padding-y:.35rem;">
+          <li class="nav-item" th:each="q, iter : ${partMap[p] != null ? partMap[p] : {}}">
+            <a class="nav-link"
+              th:href="${p == currentPart} ? ${'#q' + (iter.index + 1)} : @{|/tests/${view.takeId}?part=${p}|}"
+              th:text="${iter.index + 1}"
+              th:classappend="${q.selectedOption} != null ? ' answered' : ''"></a>
+          </li>
+        </ul>
+      </div>
+
+
+
+        <div class="mt-2 small text-danger">Khôi phục/lưu bài làm →</div>
+        <div class="small text-warning-emphasis">Chú ý: click số thứ tự để đánh dấu/nhảy nhanh</div>
+      </div>
+
+      <div class="card p-3 sticky" style="border:none; box-shadow:0 6px 20px rgba(0,0,0,.06); border-radius:1rem; margin-top:12px;">
+        <div class="text-center mb-3">
+          <div class="small text-muted">Thời gian còn lại</div>
+          <div id="countdown2" class="fs-4 fw-bold" th:text="${timeRemaining != null ? timeRemaining : '--:--:--'}">--:--:--</div>
+        </div>
+        <form th:action="@{|/tests/${view.takeId}/submit|}" method="post">
+          <button type="submit" class="btn btn-primary w-100">Nộp bài</button>
+        </form>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // === AUDIO UI (nếu có) ===
+  const audio = document.getElementById('player');
+  const btnPlay = document.getElementById('btnPlay');
+  const icoPlay = document.getElementById('icoPlay');
+  const seek = document.getElementById('seek');
+  const clock = document.getElementById('clock');
+  const vol = document.getElementById('vol');
+
+  if (audio) {
+    audio.addEventListener('loadedmetadata', () => { seek.max = Math.floor(audio.duration || 0); });
+    audio.addEventListener('timeupdate', () => { seek.value = Math.floor(audio.currentTime); clock.textContent = fmt(audio.currentTime); });
+    btnPlay?.addEventListener('click', () => { if (audio.paused) { audio.play(); icoPlay.textContent = '⏸'; } else { audio.pause(); icoPlay.textContent = '▶'; }});
+    seek?.addEventListener('input', () => audio.currentTime = seek.value);
+    vol?.addEventListener('input', () => audio.volume = vol.value);
+  }
+  function fmt(t){ t = Math.floor(t||0); const m=String(Math.floor(t/60)).padStart(2,'0'), s=String(t%60).padStart(2,'0'); return `${m}:${s}`; }
+
+  // === Autosave chọn đáp án ===
+  document.querySelectorAll('.answer-form .option').forEach(opt => {
+    opt.addEventListener('click', async () => {
+      const form = opt.closest('.answer-form');
+      form.querySelectorAll('.option').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      opt.querySelector('input[type=radio]').checked = true;
+      await autosave(form);
+      // cập nhật palette: tìm link cùng qn trong part hiện tại
+      const qn = form.dataset.qn;
+      const currentPartSection = document.querySelector('aside');
+      const badge = currentPartSection?.querySelector(`a.nav-link[href="#${form.closest('.card').id}"]`);
+      badge && badge.classList.add('answered');
+    });
+  });
+
+  // Xoá đáp án
+  document.querySelectorAll('.btn-clear').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const qn = btn.dataset.qn;
+      const form = document.querySelector(`form.answer-form[data-qn="${qn}"]`);
+      form.querySelectorAll('.option').forEach(o => { o.classList.remove('active'); o.querySelector('input').checked = false; });
+      await autosave(form, true);
+      // cập nhật palette
+      const cardId = form.closest('.card').id;
+      const badge = document.querySelector(`a.nav-link[href="#${cardId}"]`);
+      badge && badge.classList.remove('answered');
+    });
+  });
+
+  async function autosave(form, clear=false){
+    const fd = new FormData(form);
+    if (clear) fd.set('opt','');
+    try { await fetch(form.action, { method:'POST', body: fd }); }
+    catch(e){ console.warn('Autosave failed', e); }
+  }
+
+  // Phím tắt A/B/C/D trên khối cuộn
+  (function(){
+    const container = document.querySelector('.questions-scroll');
+    if (!container) return;
+    document.addEventListener('keydown', (e)=>{
+      const k = e.key.toLowerCase();
+      if (!['a','b','c','d'].includes(k)) return;
+      const cards = Array.from(container.querySelectorAll('.question-card'));
+      const mid = container.scrollTop + container.clientHeight/2;
+      let best=null, bestDist=1e9;
+      cards.forEach(c=>{
+        const y = c.offsetTop; // vị trí tương đối trong container
+        const d = Math.abs(y - mid);
+        if (d < bestDist){ best=c; bestDist=d; }
+      });
+      if(!best) return;
+      const label = best.querySelector(`input[name="opt"][value="${k.toUpperCase()}"]`)?.closest('.option');
+      label && label.click();
+    });
+  })();
+</script>
+</body>
+</html>

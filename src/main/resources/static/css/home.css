@@ -3,13 +3,56 @@
     a{color:var(--brand)} a:hover{color:var(--brand-dark)}
     .navbar-brand{letter-spacing:.2px}
     /* Hero */
-    .hero .swiper{width:100%; height:520px}
-    .hero .slide{position:relative; height:520px; color:#fff}
-    .hero .slide::after{content:"";position:absolute; inset:0; background:linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.25))}
-    .hero .slide>img{width:100%; height:100%; object-fit:cover}
-    .hero .content{position:absolute; inset:0; display:grid; place-items:center; text-align:left; z-index:2}
-    .hero h1{font-size: clamp(1.6rem, 2.5vw + 1rem, 3rem); font-weight:800}
-    .hero p{max-width:700px; font-size:1.05rem}
+.hero .swiper {
+  width: 100%;
+  height: 520px;
+}
+.hero .swiper-wrapper {
+  display: flex !important;
+}
+
+.hero .hero-slide {
+  position: relative;
+  height: 520px;
+  color: #fff;
+}
+
+.hero .hero-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.25));
+  z-index: 1;
+}
+
+.hero .hero-slide > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero .content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: left;
+  z-index: 2;
+}
+
+.hero h1 {
+  font-size: clamp(1.6rem, 2.5vw + 1rem, 3rem);
+  font-weight: 800;
+}
+
+.hero p {
+  max-width: 700px;
+  font-size: 1.05rem;
+}
+
     /* Stats */
     .stats{background:#fff}
     .stat-card{border:1px solid #f1f1f1; border-radius:16px; padding:16px 18px; background:#fff}

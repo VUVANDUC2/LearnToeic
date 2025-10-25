@@ -1,0 +1,24 @@
+#test-library .card {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#test-library .card-img-top {
+  height: 160px;
+  object-fit: cover;
+}
+
+#test-library .btn-primary {
+  background-color: #3366ff;
+  border-color: #3366ff;
+}
+
+#test-library .btn-primary:hover {
+  background-color: #254eda;
+  border-color: #254eda;
+}
+
+#test-library .form-select,
+#test-library input.form-control {
+  border-radius: 8px;
+}

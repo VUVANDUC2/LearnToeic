@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Kết quả bài thi</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<h1>Kết quả bài thi</h1>
+
+<p>
+  <b>Đề thi:</b> <span th:text="${view.testName}"></span><br>
+  <b>Điểm số:</b> <span th:text="${score}"></span> / <span th:text="${view.totalQuestions}"></span><br>
+  <b>Thời gian:</b>
+<span th:text="${view.startTime != null ? #dates.format(view.startTime, 'HH:mm dd/MM/yyyy') : ''}"></span>
+<span th:text="${view.endTime != null ? #dates.format(view.endTime, 'HH:mm dd/MM/yyyy') : ''}"></span>
+
+</p>
+
+<hr>
+
+<h2>Chi tiết bài làm</h2>
+<table border="1" cellpadding="5">
+  <thead>
+  <tr>
+    <th>Câu</th>
+    <th>Nội dung</th>
+    <th>Đáp án đã chọn</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="q : ${view.questions}">
+    <td th:text="${q.questionNumber}"></td>
+    <td th:text="${q.questionText}"></td>
+    <td th:text="${q.selectedOption != null ? q.selectedOption : 'Chưa chọn'}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<a th:href="@{/tests}">Quay lại danh sách đề</a>
+
+</body>
+</html>

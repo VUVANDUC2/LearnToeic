@@ -1,19 +1,58 @@
 package LearnToeic.dto;
 
-public class QuestionDto {
+public class QuestionForTakeDTO {
+    private Integer part;
+    public Integer getPart() {
+        return part;
+    }
+
+    public void setPart(Integer part) {
+        this.part = part;
+    }
+
     private int questionNumber;   // số thứ tự câu hỏi
+    private QuestionType questionType;
+    public QuestionType getQuestionType() {
+        if (questionType == null && part != null) {
+        return switch (part) {
+            case 1 -> QuestionType.IMAGE_CHOICE;
+            case 2 -> QuestionType.AUDIO_ONLY;
+            case 3,4 -> QuestionType.AUDIO_PASSAGE;
+            case 5 -> QuestionType.TEXT_BLANK;
+            case 6 -> QuestionType.PASSAGE_BLANK;
+            case 7 -> QuestionType.READING_COMP;
+            default -> null;
+        };
+    }
+    return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
+    }
+
     private String questionText;  // nội dung câu hỏi
     private String optionA;       // đáp án A
     private String optionB;       // đáp án B
     private String optionC;       // đáp án C
     private String optionD;       // đáp án D
+    private Character selectedOption;
 
-    public QuestionDto() {
+    public Character getSelectedOption() {
+        return selectedOption;
     }
 
-    public QuestionDto(int questionNumber, String questionText,
+    public void setSelectedOption(Character selectedOption) {
+        this.selectedOption = selectedOption;
+    }
+
+    public QuestionForTakeDTO() {
+    }
+
+    public QuestionForTakeDTO(int part,int questionNumber, String questionText,
                        String optionA, String optionB,
                        String optionC, String optionD) {
+        this.part = part;
         this.questionNumber = questionNumber;
         this.questionText = questionText;
         this.optionA = optionA;

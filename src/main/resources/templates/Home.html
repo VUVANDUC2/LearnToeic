@@ -10,6 +10,7 @@
     <!-- Swiper (hero & testimonials) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/js/home.js}">
 </head>
 <body>
     <!-- Header fragment -->
@@ -20,7 +21,8 @@
         <section class="hero">
         <div class="swiper hero-swiper">
             <div class="swiper-wrapper">
-            <div class="swiper-slide slide">
+            <div class="swiper-slide hero-slide">
+
                 <img src="https://images.unsplash.com/photo-1606761568499-6d2451b23cfc?q=80&w=1920&auto=format&fit=crop" alt="Classroom" />
                 <div class="content">
                 <div class="container">
@@ -37,7 +39,7 @@
                 </div>
                 </div>
             </div>
-            <div class="swiper-slide slide">
+            <div class="swiper-slide hero-slide">
                 <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1920&auto=format&fit=crop" alt="Study" />
                 <div class="content">
                 <div class="container">
@@ -261,7 +263,7 @@
         </section>
 
         <!-- Branches CTA -->
-        <section id="branches" class="container my-4 my-lg-5">
+        <!-- <section id="branches" class="container my-4 my-lg-5">
         <div class="row align-items-center g-4">
             <div class="col-12 col-lg-6">
             <img class="img-fluid rounded" src="https://images.unsplash.com/photo-1462899006636-339e08d1844e?q=80&w=1200&auto=format&fit=crop" alt="Branches" />
@@ -275,7 +277,7 @@
             </div>
             </div>
         </div>
-        </section>
+        </section> -->
 
      </main>
     <!-- Footer fragment -->

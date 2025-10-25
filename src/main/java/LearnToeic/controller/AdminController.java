@@ -9,25 +9,25 @@ public class AdminController {
     @GetMapping("/admin")
     public String admin(Model model) {
         model.addAttribute("pageTitle", "Quản trị");
-        return "admin"; 
+        return "admin";
     }
 
     @GetMapping("/admin/test")
     public String test(Model model) {
         model.addAttribute("pageTitle", "Quản trị");
-        return "admin/test"; 
+        return "admin/test";
     }
 
     @GetMapping("/admin/blog")
     public String blog(Model model) {
         model.addAttribute("pageTitle", "Quản trị");
-        return "admin/blog"; 
+        return "admin/blog";
     }
 
     @GetMapping("/admin/document")
     public String document(Model model) {
         model.addAttribute("pageTitle", "Quản trị");
-        return "admin/document"; 
+        return "admin/document";
     }
 }
 
