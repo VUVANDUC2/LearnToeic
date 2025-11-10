@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${pageTitle} ?: 'Trang chủ • TOEIC Center'">Trang chủ • TOEIC Center</title>
+    <title th:text="${pageTitle} ?: 'Trang chủ • LEARN TOEIC'">Trang chủ • LEARN TOEIC</title>
     <!-- Bootstrap 5 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Swiper (hero & testimonials) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/Home.css}">
 </head>
 <body>
     <!-- Header fragment -->
@@ -18,77 +18,92 @@
      <main>
         <!-- Hero Slider -->
         <section class="hero">
-        <div class="swiper hero-swiper">
-            <div class="swiper-wrapper">
-            <div class="swiper-slide slide">
-                <img src="https://images.unsplash.com/photo-1606761568499-6d2451b23cfc?q=80&w=1920&auto=format&fit=crop" alt="Classroom" />
-                <div class="content">
-                <div class="container">
-                    <div class="row">
-                    <div class="col-12 col-lg-7">
-                        <h1>Đào tạo TOEIC uy tín • Lộ trình rõ ràng</h1>
-                        <p>Từ mất gốc đến 800+ TOEIC với phương pháp thực chiến và đội ngũ giảng viên giàu kinh nghiệm.</p>
-                        <div class="d-flex gap-2">
-                        <a class="btn btn-danger btn-lg" href="#courses">Xem khóa học</a>
-                        <a class="btn btn-outline-light btn-lg" href="#">Lộ trình 800+ miễn phí</a>
+          <div id="heroCarousel" class="carousel slide">
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+              <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            </div>
+
+            <div class="carousel-inner rounded-4 overflow-hidden shadow-sm">
+              <!-- Slide 1 -->
+              <div class="carousel-item promo-item active" data-bs-interval="4000">
+                <div class="promo-card theme-sky">
+                  <div class="container">
+                    <div class="row g-4 align-items-center">
+                      <div class="col-12 col-lg-7">
+                        <h2 class="promo-title">Thi Mô Phỏng</h2>
+                        <p class="promo-desc">
+                          Luyện thi mô phỏng trên máy tính như thi thật giúp bạn làm quen khi bước vào kì thi chính thức.
+                        </p>
+                        <a th:href="@{/tests}" class="btn btn-cta btn-lg px-4">Làm bài thi ngay</a>
+                      </div>
+                      <div class="col-12 col-lg-5">
+                        <div class="promo-photo">
+                          <img src="/img/banners/banner01.png"   alt="Thi mô phỏng">
                         </div>
+                      </div>
                     </div>
-                    </div>
+                  </div>
                 </div>
-                </div>
-            </div>
-            <div class="swiper-slide slide">
-                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1920&auto=format&fit=crop" alt="Study" />
-                <div class="content">
-                <div class="container">
-                    <div class="row">
-                    <div class="col-12 col-lg-7">
-                        <h1>Học linh hoạt: Offline • Online • Hybrid</h1>
-                        <p>Chủ động thời gian với lớp trực tiếp, lớp online tương tác và hệ thống bài giảng số.</p>
-                        <div class="d-flex gap-2">
-                        <a class="btn btn-danger btn-lg" href="#registerModal" data-bs-toggle="modal">Đăng ký tư vấn</a>
-                        <a class="btn btn-outline-light btn-lg" href="#feature">Xem phương pháp</a>
+              </div>
+
+              <!-- Slide 2 -->
+              <div class="carousel-item promo-item" data-bs-interval="4000">
+                <div class="promo-card theme-peach">
+                  <div class="container">
+                    <div class="row g-4 align-items-center">
+                      <div class="col-12 col-lg-7">
+                        <h2 class="promo-title">Nội dung luyện tập chất lượng</h2>
+                        <p class="promo-desc">
+                          Chúng tôi cung cấp những bài luyện tập phù hợp nhất cho nhiều loại chứng chỉ khác nhau.
+                        </p>
+                        <a href="#registerModal" data-bs-toggle="modal" class="btn btn-cta btn-lg px-4">Vào luyện tập ngay</a>
+                      </div>
+                      <div class="col-12 col-lg-5">
+                        <div class="promo-photo">
+                          <img src="/img/banners/banner02.png"    alt="Học linh hoạt">
                         </div>
+                      </div>
                     </div>
-                    </div>
+                  </div>
                 </div>
-                </div>
-            </div>
-            <div class="swiper-slide slide">
-                <img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=1920&auto=format&fit=crop" alt="Community" />
-                <div class="content">
-                <div class="container">
-                    <div class="row">
-                    <div class="col-12 col-lg-7">
-                        <h1>Cộng đồng 1.000.000+ học viên</h1>
-                        <p>Kết nối – thực hành – chinh phục mục tiêu với lộ trình cá nhân hóa theo trình độ.</p>
-                        <div class="d-flex gap-2">
-                        <a class="btn btn-danger btn-lg" href="#testimonials">Xem cảm nhận</a>
-                        <a class="btn btn-outline-light btn-lg" href="#blog">Tài liệu miễn phí</a>
+              </div>
+
+              <!-- Slide 3 -->
+              <div class="carousel-item promo-item" data-bs-interval="4000">
+                <div class="promo-card theme-mint">
+                  <div class="container">
+                    <div class="row g-4 align-items-center">
+                      <div class="col-12 col-lg-7">
+                        <h2 class="promo-title">Cộng đồng 1.000.000+ học viên</h2>
+                        <p class="promo-desc">
+                          Kết nối – thực hành – chinh phục mục tiêu với lộ trình cá nhân hóa theo trình độ.
+                        </p>
+                        <a href="#testimonials" class="btn btn-cta btn-lg px-4">Xem cảm nhận</a>
+                      </div>
+                      <div class="col-12 col-lg-5">
+                        <div class="promo-photo">
+                          <img src="/img/banners/banner03.png"   alt="Cộng đồng học viên">
                         </div>
+                      </div>
                     </div>
-                    </div>
+                  </div>
                 </div>
-                </div>
+              </div>
             </div>
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div>
-        </section>
-        <!-- Stats Band -->
-        <section class="stats py-4 py-lg-5">
-        <div class="container">
-            <div class="row g-3 g-lg-4">
-            <div class="col-6 col-md-4 col-lg-2"><div class="stat-card text-center"><div class="stat-num" data-count="12">0</div><div class="small text-secondary">Năm truyền cảm hứng</div></div></div>
-            <div class="col-6 col-md-4 col-lg-2"><div class="stat-card text-center"><div class="stat-num" data-count="300">0</div><div class="small text-secondary">Giảng viên</div></div></div>
-            <div class="col-6 col-md-4 col-lg-2"><div class="stat-card text-center"><div class="stat-num" data-count="1000000">0</div><div class="small text-secondary">Học viên</div></div></div>
-            <div class="col-6 col-md-4 col-lg-2"><div class="stat-card text-center"><div class="stat-num" data-count="200">0</div><div class="small text-secondary">Đối tác</div></div></div>
-            <div class="col-6 col-md-4 col-lg-2"><div class="stat-card text-center"><div class="stat-num" data-count="30">0</div><div class="small text-secondary">Cơ sở</div></div></div>
-            <div class="col-6 col-md-4 col-lg-2"><div class="stat-card text-center"><div class="stat-num" data-count="100000">0</div><div class="small text-secondary">HV online</div></div></div>
-            </div>
-        </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Trước</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Tiếp</span>
+            </button>
+          </div>
         </section>
 
         <!-- Feature band: Phương pháp -->
@@ -111,174 +126,115 @@
             </div>
         </div>
         </section>
+        <section class="section-wrapper">
+  <div class="container">
 
-        <!-- Courses grid -->
-        <section id="courses" class="container my-4 my-lg-5">
-        <div class="d-flex align-items-end justify-content-between mb-3">
-            <div>
-            <h2 class="fw-bold mb-1">Khóa học nổi bật</h2>
-            <div class="text-secondary">Từ người mới bắt đầu đến mục tiêu 800+</div>
-            </div>
-            <a class="btn btn-outline-secondary" href="#">Xem tất cả</a>
-        </div>
-        <div class="row g-4">
-            <div class="col-12 col-md-6 col-lg-4">
-            <article class="course-card h-100">
-                <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=1200&auto=format&fit=crop" alt="Pre TOEIC" />
-                <div class="p-3">
-                <h5 class="fw-bold">Pre TOEIC (300–350)</h5>
-                <p class="small text-secondary">Lấy lại căn bản trong 8 tuần, xây nền ngữ âm, từ vựng, ngữ pháp cốt lõi.</p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <span class="badge text-bg-light">2 kỹ năng</span>
-                    <a class="btn btn-sm btn-danger" href="#">Xem chi tiết</a>
-                </div>
-                </div>
-            </article>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-            <article class="course-card h-100">
-                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop" alt="TOEIC A" />
-                <div class="p-3">
-                <h5 class="fw-bold">TOEIC A (450–500)</h5>
-                <p class="small text-secondary">Tăng tốc kỹ năng Nghe–Đọc theo format đề thi mới nhất.</p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <span class="badge text-bg-light">2 kỹ năng</span>
-                    <a class="btn btn-sm btn-danger" href="#">Xem chi tiết</a>
-                </div>
-                </div>
-            </article>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-            <article class="course-card h-100">
-                <img src="https://images.unsplash.com/photo-1485217988980-11786ced9454?q=80&w=1200&auto=format&fit=crop" alt="TOEIC B" />
-                <div class="p-3">
-                <h5 class="fw-bold">TOEIC B (600–650)</h5>
-                <p class="small text-secondary">Chiến lược làm bài nâng cao, bứt phá điểm đọc hiểu.</p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <span class="badge text-bg-light">2 kỹ năng</span>
-                    <a class="btn btn-sm btn-danger" href="#">Xem chi tiết</a>
-                </div>
-                </div>
-            </article>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-            <article class="course-card h-100">
-                <img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=1200&auto=format&fit=crop" alt="TOEIC 4 kỹ năng" />
-                <div class="p-3">
-                <h5 class="fw-bold">TOEIC A+ (4 kỹ năng)</h5>
-                <p class="small text-secondary">Nghe–Đọc–Nói–Viết cho môi trường công việc quốc tế.</p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <span class="badge text-bg-light">4 kỹ năng</span>
-                    <a class="btn btn-sm btn-danger" href="#">Xem chi tiết</a>
-                </div>
-                </div>
-            </article>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-            <article class="course-card h-100">
-                <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=1200&auto=format&fit=crop" alt="Giao tiếp công việc" />
-                <div class="p-3">
-                <h5 class="fw-bold">Giao tiếp công việc</h5>
-                <p class="small text-secondary">Thuyết trình, họp, email – các tình huống công sở thực chiến.</p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <span class="badge text-bg-light">Kỹ năng</span>
-                    <a class="btn btn-sm btn-danger" href="#">Xem chi tiết</a>
-                </div>
-                </div>
-            </article>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-            <article class="course-card h-100">
-                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop" alt="Intensive" />
-                <div class="p-3">
-                <h5 class="fw-bold">Lớp cấp tốc 2–6 tuần</h5>
-                <p class="small text-secondary">Dồn lực về đích cho mục tiêu sát hạn nộp điểm.</p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <span class="badge text-bg-light">Bootcamp</span>
-                    <a class="btn btn-sm btn-danger" href="#">Xem chi tiết</a>
-                </div>
-                </div>
-            </article>
-            </div>
-        </div>
-        </section>
+    <!-- Tiêu đề -->
+    <h2 class="headline">
+      Chúng Tôi Có Tất Cả <span class="highlight">Những Gì Bạn Đang Tìm Kiếm</span>
+    </h2>
 
-        <!-- Video / CTA -->
-        <section class="container my-4 my-lg-5">
-        <div class="row align-items-center g-4">
-            <div class="col-12 col-lg-6">
-            <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video lộ trình" allowfullscreen></iframe>
-            </div>
-            </div>
-            <div class="col-12 col-lg-6">
-            <h3 class="fw-bold">Video lộ trình tự học 800+ TOEIC</h3>
-            <p class="text-secondary">Bản đồ từng bước – checklist – mẹo làm bài và tài liệu kèm theo.</p>
-            <div class="d-flex gap-2">
-                <a class="btn btn-danger" href="#registerModal" data-bs-toggle="modal">Nhận tư vấn miễn phí</a>
-                <a class="btn btn-outline-secondary" href="#">Tải tài liệu</a>
-            </div>
-            </div>
+    <!-- HÀNG 1: 1 CARD LỚN (TEXT + ẢNH CÙNG HÀNG) -->
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="feature-card fade-item d-flex flex-column flex-lg-row align-items-center">
+          <!-- Text -->
+          <div class="flex-grow-1 me-lg-4">
+            <h3 class="feature-title">Nội dung luyện tập chất lượng</h3>
+            <p class="feature-text">
+              Chúng tôi cung cấp những bài luyện tập phù hợp nhất cho nhiều loại chứng chỉ khác nhau.
+            </p>
+          </div>
+          <!-- Ảnh -->
+          <div class="mt-3 mt-lg-0">
+            <img src="https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=1200&auto=format&fit=crop"
+                 alt="Video" class="feature-illustration feature-illustration-lg">
+          </div>
         </div>
-        </section>
+      </div>
+    </div>
 
-        <!-- Testimonials -->
-        <section id="testimonials" class="container my-4 my-lg-5">
-        <div class="d-flex align-items-end justify-content-between mb-3">
-            <div>
-            <h2 class="fw-bold mb-1">Cảm nhận học viên</h2>
-            <div class="text-secondary">Những câu chuyện chuyển mình nhờ tiếng Anh</div>
-            </div>
-            <div class="d-none d-lg-flex gap-2">
-            <button class="btn btn-outline-secondary btn-sm" id="testiPrev"><i class="bi bi-arrow-left"></i></button>
-            <button class="btn btn-outline-secondary btn-sm" id="testiNext"><i class="bi bi-arrow-right"></i></button>
-            </div>
+    <!-- HÀNG 2: 2 CARD SO LE -->
+    <div class="row g-4 mb-3">
+      <!-- Card 1: Ảnh trái - chữ phải -->
+      <div class="col-lg-6">
+        <div class="feature-card fade-item d-flex flex-column flex-lg-row align-items-center gap-3">
+          <div class="flex-shrink-0">
+            <img src="https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=1200&auto=format&fit=crop"
+                 alt="Mock Test" class="feature-illustration">
+          </div>
+          <div>
+            <h3 class="feature-title">Mô phỏng đề thi thật</h3>
+            <p class="feature-text">
+              Người dùng được làm các bài thi thử có nội dung tương đương các bài thi thật
+              với giải thích chi tiết từng câu hỏi.
+            </p>
+          </div>
         </div>
-        <div class="swiper testi-swiper">
-            <div class="swiper-wrapper">
-            <div class="swiper-slide h-100"><div class="testimonial"><div class="d-flex align-items-center gap-3 mb-2"><img class="avatar" src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=256&auto=format&fit=crop" alt="HV 1"/><div><strong>Nguyễn Minh</strong><div class="small text-secondary">Đạt 805 TOEIC</div></div></div><p>Giáo trình rõ ràng, phương pháp dễ nhớ. Lịch học linh hoạt giúp mình cân bằng công việc.</p></div></div>
-            <div class="swiper-slide h-100"><div class="testimonial"><div class="d-flex align-items-center gap-3 mb-2"><img class="avatar" src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=256&auto=format&fit=crop" alt="HV 2"/><div><strong>Trần Anh</strong><div class="small text-secondary">Tăng 250 điểm sau 2 tháng</div></div></div><p>Thầy cô theo sát, bài tập online phong phú. Đặc biệt là mẹo quản lý thời gian khi làm bài.</p></div></div>
-            <div class="swiper-slide h-100"><div class="testimonial"><div class="d-flex align-items-center gap-3 mb-2"><img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=256&auto=format&fit=crop" alt="HV 3"/><div><strong>Phương Thảo</strong><div class="small text-secondary">Đạt 900 TOEIC</div></div></div><p>Môi trường học tích cực, nhiều hoạt động thực hành. Mình tự tin giao tiếp với đồng nghiệp quốc tế.</p></div></div>
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-        </section>
+      </div>
 
-        <!-- Blog / Tài liệu -->
-        <section id="blog" class="container my-4 my-lg-5">
-        <div class="d-flex align-items-end justify-content-between mb-3">
-            <div>
-            <h2 class="fw-bold mb-1">Tài liệu & Bài viết mới</h2>
-            <div class="text-secondary">Hướng dẫn, tips, đề luyện cập nhật</div>
-            </div>
-            <a class="btn btn-outline-secondary" href="#">Xem tất cả</a>
+      <!-- Card 2: Chữ trái - ảnh phải -->
+      <div class="col-lg-6">
+        <div class="feature-card fade-item d-flex flex-column flex-lg-row align-items-center gap-3">
+          <div>
+            <h3 class="feature-title">Cá nhân hóa người dùng</h3>
+            <p class="feature-text">
+              Ngay sau khi hoàn thành bài thi, các thống số đánh giá chi tiết sẽ được hiển thị
+              để bạn có thể dễ dàng theo dõi quá trình học của mình.
+            </p>
+          </div>
+          <div class="flex-shrink-0 mt-3 mt-lg-0">
+            <img src="https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=1200&auto=format&fit=crop"
+                 alt="Analytics" class="feature-illustration">
+          </div>
         </div>
-        <div class="row g-4">
-            <div class="col-12 col-md-6 col-lg-4"><article class="post-card h-100"><img src="https://images.unsplash.com/photo-1519638399535-1b036603ac77?q=80&w=1200&auto=format&fit=crop" alt="Tài liệu TOEIC" /><div class="p-3"><h5 class="fw-bold">Trọn bộ tài liệu tự học TOEIC A–Z</h5><p class="small text-secondary">Tổng hợp từ vựng – ngữ pháp – đề luyện – audio.</p><a class="btn btn-sm btn-danger" href="#">Đọc ngay</a></div></article></div>
-            <div class="col-12 col-md-6 col-lg-4"><article class="post-card h-100"><img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=1200&auto=format&fit=crop" alt="Speaking Writing" /><div class="p-3"><h5 class="fw-bold">TOEIC Speaking & Writing: lộ trình gợi ý</h5><p class="small text-secondary">Chiến lược luyện nói – viết đạt thang điểm mục tiêu.</p><a class="btn btn-sm btn-danger" href="#">Đọc ngay</a></div></article></div>
-            <div class="col-12 col-md-6 col-lg-4"><article class="post-card h-100"><img src="https://images.unsplash.com/photo-1518314916381-77a37c2a49ae?q=80&w=1200&auto=format&fit=crop" alt="Tips làm bài" /><div class="p-3"><h5 class="fw-bold">20 mẹo tăng tốc làm bài TOEIC</h5><p class="small text-secondary">Phân bổ thời gian – tránh bẫy – tối ưu điểm nhanh.</p><a class="btn btn-sm btn-danger" href="#">Đọc ngay</a></div></article></div>
-        </div>
-        </section>
+      </div>
+    </div>
 
-        <!-- Branches CTA -->
-        <section id="branches" class="container my-4 my-lg-5">
-        <div class="row align-items-center g-4">
-            <div class="col-12 col-lg-6">
-            <img class="img-fluid rounded" src="https://images.unsplash.com/photo-1462899006636-339e08d1844e?q=80&w=1200&auto=format&fit=crop" alt="Branches" />
-            </div>
-            <div class="col-12 col-lg-6">
-            <h3 class="fw-bold">Hệ thống 30+ cơ sở toàn quốc</h3>
-            <p class="text-secondary">Chọn cơ sở gần bạn để được tư vấn lớp phù hợp hoặc đăng ký học online tương tác.</p>
-            <div class="row g-2">
-                <div class="col-12 col-md-6"><select class="form-select"><option>Hà Nội</option><option>TP. Hồ Chí Minh</option><option>Đà Nẵng</option><option>Hải Phòng</option></select></div>
-                <div class="col-12 col-md-6"><a class="btn btn-danger w-100" href="#">Xem danh sách cơ sở</a></div>
-            </div>
-            </div>
+    <!-- HÀNG 3: 2 CARD SO LE NGƯỢC LẠI -->
+    <div class="row g-4">
+      <!-- Card 3: Chữ trái - ảnh phải -->
+      <div class="col-lg-6">
+        <div class="feature-card fade-item d-flex flex-column flex-lg-row align-items-center gap-3">
+          <div>
+            <h3 class="feature-title">Hệ thống ứng dụng thông minh</h3>
+            <p class="feature-text">
+              Estudyme phát triển hệ thống ứng dụng học tập phong phú, người dùng có thể tải về
+              để học tập nâng cao điểm số.
+            </p>
+          </div>
+          <div class="flex-shrink-0 mt-3 mt-lg-0">
+            <img src="https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=1200&auto=format&fit=crop"
+                 alt="App" class="feature-illustration">
+          </div>
         </div>
-        </section>
+      </div>
+
+      <!-- Card 4: Ảnh trái - chữ phải -->
+      <div class="col-lg-6">
+        <div class="feature-card fade-item d-flex flex-column flex-lg-row align-items-center gap-3">
+          <div class="flex-shrink-0">
+            <img src="https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=1200&auto=format&fit=crop"
+                 alt="Support" class="feature-illustration">
+          </div>
+          <div>
+            <h3 class="feature-title">Hỗ trợ nhanh chóng</h3>
+            <p class="feature-text">
+              Người dùng có thể liên hệ trực tiếp với đội ngũ hỗ trợ qua nút tin nhắn ở góc phải màn hình.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
      </main>
     <!-- Footer fragment -->
     <div th:replace="fragments/footer :: siteFooter"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/Home.js"></script>
 </body>
 </html>
