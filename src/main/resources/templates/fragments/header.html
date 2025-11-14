@@ -8,43 +8,87 @@
       </button>
       <div class="collapse navbar-collapse" id="navMain">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Luyện đề</a>
-            <div class="dropdown-menu p-3 shadow border-0" style="min-width:620px">
-              <div class="row g-3">
-                <div class="col-12 col-md-6">
-                  <h6 class="dropdown-header px-0">TOEIC 2 kỹ năng</h6>
-                  <a class="dropdown-item px-0" th:href="@{/tests}" href="#">Pre TOEIC (300–350)</a>
-                  <a class="dropdown-item px-0" href="#">TOEIC A (450–500)</a>
-                  <a class="dropdown-item px-0" href="#">TOEIC B (600–650)</a>
-                </div>
-                <div class="col-12 col-md-6">
-                  <h6 class="dropdown-header px-0">TOEIC 4 kỹ năng</h6>
-                  <a class="dropdown-item px-0" href="#">TOEIC A+ (L/R/S/W)</a>
-                  <!-- <a class="dropdown-item px-0" href="#">Giao tiếp công việc</a> -->
-                  <!-- <div class="mt-2 p-3 rounded" style="background:#f8fafc">
-                    <small class="text-secondary d-block mb-2">Lộ trình gợi ý</small>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <span><strong>800+ TOEIC</strong> miễn phí</span>
-                      <a class="btn btn-sm btn-danger" href="#">Xem lộ trình</a>
-                    </div>
-                  </div> -->
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="nav-item"><a class="nav-link" href="#feature">Phương pháp</a></li>
-          <!-- <li class="nav-item"><a class="nav-link" href="#courses">Khóa nổi bật</a></li>-->
-          <li class="nav-item"><a class="nav-link" href="#testimonials">Flashcards</a></li>
-          <li class="nav-item"><a class="nav-link" href="#blog">Tài liệu</a></li>
-          <li class="nav-item"><a class="nav-link" href="#branches">Blog</a></li>
-          <!-- <li class="nav-item"><a th:href="@{/exam}" class="btn btn-primary">Bắt đầu làm bài</a></li> -->
 
+          <li class="nav-item ">
+            <a class="nav-link  fw-semibold" href="#" role="button"
+              th:href="@{/tests}"
+              th:classappend="${requestURI != null && requestURI.startsWith('/tests') ? 'active' : ''}">
+              Luyện đề
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link fw-semibold"
+              th:href="@{/}"
+              th:classappend="${requestURI != null && requestURI == '/phuong-phap' ? 'active' : ''}">
+              Phương pháp
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link fw-semibold"
+              th:href="@{/flashcards}"
+              th:classappend="${requestURI != null && requestURI == '/flashcards' ? 'active' : ''}">
+              Flashcards
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link fw-semibold"
+              th:href="@{/resources}"
+              th:classappend="${requestURI != null && requestURI == '/resources' ? 'active' : ''}">
+              Tài liệu
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link fw-semibold"
+              th:href="@{/blog}"
+              th:classappend="${requestURI != null && requestURI.startsWith('/blog') ? 'active' : ''}">
+              Blog
+            </a>
+          </li>
         </ul>
-        <div class="d-flex gap-2">
-          <a class="btn btn-outline-secondary d-none d-lg-inline" href="#search"><i class="bi bi-search"></i></a>
-          <a class="btn btn-danger" th:href="@{auth/login}" >Đăng nhập</a>
-        </div>
+        <div class="d-flex align-items-center gap-2">
+
+  <!-- CHƯA login -->
+  <a class="btn btn-primary px-4"
+     sec:authorize="isAnonymous()"
+     th:href="@{/auth/login}">
+    Đăng nhập
+  </a>
+
+  <!-- ĐÃ login -->
+  <div class="account-dropdown-wrapper position-relative"
+       sec:authorize="isAuthenticated()">
+
+    <button class="btn p-0 border-0 bg-transparent"
+            type="button"
+            id="userMenuBtn">
+      <span class="avatar-text-circle">
+        <span th:text="${#strings.substring(
+                            #strings.listSplit(currentUser.fullName, ' ')
+                                     .get(#strings.listSplit(currentUser.fullName, ' ').size() - 1),
+                            0, 1).toUpperCase()}">
+          D
+        </span>
+      </span>
+    </button>
+
+    <!-- menu tự làm, KHÔNG dùng class dropdown-menu nữa -->
+    <ul class="account-menu-dropdown" id="userMenu">
+      <li><a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a></li>
+      <li><a class="dropdown-item text-danger" th:href="@{/account/delete}">Xoá tài khoản</a></li>
+      <li>
+        <form th:action="@{/logout}" method="post">
+          <button type="submit" class="dropdown-item">Đăng xuất</button>
+        </form>
+      </li>
+    </ul>
+
+  </div>
+</div>
+
       </div>
     </div>
   </nav>

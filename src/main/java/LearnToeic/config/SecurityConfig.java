@@ -10,22 +10,24 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/auth/login"));
+
         http
             .authorizeHttpRequests(auth -> auth
                 // Static
                 .requestMatchers("/css/**","/js/**","/images/**","/webjars/**").permitAll()
 
                 // Trang công khai
-                .requestMatchers("/", "/auth/login", "/auth/signup", "/search", "/playlist", "/error").permitAll()
+                .requestMatchers("/","/auth/forgot-password", "/auth/login", "/auth/signup", "/search", "/playlist", "/error").permitAll()
 
-                // 🔒 BẮT đúng URL BẮT ĐẦU BÀI (đặt TRƯỚC rule /tests/**)
+                // BẮT đúng URL BẮT ĐẦU BÀI (đặt TRƯỚC rule /tests/**)
                 .requestMatchers(HttpMethod.GET, "/tests/*/start").authenticated()
 
-                // 👀 Còn lại các trang tests/lessons GET thì xem công khai
+                // Còn lại các trang tests/lessons GET thì xem công khai
                 .requestMatchers(HttpMethod.GET, "/tests/**", "/lessons/**").permitAll()
 
                 // Các thao tác POST cần đăng nhập
-                .requestMatchers(HttpMethod.POST, "/tests/**", "/attempts/**", "/progress/**", "/profile/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/tests/**","/take/**", "/attempts/**", "/progress/**", "/profile/**").authenticated()
 
                 // Những URL khác tuỳ bạn:
                 .anyRequest().authenticated()
@@ -40,7 +42,13 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/", false)
             )
 
-            .logout(lo -> lo.logoutUrl("/auth/logout").logoutSuccessUrl("/").permitAll());
+            .logout(logout -> logout
+            .logoutUrl("/logout")                // URL để logout
+            .logoutSuccessUrl("/") // Điều hướng sau khi logout
+            .invalidateHttpSession(true)         // Xoá session
+            .clearAuthentication(true)           // Xoá authentication
+            .deleteCookies("JSESSIONID")         // Xoá cookie
+        );
 
         return http.build();
     }

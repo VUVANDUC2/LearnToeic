@@ -13,7 +13,7 @@ public class AnswerSheetId implements Serializable{
     @Column(name = "sequence", nullable = false)
     private Integer sequence;
 
-    protected AnswerSheetId() {} // JPA cần
+    protected AnswerSheetId() {}
 
     public AnswerSheetId(Integer testId, Integer sequence) {
         this.testId = testId;

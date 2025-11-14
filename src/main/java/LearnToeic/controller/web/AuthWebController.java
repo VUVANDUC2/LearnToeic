@@ -1,11 +1,17 @@
 package LearnToeic.controller.web;
 
 import LearnToeic.dto.auth.SignupRequest;
+import LearnToeic.entity.User;
+import LearnToeic.repository.AccountUserRepository;
 import LearnToeic.service.AccountUserService;
 import LearnToeic.service.exception.DuplicateEmailException;
 import LearnToeic.service.exception.PasswordNotMatchException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +29,20 @@ public class AuthWebController {
     public String loginPage(
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
-            Model model
-    ) {
-        if (error != null)  model.addAttribute("error", "Sai tài khoản hoặc mật khẩu");
-        if (logout != null) model.addAttribute("msg", "Bạn đã đăng xuất");
+            @RequestParam(value = "success", required = false) String success,
+            Model model) {
+        if (error != null) {
+            model.addAttribute("message", "Tên đăng nhập hoặc mật khẩu không chính xác!");
+            model.addAttribute("alertClass", "danger");
+        }
+        if (logout != null) {
+            model.addAttribute("message", "Bạn đã đăng xuất thành công!");
+            model.addAttribute("alertClass", "info");
+        }
+        if (success != null) {
+            model.addAttribute("message", "Đăng nhập thành công!");
+            model.addAttribute("alertClass", "success");
+        }
         return "auth/login"; // templates/auth/login.html
     }
 
@@ -44,7 +60,7 @@ public class AuthWebController {
                             RedirectAttributes ra) {
 
         if (binding.hasErrors()) {
-        binding.reject("formError","Vui lòng kiểm tra lại các trường đã nhập");
+        binding.reject("formError","Vui lòng kiểm tra lại các thông tin đã nhập đã nhập");
         return "auth/signup";
     }
 

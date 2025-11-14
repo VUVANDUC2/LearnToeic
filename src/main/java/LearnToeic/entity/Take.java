@@ -7,10 +7,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "takes")
-public class Take implements Serializable {
+public class Take implements Serializable
+{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "take_id")
-    private Long takeId;
+    private Integer takeId;
 
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user_id")
     private User user;
@@ -34,11 +35,11 @@ public class Take implements Serializable {
     private Integer elapsedSeconds = 0;
 
     //  Getter & Setter
-    public Long getTakeId() {
+    public Integer getTakeId() {
         return takeId;
     }
 
-    public void setTakeId(Long takeId) {
+    public void setTakeId(Integer takeId) {
         this.takeId = takeId;
     }
 

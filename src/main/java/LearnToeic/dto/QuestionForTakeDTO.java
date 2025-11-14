@@ -10,7 +10,7 @@ public class QuestionForTakeDTO {
         this.part = part;
     }
 
-    private int questionNumber;   // số thứ tự câu hỏi
+    private Integer questionNumber;   // số thứ tự câu hỏi
     private QuestionType questionType;
     public QuestionType getQuestionType() {
         if (questionType == null && part != null) {
@@ -61,11 +61,11 @@ public class QuestionForTakeDTO {
         this.optionD = optionD;
     }
 
-    public int getQuestionNumber() {
+    public Integer getQuestionNumber() {
         return questionNumber;
     }
 
-    public void setQuestionNumber(int questionNumber) {
+    public void setQuestionNumber(Integer questionNumber) {
         this.questionNumber = questionNumber;
     }
 

@@ -37,5 +37,26 @@ public class AccountUserService {
 
         userRepo.save(u);
     }
+     public User fetchUserByEmail(String email) {
+        return userRepo.findByEmail(email)
+                .orElse(null);
+    }
+
+    // public void sendResetLink(String email, String siteURL) {
+    //     User user = userRepo.findByEmail(email).orElse(null);
+    //     if (user == null) throw new RuntimeException("Email không tồn tại!");
+
+    //     String token = UUID.randomUUID().toString();
+    //     PasswordResetToken resetToken = new PasswordResetToken();
+    //     resetToken.setToken(token);
+    //     resetToken.setEmail(email);
+    //     resetToken.setExpiryDate(LocalDateTime.now().plusMinutes(30));
+
+    //     tokenRepo.save(resetToken);
+
+    //     String link = siteURL + "/reset_password?token=" + token;
+    //     emailService.sendEmail(email, "Đặt lại mật khẩu",
+    //         "Nhấn vào link để đặt lại mật khẩu: " + link);
+    // }
 
 }

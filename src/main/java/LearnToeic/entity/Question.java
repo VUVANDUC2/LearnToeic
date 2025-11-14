@@ -29,11 +29,11 @@ public class Question implements Serializable{
     @Column(name = "option_d")
     private String optionD;
 
-    // @Column(name = "correct_option", length = 1)
-    // private String correctOption;
+    @Column(name = "correct_option", length = 1)
+    private String correctOption;
 
-    // @Column(name = "note", columnDefinition = "TEXT")
-    // private String note;
+    @Column(name = "note", columnDefinition = "TEXT")
+    private String note;
 
     //  Getter & Setter
     public QuestionId getId() {
@@ -92,31 +92,19 @@ public class Question implements Serializable{
         this.optionD = optionD;
     }
 
-    // public String getCorrectOption() {
-    //     return correctOption;
-    // }
+    public String getCorrectOption() {
+        return correctOption;
+    }
 
-    // public void setCorrectOption(String correctOption) {
-    //     this.correctOption = correctOption;
-    // }
+    public void setCorrectOption(String correctOption) {
+        this.correctOption = correctOption;
+    }
 
-    // public String getNote() {
-    //     return note;
-    // }
+    public String getNote() {
+        return note;
+    }
 
-    // public void setNote(String note) {
-    //     this.note = note;
-    // }
-    // @Transient
-    // public QuestionType getQuestionType() {
-    //     return switch (part) {
-    //     case 1 -> QuestionType.IMAGE_CHOICE;
-    //     case 2 -> QuestionType.AUDIO_ONLY;
-    //     case 3,4 -> QuestionType.AUDIO_PASSAGE;
-    //     case 5 -> QuestionType.TEXT_BLANK;
-    //     case 6 -> QuestionType.PASSAGE_BLANK;
-    //     case 7 -> QuestionType.READING_COMP;
-    //     default -> throw new IllegalStateException("Invalid part: " + part);
-    //     };
-    // }
+    public void setNote(String note) {
+        this.note = note;
+    }
 }

@@ -1,88 +1,71 @@
 <div th:fragment="siteFooter">
-  <!-- Footer -->
   <footer class="pt-5 pb-4 mt-4" style="background:#0b1220;color:#cbd5e1">
     <div class="container">
       <div class="row g-4">
+
         <div class="col-12 col-lg-4">
-          <h5 class="fw-bold text-white">TOEIC Center</h5>
-          <p class="small">Sứ mệnh: Giúp hàng triệu người Việt tự tin nói tiếng Anh. Học thật – dụng thật – đạt mục tiêu thật.</p>
+          <h5 class="fw-bold text-white">LEARN TOEIC</h5>
+          <p class="small">Sứ mệnh: Giúp hàng triệu người Việt tự tin nói tiếng Anh.<br>Học thật – dụng thật – đạt mục tiêu thật.</p>
           <div class="d-flex gap-2">
             <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-facebook"></i></a>
             <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-youtube"></i></a>
             <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-tiktok"></i></a>
           </div>
         </div>
+
         <div class="col-6 col-lg-2">
-          <h6 class="text-white">Khóa học</h6>
+          <h6 class="text-white">Về chúng tôi</h6>
           <ul class="list-unstyled small">
-            <li><a href="#" class="text-reset">Pre TOEIC</a></li>
-            <li><a href="#" class="text-reset">TOEIC A</a></li>
-            <li><a href="#" class="text-reset">TOEIC B</a></li>
-            <li><a href="#" class="text-reset">TOEIC 4 kỹ năng</a></li>
+            <li><a href="#" class="text-reset text-decoration-none">Giới thiệu</a></li>
+            <li><a href="#" class="text-reset text-decoration-none">Liên hệ</a></li>
+            <li><a href="#" class="text-reset text-decoration-none">FAQ</a></li>
           </ul>
         </div>
-        <div class="col-6 col-lg-2">
-          <h6 class="text-white">Tài nguyên</h6>
+
+        <div class="col-6 col-lg-3">
+          <h6 class="text-white">Chính sách</h6>
           <ul class="list-unstyled small">
-            <li><a href="#" class="text-reset">Tài liệu</a></li>
-            <li><a href="#" class="text-reset">Đề luyện</a></li>
-            <li><a href="#" class="text-reset">Blog</a></li>
-            <li><a href="#" class="text-reset">Hỏi đáp</a></li>
+            <li><a href="#" class="text-reset text-decoration-none">Điều khoản</a></li>
+            <li><a href="#" class="text-reset text-decoration-none">Quyền riêng tư</a></li>
+            <li><a href="#" class="text-reset text-decoration-none">Hướng dẫn thanh toán</a></li>
           </ul>
         </div>
-        <div class="col-12 col-lg-4">
-          <h6 class="text-white">Đăng ký nhận tư vấn</h6>
-          <form class="row g-2">
-            <div class="col-12 col-sm-6"><input type="text" class="form-control" placeholder="Họ tên" required></div>
-            <div class="col-12 col-sm-6"><input type="tel" class="form-control" placeholder="Số điện thoại" required></div>
-            <div class="col-12 col-sm-8"><input type="email" class="form-control" placeholder="Email"></div>
-            <div class="col-12 col-sm-4 d-grid"><button class="btn btn-danger" type="submit">Gửi</button></div>
-          </form>
+
+        <div class="col-12 col-lg-3">
+          <h6 class="text-white">Liên hệ</h6>
+          <ul class="list-unstyled small">
+            <li class="d-flex mb-2">
+              <i class="bi bi-geo-alt me-2 pt-1"></i>
+              <span>Số 1, Võ Văn Ngân, Quận Thủ Đức, Tp. Hồ Chí Minh</span>
+            </li>
+            <li class="d-flex mb-2">
+              <i class="bi bi-telephone me-2 pt-1"></i>
+              <span>038961333</span>
+            </li>
+            <li class="d-flex mb-2">
+              <i class="bi bi-envelope me-2 pt-1"></i>
+              <span>learntoeic@gmail.com</span>
+            </li>
+          </ul>
         </div>
+
       </div>
+
       <hr class="border-secondary border-opacity-25 my-4" />
+
       <div class="d-flex flex-column flex-md-row justify-content-between small">
-        <span>© 2025 TOEIC Center. All rights reserved.</span>
-        <div class="d-flex gap-3"><a href="#" class="text-reset">Điều khoản</a><a href="#" class="text-reset">Bảo mật</a><a href="#" class="text-reset">Liên hệ</a></div>
+        <span>© 2025 LEARN TOEIC. All rights reserved.</span>
       </div>
     </div>
   </footer>
 
-  <!-- Floating CTA -->
   <div class="floating-cta" style="position:fixed;right:20px;bottom:24px;z-index:999">
-    <a class="btn btn-danger btn-lg shadow" href="#registerModal" data-bs-toggle="modal"><i class="bi bi-chat-dots"></i> Tư vấn</a>
+    <a class="btn btn-danger btn-lg shadow" href="#registerModal" data-bs-toggle="modal"><i class="bi bi-chat-dots"></i> Liên hệ</a>
   </div>
 
-  <!-- Register Modal -->
-  <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Đăng ký tư vấn</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form class="row g-2">
-            <div class="col-12 col-sm-6"><label class="form-label small">Họ tên</label><input type="text" class="form-control" required></div>
-            <div class="col-12 col-sm-6"><label class="form-label small">Số điện thoại</label><input type="tel" class="form-control" required></div>
-            <div class="col-12"><label class="form-label small">Email</label><input type="email" class="form-control"></div>
-            <div class="col-12"><label class="form-label small">Khu vực</label>
-              <select class="form-select"><option>Hà Nội</option><option>TP. Hồ Chí Minh</option><option>Đà Nẵng</option></select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-danger">Gửi đăng ký</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-  <script>
+  <!-- <script>
     // Hero swiper
     const heroSwiper = new Swiper('.hero-swiper', {
       loop: true,
@@ -120,5 +103,5 @@
       entries.forEach(e=>{ if(e.isIntersecting){ runCount(e.target); io.unobserve(e.target) } })
     }, {threshold: .6})
     counters.forEach(c=>io.observe(c))
-  </script>
+  </script> -->
 </div>

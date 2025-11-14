@@ -13,11 +13,6 @@ public class UserQueryService {
     private final AccountUserRepository userRepo;
 
     public Integer getCurrentUserId(Authentication auth) {
-        // // Cách 1: nếu auth.getPrincipal() là CustomUserDetails có sẵn userId
-        // if (auth != null && auth.getPrincipal() instanceof LearnToeic.security.CustomUserDetails cud) {
-        //     return cud.getId();
-        // }
-
         // Cách 2: nếu đang dùng username = email
         // auth.getName() trả về "username" của user → ở bạn là email
         String email = (auth != null) ? auth.getName() : null;

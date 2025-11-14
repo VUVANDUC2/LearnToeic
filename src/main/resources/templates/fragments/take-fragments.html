@@ -1,0 +1,63 @@
+<div th:fragment="partBlock(pv, takeId, selectedMap)">
+  <div>
+        <!-- Header nhỏ cho Part -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="m-0" th:text="${'Part ' + pv.part}">Part</h5>
+          <span class="text-muted small" th:text="${pv.rangeLabel}">Q1–Q6</span>
+        </div>
+
+        <!-- Danh sách câu hỏi -->
+        <div class="vstack gap-3">
+          <section th:each="q : ${pv.questions}"
+              class="card p-3"
+              th:attr="data-qn=${q.questionNumber}"
+              th:with="qn=${q.questionNumber},
+                        selectedMap=${view.selectedMap},
+                        sel=${q.selectedOption != null ? q.selectedOption
+                            : (selectedMap != null ? selectedMap[qn] : null)}">
+
+
+            <!-- Header câu -->
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge text-bg-secondary"
+                      th:text="${'Q' + q.questionNumber}">Q1</span>
+              </div>
+            </div>
+
+            <!-- Nội dung / Prompt -->
+            <div class="fw-semibold mb-2" th:text="${q.questionText}">Prompt hiển thị ở đây…</div>
+
+            <!-- Các lựa chọn A/B/C/D -->
+            <form class="vstack gap-2 answer-form"
+                  th:action="@{|/tests/${view.takeId}/answer|}"
+                  method="post"
+                  th:data-qn="${qn}">
+              <input type="hidden" name="qn" th:value="${qn}"/>
+
+              <label class="option" th:classappend="${sel}=='A' ? ' active'">
+                <input type="radio" name="opt" value="A" th:checked="${sel}=='A'"/>
+                <div class="d-flex gap-2"><div class="fw-bold">A.</div><div th:utext="${q.optionA}">Option A</div></div>
+              </label>
+
+              <label class="option" th:classappend="${sel}=='B' ? ' active'">
+                <input type="radio" name="opt" value="B" th:checked="${sel}=='B'"/>
+                <div class="d-flex gap-2"><div class="fw-bold">B.</div><div th:utext="${q.optionB}">Option B</div></div>
+              </label>
+
+              <label class="option" th:classappend="${sel}=='C' ? ' active'">
+                <input type="radio" name="opt" value="C" th:checked="${sel}=='C'"/>
+                <div class="d-flex gap-2"><div class="fw-bold">C.</div><div th:utext="${q.optionC}">Option C</div></div>
+              </label>
+
+              <label class="option" th:classappend="${sel}=='D' ? ' active'">
+                <input type="radio" name="opt" value="D" th:checked="${sel}=='D'"/>
+                <div class="d-flex gap-2"><div class="fw-bold">D.</div><div th:utext="${q.optionD}">Option D</div></div>
+              </label>
+            </form>
+
+
+          </section>
+        </div>
+      </div>
+</div>

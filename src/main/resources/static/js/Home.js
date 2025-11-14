@@ -1,31 +1,64 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const heroSwiper = new Swiper(".hero-swiper", {
-    // core
-    loop: true,
-    slidesPerView: 1,
-    speed: 700,
-    autoplay: { delay: 4000, disableOnInteraction: false },
+// ================== HERO CAROUSEL (nếu đang dùng) ==================
+document.addEventListener('DOMContentLoaded', function () {
+  const el = document.querySelector('#heroCarousel');
+  if (el) {
+    el.querySelectorAll('.carousel-item')
+      .forEach(i => i.setAttribute('data-bs-interval', '4000'));
 
-    // fade needs a bit more help when looping
-    // effect: "fade",
-    // fadeEffect: { crossFade: true },
-    loopAdditionalSlides: 3,   // 👈 thêm dòng này (hoặc dùng loopedSlides: 3)
-    // loopedSlides: 3,
+    const carousel = new bootstrap.Carousel(el, {
+      interval: 4000,
+      ride: 'carousel',
+      wrap: true,
+      pause: false,
+      keyboard: true,
+      touch: true
+    });
 
-    preloadImages: true,
-    updateOnImagesReady: true,
+    el.addEventListener('slid.bs.carousel', (e) => {
+      const items = el.querySelectorAll('.carousel-item');
+      const activeIndex = [...items].indexOf(e.relatedTarget);
+      console.log('activeIndex:', activeIndex, '/', items.length);
+    });
+  }
 
-    pagination: { el: ".hero .swiper-pagination", clickable: true },
-    navigation: {
-      nextEl: ".hero .swiper-button-next",
-      prevEl: ".hero .swiper-button-prev",
-    },
+  // ================== SECTION "CHÚNG TÔI CÓ TẤT CẢ..." ==================
+  const fadeItems = document.querySelectorAll('.fade-item');
 
-    // debug nhanh (xem Swiper có sang index 2 không)
-    on: {
-      slideChange(swiper) {
-        console.log("realIndex:", swiper.realIndex, "/", swiper.slides.length);
-      },
-    },
-  });
+  if (!('IntersectionObserver' in window)) {
+    // fallback: nếu browser cũ, show luôn
+    fadeItems.forEach(item => item.classList.add('show'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, ob) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        ob.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  fadeItems.forEach(item => observer.observe(item));
+  // Avatar
+  const btn = document.getElementById('userMenuBtn');
+    const menu = document.getElementById('userMenu');
+
+    if (!btn || !menu) return;
+
+    // Click vào avatar: toggle menu
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      menu.classList.toggle('show');
+    });
+
+    // Click vào trong menu: không tắt ngay
+    menu.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+
+    // Click ra ngoài: đóng menu
+    document.addEventListener('click', function () {
+      menu.classList.remove('show');
+    });
 });

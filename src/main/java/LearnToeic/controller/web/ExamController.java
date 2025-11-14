@@ -1,18 +1,21 @@
 package LearnToeic.controller.web;
 
-import LearnToeic.dto.QuestionForTakeDTO;
-import LearnToeic.entity.Take;
+import LearnToeic.security.AuthUtils;
 import LearnToeic.service.ExamService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseEntity;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 
 @Controller
 @RequestMapping("/tests")
@@ -20,96 +23,79 @@ import java.util.stream.Collectors;
 public class ExamController {
 
     private final ExamService examService;
+    private final AuthUtils authUtils;
 
-    @GetMapping("/{takeId}")
-    public String examTake(@PathVariable Long takeId,
-                          @RequestParam(defaultValue = "1") int part,
-                          Model model) {
+    @GetMapping("/{testId}/start")
+    public String startTest(@PathVariable Integer testId) {
 
-        Take take = examService.getTestTake(takeId);//lấy thông tin lượt làm bài
-        // 2) Nếu lần đầu thì set endTime
-        if (take.getEndTime() == null) {
-            take.setEndTime(Instant.now().plusSeconds(120 * 60));
-            //takeService.save(take);
-        }
-        List<QuestionForTakeDTO> allQuestions = examService.getAllQuestions(takeId); // lấy tất cả câu hỏi của mỗi lần làm bài
+        Integer userId = authUtils.currentUserId();
+        Integer takeId = examService.startOrResume(userId, testId); // tạo hoặc lấy take
 
-        // Lọc câu hỏi theo Part
-        List<QuestionForTakeDTO> partQuestions = allQuestions.stream()
-            .filter(q -> q.getPart() == part)
-            .collect(Collectors.toList());
-
-        // Nhóm câu hỏi theo groupId và đánh dấu câu đầu tiên
-        // Map<Integer, List<QuestionForTakeDTO>> grouped = partQuestions.stream()
-        //     .filter(q -> q.getGroupId() != null)
-        //     .collect(Collectors.groupingBy(QuestionForTakeDTO::getGroupId));
-
-        // grouped.forEach((gid, list) -> {
-        //     if (!list.isEmpty()) {
-        //         list.sort(Comparator.comparing(QuestionForTakeDTO::getQuestionNumber));
-        //         list.get(0).setIsFirstInGroup(true);
-        //     }
-        // });
-
-        // Đánh dấu câu không thuộc nhóm là first (Part 1, 2, 5)
-        // partQuestions.stream()
-        //     .filter(q -> q.getGroupId() == null)
-        //     .forEach(q -> q.setIsFirstInGroup(true));
-
-        // Load đáp án đã chọn
-        Map<Integer, Character> selectedMap = examService.getSelectedAnswers(takeId);
-        partQuestions.forEach(q ->
-            q.setSelectedOption(selectedMap.get(q.getQuestionNumber()))
-        );
-
-        // Tạo partMap cho sidebar (7 parts)
-        Map<Integer, List<QuestionForTakeDTO>> partMap = allQuestions.stream()
-            .collect(Collectors.groupingBy(QuestionForTakeDTO::getPart));
-
-        model.addAttribute("view", take);
-        model.addAttribute("currentPart", part);
-        model.addAttribute("partQuestions", partQuestions);
-        model.addAttribute("partMap", partMap);
-        model.addAttribute("selectedMap", selectedMap);
+        return "redirect:/tests/take/" + takeId;  // chuyển sang trang làm bài
+    }
+    @GetMapping("/take/{takeId}")
+    public String examHome(@PathVariable Integer takeId, Model model,
+                           @RequestParam(name="part", defaultValue="1") int part) {
+        var view = examService.buildTakeView(takeId);
+        var pv = examService.buildPartView(takeId, part);
+        model.addAttribute("pv", pv);
+        model.addAttribute("view", view);
         model.addAttribute("review", false);
-
-        return "tests/text";
+        return "tests/take-home";
     }
+    @GetMapping("/take/{takeId}/part/{p}")
+    public String loadPart(@PathVariable Integer takeId, @PathVariable int p, Model model) {
+        var pv = examService.buildPartView(takeId, p); // lấy câu hỏi part p
+        var view = examService.buildTakeView(takeId);
+        model.addAttribute("takeId", takeId);
+        model.addAttribute("view", view);
+        model.addAttribute("pv", pv);
+        model.addAttribute("review", false);
+        model.addAttribute("selectedMap", view.selectedMap());
+        return "fragments/take-parts :: partBlock(pv=${pv}, takeId=${takeId})";
+    }
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public String onError(Exception ex){
+        return "<div class='alert alert-danger'>Lỗi máy chủ: "
+            + (ex.getClass().getSimpleName()) + "</div>";
+    }
+
     @PostMapping("/{takeId}/submit")
-    public ResponseEntity<?> submitTest(@PathVariable Long takeId,
-                                       @RequestBody Map<String, Object> payload) {
+    @Transactional
+    public String submitExam(@PathVariable Integer takeId,
+            @RequestParam("answersJson") String answersJson
+            ) throws Exception {
 
-        try {
-            // 1. Lấy danh sách đáp án
-            @SuppressWarnings("unchecked")
-            List<Map<String, Object>> answers =
-                (List<Map<String, Object>>) payload.get("answers");
+        // Parse JSON {"101":"B","102":"D",...}
+        ObjectMapper om = new ObjectMapper();
+        Map<String, String> raw = om.readValue(answersJson, new TypeReference<Map<String,String>>(){});
 
-            boolean finalSubmit = Boolean.TRUE.equals(payload.get("submit"));
-
-            // 2. Lưu đáp án vào DB
-            examService.saveAnswers(takeId, answers, finalSubmit);
-
-            // 3. Nếu là submit cuối cùng, chấm điểm
-            if (finalSubmit) {
-                examService.gradeTest(takeId);
-                return ResponseEntity.ok(Map.of(
-                    "status", "success",
-                    "message", "Nộp bài thành công!"
-                ));
-            }
-
-            return ResponseEntity.ok(Map.of(
-                "status", "saved",
-                "message", "Lưu đáp án thành công"
-            ));
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                "status", "error",
-                "message", e.getMessage()
-            ));
+        // Chuyển sang Map<Integer, Character>
+        Map<Integer, Character> answers = new HashMap<>();
+        for (Map.Entry<String, String> e : raw.entrySet()) {
+            Integer qn = Integer.valueOf(e.getKey());
+            Character sel = e.getValue() != null && !e.getValue().isEmpty() ? e.getValue().charAt(0) : null;
+            if (sel != null) answers.put(qn, sel);
         }
-    }
 
+        examService.saveAllAndGrade(takeId, answers);   // <— chỉ lưu khi submit
+        return "redirect:/tests/take/" + takeId + "/review";
+    }
+    @GetMapping("/take/{takeId}/review")
+    public String reviewTake(
+            @PathVariable Integer takeId,
+            @RequestParam(name="part", defaultValue="1") int part,
+            Model model) {
+
+        var vm = examService.buildTakeViewWithResults(takeId, part); // có selectedMap, correctMap, isCorrectMap, score
+        var pv = examService.buildPartView(takeId, part);
+
+        model.addAttribute("view", vm);     // gồm: testId, testName, totalQuestions, score, partMap, selectedMap, correctMap, isCorrectMap, takeId
+        model.addAttribute("pv", pv); // PartView hiện tại
+        model.addAttribute("review", true); // bật chế độ review
+
+        return "tests/take-home";
+    }
 }

@@ -5,193 +5,432 @@
   <title>Đăng nhập • LearnToeic</title>
 
   <!-- Bootstrap / Icons -->
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-  <link rel="stylesheet" th:href="@{/css/bootstrap-icons.css}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
 
   <style>
-    /* ===== Nền tổng thể ===== */
-    body {
-      background: linear-gradient(135deg, #2463eb 0%, #6610f2 100%);
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    /* ========== RESET CHO TRANG LOGIN ========== */
+    body.login-page {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #111827;
+    }
+    body.login-page * {
+      box-sizing: border-box;
+    }
+
+    /* ========== LAYOUT 2 CỘT ========== */
+    .login-page-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* CỘT TRÁI: nền gradient + logo + text + illustration */
+    .login-hero {
+      flex: 1.4;
+      padding: 48px 60px;
+      background:
+        radial-gradient(circle at top left, #ffe0cc 0, transparent 55%),
+        radial-gradient(circle at bottom right, #ffe6f2 0, transparent 55%),
+        #fff7f2;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-hero-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+    .logo-mark {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #ff7a45, #ffb36b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 26px;
+      color: #fff;
+    }
+    .logo-text {
+      font-size: 30px;
+      font-weight: 800;
+      color: #172554;
+    }
+    .logo-text span { color: #ff7a45; }
+
+    .login-hero-title {
+      font-size: 52px;
+      font-weight: 800;
+      color: #172554;
+      margin: 0 0 8px;
+    }
+    .login-hero-sub {
+      font-size: 18px;
+      color: #6b7280;
+      margin-bottom: 24px;
+      max-width: 430px;
+    }
+
+    .login-hero-illustration {
+      margin-top: auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+    }
+    .login-hero-illustration img {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* CỘT PHẢI: FORM */
+    .login-panel-wrapper {
+      flex: 1;
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
+      align-items: flex-start; /* form nằm trên, giống ảnh */
+      padding: 40px 56px 48px;
+      background: #ffffff;
     }
 
-    /* ===== Form card ===== */
-    .login-card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    .login-panel {
       width: 100%;
-      max-width: 480px;
-      padding: 60px 50px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      max-width: 470px;
+      margin-top: 40px;       /* đẩy xuống 1 chút như screenshot */
     }
 
-    .login-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    /* ===== Tiêu đề ===== */
-    .login-title {
-      text-align: center;
-      color: #0d6efd;
+    .login-heading {
+      font-size: 36px;
       font-weight: 700;
-      margin-bottom: 2rem;
-      font-size: 2rem;
+      margin: 0 0 10px;
+      color: #111827;
+    }
+    .login-subtext {
+      font-size: 15px;
+      color: #6b7280;
+      margin-bottom: 32px;
     }
 
-    /* ===== Label & Input ===== */
-    .form-label {
-      display: block;
+    /* LABEL + INPUT */
+    .login-panel .form-label {
       font-weight: 600;
-      color: #333;
+      color: #374151;
       margin-bottom: 6px;
+      font-size: 14px;
     }
-
-    .form-control {
-      border-radius: 10px;
-      padding: 12px 15px;
-      font-size: 1rem;
-      border: 1.5px solid #ccc;
-      transition: all 0.25s ease;
-    }
-
-    .form-control:focus {
-      border-color: #0d6efd;
-      box-shadow: 0 0 6px rgba(13, 110, 253, 0.3);
-    }
-
-    /* ===== Input group (mật khẩu + icon mắt) ===== */
-    .input-group {
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .btn-eye {
-      border: 1px solid #ced4da;
-      border-left: none;
-      background: #f8f9fa;
-      padding: 0 14px;
-      display: flex;
-      align-items: center;
-      transition: background-color 0.2s ease;
-    }
-
-    .btn-eye:hover {
-      background-color: #e9ecef;
-    }
-
-    /* ===== Nút đăng nhập ===== */
-    .btn-login {
+    .login-panel .form-control {
       display: block;
-      width: 100%;
-      background: linear-gradient(90deg, #0d6efd, #6610f2);
-      border: none;
+      width: 100%;           /* FULL RỘNG = nút đăng nhập */
       border-radius: 10px;
-      color: #fff;
-      font-weight: 600;
-      padding: 12px;
-      font-size: 1.1rem;
-      margin-top: 1.2rem;
-      transition: all 0.25s ease;
+      padding: 13px 14px;
+      font-size: 0.96rem;
+      border: 1.5px solid #e5e7eb;
+      transition: all 0.2s ease;
+      box-shadow: none;
+      margin: 0;             /* xoá mọi margin ngầm gây lệch */
+    }
+    .login-panel .form-control::placeholder {
+      color: #9ca3af;
+    }
+    .login-panel .form-control:focus {
+      border-color: #ff7a45;
+      box-shadow: 0 0 0 3px rgba(248, 114, 67, 0.16);
     }
 
-    .btn-login:hover {
-      background: linear-gradient(90deg, #6610f2, #0d6efd);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(13, 110, 253, 0.4);
-    }
+  /* INPUT PASSWORD + ICON MẮT */
+  .input-group { position: relative; }
+  .input-group .form-control { padding-right: 44px; } /* chừa chỗ cho icon */
+  /* nếu Bootstrap đã xoá bo góc khi không phải phần tử cuối, thêm: */
+  .input-group > .form-control:not(:last-child) {
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+  }
 
-    /* ===== Link ===== */
-    a {
+.btn-eye{
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  padding: 4px;
+  cursor: pointer;
+  z-index: 6;              /* > z-index:3 của .form-control:focus (Bootstrap) */
+  pointer-events: auto;
+}
+.btn-eye i{ font-size: 18px; }
+
+/* tùy chọn: nếu có container nào tạo stacking context (transform/overflow) */
+.login-panel .input-group { z-index: 6; }
+
+    /* LINK QUÊN MẬT KHẨU */
+    .forgot-link {
+      color: #ff7a45;
+      font-size: 0.85rem;
       text-decoration: none;
     }
-
-    a.text-link {
-      color: #6610f2;
-      font-weight: 500;
-    }
-
-    a.text-link:hover {
+    .forgot-link:hover {
       text-decoration: underline;
     }
 
-    .register-text {
-      text-align: center;
-      margin-top: 1.8rem;
-      font-size: 0.95rem;
-      color: #444;
+    /* NÚT ĐĂNG NHẬP */
+    .btn-login {
+      display: block;
+      width: 100%;
+      margin-top: 22px;
+      padding: 13px 16px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #ffffff;
+      background: #ff7a45;
+      box-shadow: 0 6px 16px rgba(248, 114, 67, 0.3);
+      transition: all 0.2s ease;
+    }
+    .btn-login:hover {
+      background: #ff6a33;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(248, 114, 67, 0.4);
     }
 
-    /* Responsive */
-    @media (max-width: 480px) {
-      .login-card {
-        padding: 40px 30px;
+    /* DIVIDER "HOẶC" */
+    .login-divider {
+      display: flex;
+      align-items: center;
+      margin: 26px 0 14px;
+      color: #9ca3af;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .login-divider::before,
+    .login-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+    .login-divider span {
+      margin: 0 14px;
+      font-weight: 500;
+    }
+
+    /* NÚT GOOGLE */
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;      /* CĂN GIỮA */
+      gap: 10px;
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #111827;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-google:hover {
+      background: #f9fafb;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+    .google-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* TEXT ĐĂNG KÝ */
+    .register-text {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #6b7280;
+      text-align: center;
+    }
+    .link-inline {
+      color: #ff7a45;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .link-inline:hover {
+      text-decoration: underline;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .login-page-wrapper {
+        flex-direction: column;
       }
-      .login-title {
-        font-size: 1.6rem;
+      .login-panel-wrapper {
+        padding: 32px 20px 40px;
+        align-items: flex-start;
+      }
+      .login-panel {
+        margin-top: 10px;
+        max-width: 100%;
       }
     }
+    @media (max-width: 576px) {
+      .login-hero-illustration {
+        display: none;
+      }
+      .login-hero {
+        padding: 28px 20px 12px;
+      }
+    }
+
+
+
   </style>
 </head>
 
-<body>
-  <main>
-    <div class="login-card">
-      <h2 class="login-title">Đăng nhập</h2>
+<body class="login-page">
+<main class="login-page-wrapper">
 
-      <form th:action="@{/auth/login}" method="post" novalidate>
-        <!-- Email -->
+  <!-- CỘT TRÁI -->
+  <section class="login-hero">
+    <div class="login-hero-logo">
+      <div class="logo-mark">L</div>
+      <div class="logo-text">Learn<span>Toeic</span></div>
+    </div>
+
+    <h1 class="login-hero-title">EstudyMe style</h1>
+    <p class="login-hero-sub">
+      Không gian luyện thi TOEIC hiện đại, trực quan và cá nhân hóa cho từng học viên.
+    </p>
+  </section>
+
+  <!-- CỘT PHẢI: FORM -->
+  <section class="login-panel-wrapper">
+    <div class="login-panel">
+      <h1 class="login-heading">Đăng nhập</h1>
+      <p class="login-subtext">
+        Chào mừng bạn trở lại! Vui lòng nhập thông tin của bạn bên dưới.
+      </p>
+
+      <form th:action="@{/auth/login}" method="post" class="needs-validation" novalidate>
+        <!-- Tài khoản -->
         <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input id="email" name="email" type="email" class="form-control"
-                 placeholder="nhapemail@gmail.com" required>
+          <label for="email" class="form-label">Tài khoản *</label>
+          <input id="email" name="email" type="email"
+                 class="form-control"
+                 placeholder="Nhập tài khoản"
+                 required>
         </div>
 
-        <!-- Password -->
-        <div class="mb-3">
-          <label for="password" class="form-label d-flex justify-content-between align-items-center">
-            <span>Mật khẩu</span>
-            <a class="small text-link" th:href="@{/forgot_password}">Quên mật khẩu?</a>
+        <!-- Mật khẩu -->
+      <div class="mb-2">
+          <label class="form-label d-flex justify-content-between align-items-center" for="password">
+            <span>Mật khẩu * </span>
+
           </label>
+
           <div class="input-group">
-            <input id="password" name="password" type="password" class="form-control"
-                   placeholder="••••••••" required>
-            <button type="button" class="btn-eye" id="togglePassword" aria-label="Hiện/ẩn mật khẩu">
-              <i class="bi bi-eye" id="togglePasswordIcon"></i>
-            </button>
-          </div>
+  <input id="password" name="password" type="password"
+         class="form-control" placeholder="••••••••" required>
+  <button type="button" id="togglePassword" class="btn-eye" aria-label="Hiện/ẩn mật khẩu">
+    <i class="bi bi-eye" id="togglePasswordIcon"></i>
+  </button>
+</div>
+        </div>
+        <!-- THÔNG BÁO CHUNG -->
+<div th:if="${message}" class="container mt-3">
+  <div th:class="'alert alert-' + ${alertClass} + ' alert-dismissible fade show'" role="alert">
+    <span th:text="${message}">Thông báo</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+</div>
+
+
+
+        <!-- Quên mật khẩu -->
+        <div class="d-flex justify-content-end mb-3">
+          <a class="small text-decoration-none" th:href="@{/auth/forgot-password}">Quên mật khẩu?</a>
         </div>
 
-        <button type="submit" class="btn-login">Đăng nhập</button>
+        <!-- Nút đăng nhập -->
+        <button type="submit" class="btn-login">
+          ĐĂNG NHẬP
+        </button>
       </form>
 
-      <div class="register-text">
-        Chưa có tài khoản?
-        <a th:href="@{/auth/signup}" class="text-link">Đăng ký ngay</a>
+      <!-- HOẶC -->
+      <div class="login-divider">
+        <span>HOẶC</span>
       </div>
+
+      <!-- Google -->
+      <a th:href="@{/oauth2/authorization/google}" class="btn-google">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+             alt="Google" class="google-icon">
+        Tiếp tục với Google
+      </a>
+
+      <!-- Đăng ký -->
+      <p class="register-text">
+        Bạn chưa có tài khoản?
+        <a th:href="@{/auth/signup}" class="link-inline">Đăng ký ngay</a>
+      </p>
     </div>
-  </main>
+  </section>
 
-  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const pwd = document.getElementById('password');
-      const btn = document.getElementById('togglePassword');
-      const icon = document.getElementById('togglePasswordIcon');
+</main>
 
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // === Nút hiện/ẩn mật khẩu ===
+    const pwd  = document.getElementById('password');
+    const btn  = document.getElementById('togglePassword');
+    const icon = document.getElementById('togglePasswordIcon');
+
+    if (btn && pwd && icon) {
       btn.addEventListener('click', function () {
         const isHidden = pwd.type === 'password';
         pwd.type = isHidden ? 'text' : 'password';
         icon.classList.toggle('bi-eye', !isHidden);
         icon.classList.toggle('bi-eye-slash', isHidden);
       });
+    }
+
+    // === Thông báo tự ẩn sau 3 giây ===
+    const msg = document.getElementById("loginMessage");
+    if (msg) {
+      // Thêm hiệu ứng mờ dần
+      msg.style.transition = "opacity 0.5s ease";
+      msg.style.opacity = "1";
+
+      // Sau 3s bắt đầu mờ dần rồi ẩn
+      setTimeout(() => {
+        msg.style.opacity = "0";
+        setTimeout(() => {
+          msg.style.display = "none"; // ẩn hẳn
+        }, 500); // sau khi mờ xong
+      }, 3000); // đợi 3 giây
+    }
+  });
+  //viền đỏ
+  const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
     });
-  </script>
+</script>
+
 </body>
 </html>

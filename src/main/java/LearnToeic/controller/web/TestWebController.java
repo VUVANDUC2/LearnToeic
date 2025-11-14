@@ -1,40 +1,51 @@
 package LearnToeic.controller.web;
 
-import LearnToeic.dto.TestForTakeDTO;
-import LearnToeic.service.TakeViewService;
+import LearnToeic.dto.TestDTO;
+import LearnToeic.service.TestListService;
+import LearnToeic.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/tests")
 @RequiredArgsConstructor
 public class TestWebController {
 
-    private final LearnToeic.repository.TestRepository testRepo;
-    private final LearnToeic.service.UserQueryService userQueryService; // service tiện ích để lấy userId hiện tại
-    private final TakeViewService takeViewService;
+    private final TestListService testService;
+    private final UserQueryService userQueryService;
 
-    // Danh sách đề thi (ai cũng xem được)
-    @GetMapping
-    public String list(Model model) {
-        model.addAttribute("tests", testRepo.findAllByOrderByTestDateDesc());
+    // Danh sách đề (phân trang)
+    @GetMapping("/tests")
+    public String listTests(Model model,
+                            @RequestParam(defaultValue = "0") int page) {
+        int pageSize = 8; // chỉ 8 đề mỗi trang
+        Page<TestDTO> testPage = testService.getAllTestsPage(page, pageSize);
+
+        model.addAttribute("tests", testPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", testPage.getTotalPages());
+        model.addAttribute("pageTitle", "Thư viện đề thi • LEARN TOEIC");
+
         return "tests/list";
     }
+    // 🔍 Tìm kiếm đề + phân trang
+    @GetMapping("/tests/search")
+    public String searchTests(Model model,
+                              @RequestParam(required = false) String keyword,
+                              @RequestParam(defaultValue = "0") int page) {
 
-    // BẮT ĐẦU / RESUME bài thi → cần đăng nhập
-    // Dùng GET để Security "ghi nhớ" SavedRequest, login xong quay lại URL này.
-    @GetMapping("/{testId}/start")
-    public String start(@PathVariable Integer testId, Authentication auth) {
-        // Lấy userId từ SecurityContext (tránh tự set session)
-        Integer userId = userQueryService.getCurrentUserId(auth);
-        // Khởi tạo hoặc resume bài làm cho user + test
-        TestForTakeDTO dto = takeViewService.startOrResume(userId, testId);
+        int pageSize = 8;
+        Page<TestDTO> testPage = testService.searchTests(keyword, page, pageSize);
 
-        // Điều hướng sang trang làm bài của bạn
-        // (Bạn đang hiển thị làm bài ở /tests/{takeId}?q=1 → giữ nguyên để không phải sửa view)
-        return "redirect:/tests/" + dto.getTakeId() + "?q=1";
+        model.addAttribute("tests", testPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", testPage.getTotalPages());
+        model.addAttribute("keyword", keyword); // để giữ lại text trong ô search
+        model.addAttribute("pageTitle", "Tìm kiếm đề thi • LEARN TOEIC");
+
+        return "tests/list";
     }
 }

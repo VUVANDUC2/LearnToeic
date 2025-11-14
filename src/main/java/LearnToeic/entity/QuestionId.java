@@ -3,13 +3,18 @@ package LearnToeic.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
+
 public class QuestionId implements Serializable {
 
+    @Column(name = "test_id")
     private Integer testId;
+    @Column(name = "question_number")
     private Integer questionNumber;
 
     // Default constructor is required by JPA
     public QuestionId() {}
+
     public QuestionId(Integer testId, Integer questionNumber) {
         this.testId = testId;
         this.questionNumber = questionNumber;

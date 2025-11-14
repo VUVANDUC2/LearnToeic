@@ -10,23 +10,28 @@ import jakarta.persistence.*;
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "test_id")
     private Integer testId;
 
+    @Column(name = "test_name", nullable = false, length = 255)
     private String testName;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "test_date")
     private Date testDate;
 
+    @Column(name = "total_questions", nullable = false)
     private Integer totalQuestions;
 
+    @Column(name = "max_score")
     private Integer maxScore;
 
+    @Column(name = "description", length = 255)
     private String description;
 
-    // Constructor
-    public Test() {
-    }
+    protected Test() {}
 
-    public Test(String testName, Date testDate, int totalQuestions, Integer maxScore, String description) {
+    public Test(String testName, Date testDate, Integer totalQuestions, Integer maxScore, String description) {
         this.testName = testName;
         this.testDate = testDate;
         this.totalQuestions = totalQuestions;

@@ -9,16 +9,16 @@ import java.util.Objects;
 public class UserAnswerId implements Serializable {
 
     @Column(name = "take_id", nullable = false)
-    private Long takeId;
+    private Integer takeId;
 
     @Column(name = "question_number", nullable = false)
     private Integer questionNumber;
 
     //  Getter & Setter
-    public Long getTakeId() {
+    public Integer getTakeId() {
         return takeId;
     }
-    public void setTakeId(Long takeId) {
+    public void setTakeId(Integer takeId) {
         this.takeId = takeId;
     }
     public Integer getQuestionNumber() {
@@ -30,7 +30,7 @@ public class UserAnswerId implements Serializable {
     // Constructor
     public UserAnswerId() {}
 
-    public UserAnswerId(Long takeId, Integer questionNumber) {
+    public UserAnswerId(Integer takeId, Integer questionNumber) {
         this.takeId = takeId;
         this.questionNumber = questionNumber;
     }
