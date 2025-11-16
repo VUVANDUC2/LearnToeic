@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:text="${title}">Flexy Free Bootstrap Admin Template by WrapPixel</title>
+    <!-- <link
+      rel="shortcut icon"
+      type="image/png"
+      href="/images/logos/favicon.png"
+    /> -->
+    <link rel="stylesheet" href="/css/styles.min.css" />
+  </head>
+
+  <body>
+    <!--  Body Wrapper -->
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+    >
+      <!--  App Topstrip -->
+
+      <!-- Sidebar Start -->
+      <aside th:replace="fragments/sidebar :: sidebar"></aside>
+      <!--  Sidebar End -->
+      <!--  Main wrapper -->
+      <div class="body-wrapper">
+        <!--  Header Start -->
+        <header class="app-header">
+          <nav class="navbar navbar-expand-lg navbar-light">
+            <ul class="navbar-nav">
+              <li class="nav-item d-block d-xl-none">
+                <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
+                  <i class="ti ti-menu-2"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link"
+                  href="javascript:void(0)"
+                  id="drop1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="ti ti-bell"></i>
+                  <div class="notification bg-primary rounded-circle"></div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-animate-up" aria-labelledby="drop1">
+                  <div class="message-body">
+                    <a href="javascript:void(0)" class="dropdown-item">Item 1</a>
+                    <a href="javascript:void(0)" class="dropdown-item">Item 2</a>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+              <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link"
+                    href="javascript:void(0)"
+                    id="drop2"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <img
+                      src="/images/profile/user-1.jpg"
+                      alt=""
+                      width="35"
+                      height="35"
+                      class="rounded-circle"
+                    />
+                  </a>
+                  <div
+                    class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
+                    aria-labelledby="drop2"
+                  >
+                    <div class="message-body">
+                      <a
+                        href="javascript:void(0)"
+                        class="d-flex align-items-center gap-2 dropdown-item"
+                      >
+                        <i class="ti ti-user fs-6"></i>
+                        <p class="mb-0 fs-3">My Profile</p>
+                      </a>
+                      <a
+                        href="javascript:void(0)"
+                        class="d-flex align-items-center gap-2 dropdown-item"
+                      >
+                        <i class="ti ti-mail fs-6"></i>
+                        <p class="mb-0 fs-3">My Account</p>
+                      </a>
+                      <a
+                        href="javascript:void(0)"
+                        class="d-flex align-items-center gap-2 dropdown-item"
+                      >
+                        <i class="ti ti-list-check fs-6"></i>
+                        <p class="mb-0 fs-3">My Task</p>
+                      </a>
+                      <a
+                        href="./authentication-login.html"
+                        class="btn btn-outline-primary mx-3 mt-2 d-block"
+                      >
+                        Logout
+                      </a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </header>
+        <!--  Header End -->
+        <div class="body-wrapper-inner">
+          <div class="container-fluid">
+            <div class="row">
+              <!--Staring-->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <form>
+                      <div class="input-group">
+                        <input
+                          name="searchTerm"
+                          type="text"
+                          class="form-control"
+                          placeholder="Search..."
+                        />
+                        <button class="btn btn-primary" type="submit">Search</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <!--Table-->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-md-flex align-items-center">
+                      <div>
+                        <h4 class="card-title">Tests List</h4>
+                        <p class="card-subtitle">
+                          All of your tests on website will be display here
+                        </p>
+                      </div>
+                      <div class="d-flex ms-auto align-items-center gap-2 mt-3 mt-md-0">
+                        <a class="btn btn-primary" href="/admin/create_test" role="button">New+</a>
+                        <select
+                          class="form-select theme-select border-0"
+                          aria-label="Default select example"
+                        >
+                          <option value="1">March 2025</option>
+                          <option value="2">March 2025</option>
+                          <option value="3">March 2025</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="table-responsive mt-4">
+                      <table class="table mb-0 text-nowrap varient-table align-middle fs-3">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="px-0 text-muted">Test</th>
+                            <th scope="col" class="px-0 text-muted">Name</th>
+                            <th scope="col" class="px-0 text-muted">Status</th>
+                            <th scope="col" class="px-0 text-muted text-end">Last Modified</th>
+                            <th scope="col" class="px-0 text-muted text-end">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr th:each="test : ${tests}">
+                            <td class="px-0">
+                              <div class="d-flex align-items-center">
+                                <img
+                                  src="/images/profile/test.png"
+                                  class="rounded-circle"
+                                  width="40"
+                                  alt="flexy"
+                                />
+                                <div class="ms-3">
+                                  <h6 class="mb-0 fw-bolder" th:text="${test.getTestId}">
+                                    Sunil Joshi
+                                  </h6>
+                                  <span class="text-muted">Id</span>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="px-0" th:text="${test.getTestName}">Elite Admin</td>
+                            <td class="px-0">
+                              <span
+                                class="badge"
+                                th:classappend="${test.status == 'ARCHIVED' ? 'bg-warning' : 'bg-success'}"
+                                th:text="${test.status}"
+                              ></span>
+                            </td>
+                            <td
+                              class="px-0 text-dark fw-medium text-end"
+                              th:text="${test.getTestDate}"
+                            >
+                              $3.9K
+                            </td>
+                            <td class="px-0 text-end fw-medium">
+                              <span class="action-icons active">
+                                <a
+                                  th:data-test-id="${test.getTestId}"
+                                  th:href="@{/admin/tests/test_page(testId=${test.getTestId})}"
+                                  class="ps-3 edit-test-btn"
+                                >
+                                  <i class="ti ti-edit fs-5"></i>
+                                </a>
+                                <a
+                                  th:data-test-id="${test.getTestId}"
+                                  href="javascript:void(0)"
+                                  class="ps-3 delete-test-btn"
+                                >
+                                  <i class="ti ti-circle-x fs-5"></i>
+                                </a>
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end me-3">
+                      <!-- Previous button -->
+                      <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a
+                          class="page-link"
+                          th:href="@{/admin/tests(page=${currentPage - 1})}"
+                          tabindex="-1"
+                        >
+                          Previous
+                        </a>
+                      </li>
+
+                      <!-- Page numbers -->
+                      <li
+                        class="page-item"
+                        th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage} ? 'active'"
+                      >
+                        <a
+                          class="page-link"
+                          th:href="@{/admin/tests(page=${i})}"
+                          th:text="${i + 1}"
+                        ></a>
+                      </li>
+
+                      <!-- Next button -->
+                      <li
+                        class="page-item"
+                        th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'"
+                      >
+                        <a class="page-link" th:href="@{/admin/tests(page=${currentPage + 1})}">
+                          Next
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/updateTest.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+  </body>
+</html>

@@ -3,455 +3,253 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin TOEIC Test Viewer (Single Question View)</title>
+    <title>TOEIC Review - Part 1</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJd47xGgJv3/R5/HhL7u8M8tK+cQ8QyK/m8+3sEw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
     <style>
       body {
-        min-height: 100vh;
         background-color: #f8f9fa;
       }
-      .test-wrapper {
-        display: flex;
-        min-height: calc(100vh - 56px);
-      }
       .sidebar {
-        flex: 0 0 280px;
-        background-color: #ffffff;
-        border-right: 1px solid #dee2e6;
-        padding-top: 1rem;
-        position: sticky;
-        top: 56px;
-        height: calc(100vh - 56px);
+        height: 100vh;
         overflow-y: auto;
+        padding: 1rem;
+        border-right: 1px solid #ddd;
       }
-      .main-content {
-        flex: 1;
-        padding: 2rem;
-        overflow-y: auto;
-      }
-      .question-number-button {
-        width: 40px;
-        height: 40px;
-        margin: 4px;
-        font-size: 0.8rem;
-        font-weight: 500;
+      .question-box {
+        cursor: pointer;
         text-align: center;
-        line-height: 25px;
-        cursor: pointer; /* Allow clicking for question jump */
+        font-weight: bold;
+        color: white;
+        transition: transform 0.2s;
       }
-      /* Admin-specific styles for correct answer visualization */
-      .list-group-item {
-        background-color: #f0f0f0;
+      .question-box:hover {
+        transform: translateY(-3px);
       }
-      .correct-option {
-        background-color: #d1e7dd !important; /* Light green */
-        border-color: #badbcc !important;
+
+      .hidden {
+        display: none !important;
+      }
+
+      .correct {
+        background-color: #198754;
+      }
+      .wrong {
+        background-color: #dc3545;
+      }
+      .answer.correct {
+        background-color: #d1e7dd;
+        border-color: #badbcc;
+      }
+      .answer.wrong {
+        background-color: #f8d7da;
+        border-color: #f5c2c7;
+      }
+      .user-choice {
         font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
-      <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#"
-          ><i class="fas fa-user-shield me-2"></i>ADMIN Test Content Viewer</a
-        >
-        <span class="navbar-text text-light ms-auto"
-          >Master Content: TOEIC Full Practice Test</span
-        >
-      </div>
-    </nav>
-
-    <div class="test-wrapper">
-      <aside class="sidebar">
-        <h6 class="text-uppercase text-muted px-3 mb-3">
-          <i class="fas fa-sitemap me-1"></i> Navigate Test Sections
-        </h6>
-        <div class="list-group list-group-flush px-2" id="part-navigation">
-          <a
-            href="#"
-            class="list-group-item list-group-item-action active"
-            data-start-q="1"
-            data-end-q="6"
-            data-part="1"
-          >
-            <span class="badge bg-danger me-2">Part 1</span> Photographs (Q1-6)
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action"
-            data-start-q="7"
-            data-end-q="31"
-            data-part="2"
-          >
-            <span class="badge bg-danger me-2">Part 2</span> Q-Response (Q7-31)
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action"
-            data-start-q="32"
-            data-end-q="70"
-            data-part="3"
-          >
-            <span class="badge bg-danger me-2">Part 3</span> Conversations
-            (Q32-70)
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action"
-            data-start-q="71"
-            data-end-q="100"
-            data-part="4"
-          >
-            <span class="badge bg-danger me-2">Part 4</span> Talks (Q71-100)
-          </a>
-
-          <h6 class="text-uppercase text-muted px-3 mt-3 mb-1 small">
-            Reading Section
-          </h6>
-
-          <a
-            href="#"
-            class="list-group-item list-group-item-action"
-            data-start-q="101"
-            data-end-q="130"
-            data-part="5"
-          >
-            <span class="badge bg-primary me-2">Part 5</span> Incomplete
-            Sentences (Q101-130)
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action"
-            data-start-q="131"
-            data-end-q="146"
-            data-part="6"
-          >
-            <span class="badge bg-primary me-2">Part 6</span> Text Completion
-            (Q131-146)
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action"
-            data-start-q="147"
-            data-end-q="200"
-            data-part="7"
-          >
-            <span class="badge bg-primary me-2">Part 7</span> Reading
-            Comprehension (Q147-200)
-          </a>
-        </div>
-
-        <hr class="mx-3 my-3" />
-
-        <h6 class="text-uppercase text-muted px-3 mb-3">
-          <i class="fas fa-list-ol me-1"></i> Question Jump
-        </h6>
-        <div class="d-flex flex-wrap px-3 pb-3" id="individual-question-nav">
-          <button
-            class="btn btn-primary question-number-button"
-            data-question-id="1"
-          >
-            1
-          </button>
-          <button
-            class="btn btn-outline-secondary question-number-button"
-            data-question-id="2"
-          >
-            2
-          </button>
-          <button
-            class="btn btn-outline-secondary question-number-button"
-            data-question-id="3"
-          >
-            3
-          </button>
-          <button
-            class="btn btn-outline-secondary question-number-button"
-            data-question-id="4"
-          >
-            4
-          </button>
-          <button
-            class="btn btn-outline-secondary question-number-button"
-            data-question-id="5"
-          >
-            5
-          </button>
-          <button
-            class="btn btn-outline-secondary question-number-button"
-            data-question-id="6"
-          >
-            6
-          </button>
-        </div>
-      </aside>
-
-      <main class="main-content">
-        <div id="question-viewer">
-          <div class="question-block" data-question-id="1" data-part="1">
-            <h2 class="mb-4 text-dark pt-3">
-              <span class="badge bg-danger me-2">Part 1</span> Photographs
-            </h2>
-            <h4 class="text-muted mb-4 small">Question 1</h4>
-            <div class="card shadow-lg mb-5 border-0">
-              <div class="card-header bg-white h5 py-3 border-bottom">
-                Choose the best description for the image.
-              </div>
-              <div class="card-body">
-                <div class="mb-3 text-center border p-3 bg-light">
-                  [Placeholder: Image of Photograph 1]
-                </div>
-                <ul class="list-group list-group-flush mb-4">
-                  <li class="list-group-item">
-                    A) The man is walking on the street.
-                  </li>
-                  <li class="list-group-item">B) The car is parked outside.</li>
-                  <li class="list-group-item correct-option">
-                    C) A woman is gesturing toward a monitor.
-                    <i class="fas fa-check-circle text-success ms-2"></i>
-                  </li>
-                  <li class="list-group-item">
-                    D) Boxes have been stacked on the cart.
-                  </li>
-                </ul>
-                <div class="alert alert-success small mt-3" role="alert">
-                  <h6 class="alert-heading small fw-bold text-success">
-                    <i class="fas fa-lightbulb me-1"></i> Correct Answer &
-                    Explanation
-                  </h6>
-                  <p class="mb-0 small">
-                    **Answer:** C.
-                    <br />
-                    **Explanation:** Statement C accurately describes the main
-                    action in the photograph.
-                  </p>
-                </div>
-              </div>
+    <div class="container-fluid mt-3">
+      <div class="row">
+        <!-- Sidebar / Mini Boxes -->
+        <div class="col-md-3 col-lg-2 bg-light sidebar">
+          <!--Parts-->
+          <h5>TOEIC Parts</h5>
+          <div class="row g-2 mb-3">
+            <div class="col-12">
+              <a
+                data-part="1"
+                class="question-box p-2 rounded bg-primary d-block text-white text-decoration-none text-center mb-1 active"
+              >
+                Part 1
+              </a>
+            </div>
+            <div class="col-12">
+              <a
+                data-part="2"
+                class="question-box p-2 rounded bg-success d-block text-white text-decoration-none text-center mb-1"
+              >
+                Part 2
+              </a>
+            </div>
+            <div class="col-12">
+              <a
+                data-part="3"
+                class="question-box p-2 rounded bg-warning d-block text-dark text-decoration-none text-center mb-1"
+              >
+                Part 3
+              </a>
+            </div>
+            <div class="col-12">
+              <a
+                data-part="4"
+                class="question-box p-2 rounded bg-danger d-block text-white text-decoration-none text-center mb-1"
+              >
+                Part 4
+              </a>
             </div>
           </div>
-          <div class="question-block d-none" data-question-id="2" data-part="1">
-            <h2 class="mb-4 text-dark pt-3">
-              <span class="badge bg-danger me-2">Part 1</span> Photographs
-            </h2>
-            <h4 class="text-muted mb-4 small">Question 2</h4>
-            <div class="card shadow-lg mb-5 border-0">
-              <div class="card-header bg-white h5 py-3 border-bottom">
-                Choose the best description for the image.
-              </div>
-              <div class="card-body">
-                <div class="mb-3 text-center border p-3 bg-light">
-                  [Placeholder: Image of Photograph 2]
-                </div>
-                <ul class="list-group list-group-flush mb-4">
-                  <li class="list-group-item correct-option">
-                    A) The ladder is leaning against the wall.
-                    <i class="fas fa-check-circle text-success ms-2"></i>
-                  </li>
-                  <li class="list-group-item">
-                    B) Workers are painting the ceiling.
-                  </li>
-                  <li class="list-group-item">
-                    C) The equipment has been moved.
-                  </li>
-                  <li class="list-group-item">
-                    D) Tools are scattered on the floor.
-                  </li>
-                </ul>
-                <div class="alert alert-success small mt-3" role="alert">
-                  <h6 class="alert-heading small fw-bold text-success">
-                    <i class="fas fa-lightbulb me-1"></i> Correct Answer &
-                    Explanation
-                  </h6>
-                  <p class="mb-0 small">
-                    **Answer:** A.
-                    <br />
-                    **Explanation:** The only visible and accurate statement
-                    about the setup.
-                  </p>
-                </div>
-              </div>
+
+          <!--Questions-->
+          <h5>Questions</h5>
+          <div class="row g-2">
+            <div class="col-4" th:each="question : ${questions}">
+              <a
+                th:data-part-question="${question.part}"
+                class="question-box p-3 rounded d-block text-decoration-none correct"
+                th:text="${question.questionNumber}"
+              ></a>
             </div>
           </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 p-4">
+          <h4 class="fw-bold mb-3">Part 1: Listening Comprehension</h4>
           <div
-            class="question-block d-none"
-            data-question-id="147"
-            data-part="7"
+            class="card mb-4"
+            th:each="question : ${questions}"
+            th:data-question-part="${question.part}"
           >
-            <h2 class="mb-4 text-primary pt-3">
-              <span class="badge bg-primary me-2">Part 7</span> Reading
-              Comprehension
-            </h2>
-            <h4 class="text-muted mb-4 small">Question 147</h4>
-
-            <div class="card shadow-sm mb-4 bg-light border-0">
-              <div class="card-header bg-secondary text-white fw-bold">
-                Single Passage: Memorandum (Questions 147–148)
-              </div>
-              <div class="card-body">
-                <p class="h6 mb-3 text-secondary">MEMORANDUM</p>
-                <p class="card-text border-start border-3 ps-3 text-dark">
-                  Please note that the annual performance review period will
-                  **commence on November 1st** and conclude on **November
-                  30th**...
-                </p>
-              </div>
-            </div>
-
-            <div class="card shadow-lg mb-5 border-0">
-              <div class="card-header bg-white h5 py-3 border-bottom">
-                When will the performance review period begin?
-              </div>
-              <div class="card-body">
-                <ul class="list-group list-group-flush mb-4">
-                  <li class="list-group-item">A) On November 30th</li>
-                  <li class="list-group-item correct-option">
-                    C) On November 1st
-                    <i class="fas fa-check-circle text-success ms-2"></i>
-                  </li>
-                  <li class="list-group-item">
-                    D) After the self-assessment form is submitted
-                  </li>
-                </ul>
-                <div class="alert alert-success small mt-3" role="alert">
-                  <h6 class="alert-heading small fw-bold text-success">
-                    <i class="fas fa-lightbulb me-1"></i> Correct Answer &
-                    Explanation
-                  </h6>
-                  <p class="mb-0 small">
-                    **Answer:** C.
-                    <br />
-                    **Explanation:** The memo explicitly states, "The annual
-                    performance review period will **commence on November
-                    1st**."
-                  </p>
+            <div class="card-body" th:data-question-part="${question.part}">
+              <h5 th:text="'Question ' + ${question.questionNumber}">Question 1</h5>
+              <p th:text="${question.questionText}">What does the woman imply about the meeting?</p>
+              <audio controls class="w-100 mb-3">
+                <source src="sample.mp3" type="audio/mpeg" />
+              </audio>
+              <div class="list-group">
+                <div class="list-group-item answer correct" th:text="'A' + ${question.optionA}">
+                  A. It has been postponed.
+                  <span class="badge bg-success ms-2">Correct</span>
+                </div>
+                <div
+                  class="list-group-item answer wrong user-choice"
+                  th:text="'B' + ${question.optionB}"
+                >
+                  B. It will be shorter than usual.
+                  <span class="badge bg-danger ms-2">Your Answer</span>
+                </div>
+                <div class="list-group-item answer" th:text="'C' + ${question.optionC}">
+                  C. It has been canceled.
+                </div>
+                <div class="list-group-item answer" th:text="'D' + ${question.optionD}">
+                  D. It will start earlier than planned.
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div
-          class="d-flex justify-content-between pt-3 border-top"
-          id="nav-footer"
-        >
-          <button class="btn btn-outline-secondary" id="prev-q-btn" disabled>
-            <i class="fas fa-chevron-left me-2"></i> Previous Question
-          </button>
-          <button class="btn btn-primary" id="next-q-btn">
-            Next Question <i class="fas fa-chevron-right ms-2"></i>
-          </button>
+          <div class="card mb-4 hidden" id="q102">
+            <div class="card-body">
+              <h5>Question 2</h5>
+              <p>Where is the conversation most likely taking place?</p>
+              <div class="list-group">
+                <div class="list-group-item answer">A. In a hotel lobby.</div>
+                <div class="list-group-item answer correct user-choice">
+                  B. In an airport.
+                  <span class="badge bg-success ms-2">Correct</span>
+                </div>
+                <div class="list-group-item answer">C. At a restaurant.</div>
+                <div class="list-group-item answer">D. In an office.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4" id="q103">
+            <div class="card-body">
+              <h5>Question 3</h5>
+              <p>What does the man want to do next?</p>
+              <div class="list-group">
+                <div class="list-group-item answer wrong user-choice">
+                  A. Call his boss.
+                  <span class="badge bg-danger ms-2">Your Answer</span>
+                </div>
+                <div class="list-group-item answer correct">
+                  B. Review the report.
+                  <span class="badge bg-success ms-2">Correct</span>
+                </div>
+                <div class="list-group-item answer">C. Leave the office.</div>
+                <div class="list-group-item answer">D. Buy new equipment.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4" id="q104">
+            <div class="card-body">
+              <h5>Question 4</h5>
+              <p>What time does the train depart?</p>
+              <div class="list-group">
+                <div class="list-group-item answer">A. At 9:00 AM.</div>
+                <div class="list-group-item answer correct">
+                  B. At 9:30 AM.
+                  <span class="badge bg-success ms-2">Correct</span>
+                </div>
+                <div class="list-group-item answer wrong user-choice">
+                  C. At 10:00 AM.
+                  <span class="badge bg-danger ms-2">Your Answer</span>
+                </div>
+                <div class="list-group-item answer">D. At 10:30 AM.</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
-
-    <script th:inline="javascript">
-      // Define a global variable here. Thymeleaf will replace this with the number.
-      // Example: const GLOBAL_TEST_ID = 1;
-      const GLOBAL_TEST_ID = /*[[${testId}]]*/ 0;
-    </script>
-
-    <script th:src="@{/js/test_page.js}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const partNavLinks = document.querySelectorAll(
-          "#part-navigation .list-group-item"
-        );
-        const qJumpContainer = document.getElementById(
-          "individual-question-nav"
-        );
-        const nextBtn = document.getElementById("next-q-btn");
-        const prevBtn = document.getElementById("prev-q-btn");
-        let currentQ = 1;
+      document.addEventListener("DOMContentLoaded", () => {
+        const partLinks = document.querySelectorAll(".question-box[data-part]");
 
-        function showQuestion(qId) {
-          const questionBlocks = document.querySelectorAll(".question-block"); // live NodeList
-          currentQ = qId;
+        // Function to show/hide questions and cards
+        const showPart = (partNumber) => {
+          console.log("Showing part:", partNumber);
 
-          // Hide all and show the selected one
-          questionBlocks.forEach((block) => {
-            if (parseInt(block.dataset.questionId) === qId) {
-              block.classList.remove("d-none");
-              updateNavigation(block.dataset.part, qId);
+          // Sidebar questions
+          const allQuestions = document.querySelectorAll(
+            ".col-4 > .question-box[data-part-question]"
+          );
+          allQuestions.forEach((q) => {
+            const col = q.parentElement;
+            if (q.dataset.partQuestion === partNumber) {
+              col.classList.remove("hidden");
             } else {
-              block.classList.add("d-none");
+              col.classList.add("hidden");
             }
           });
 
-          prevBtn.disabled = qId === 1;
-          nextBtn.disabled = qId === questionBlocks.length;
-
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-
-        function updateNavigation(partNum, qId) {
-          const allQuestionBlocks = document.querySelectorAll(
-            `.question-block[data-part="${partNum}"]`
-          );
-          qJumpContainer.innerHTML = "";
-
-          allQuestionBlocks.forEach((block) => {
-            const i = parseInt(block.dataset.questionId);
-            const btn = document.createElement("button");
-            btn.classList.add("btn", "question-number-button");
-            btn.textContent = i;
-            btn.dataset.questionId = i;
-
-            if (i === qId) btn.classList.add("btn-primary");
-            else btn.classList.add("btn-outline-secondary");
-
-            btn.addEventListener("click", () => showQuestion(i));
-            qJumpContainer.appendChild(btn);
+          // Main cards
+          const allCards = document.querySelectorAll(".card[data-question-part]");
+          allCards.forEach((card) => {
+            if (card.dataset.questionPart === partNumber) {
+              card.classList.remove("hidden");
+            } else {
+              card.classList.add("hidden");
+            }
           });
 
-          // Update active part in sidebar
-          partNavLinks.forEach((link) => {
-            link.classList.remove("active");
-            if (link.dataset.part === partNum) link.classList.add("active");
-          });
-        }
+          // Update active class for parts
+          partLinks.forEach((link) => link.classList.remove("active"));
+          const activeLink = document.querySelector(`.question-box[data-part='${partNumber}']`);
+          if (activeLink) activeLink.classList.add("active");
+        };
 
-        // Part navigation
-        partNavLinks.forEach((link) => {
+        // Show Part 1 initially
+        showPart("1");
+
+        // Add click listeners
+        partLinks.forEach((link) => {
           link.addEventListener("click", (e) => {
             e.preventDefault();
-            const firstQ = document.querySelector(
-              `.question-block[data-part="${link.dataset.part}"]`
-            );
-            if (firstQ) showQuestion(parseInt(firstQ.dataset.questionId));
+            const partNumber = link.dataset.part;
+            showPart(partNumber);
           });
         });
-
-        // Next / Prev
-        nextBtn.addEventListener("click", () => showQuestion(currentQ + 1));
-        prevBtn.addEventListener("click", () => showQuestion(currentQ - 1));
-
-        // Initialize after questions are dynamically rendered
-        const checkQuestionsExist = setInterval(() => {
-          if (document.querySelectorAll(".question-block").length > 0) {
-            clearInterval(checkQuestionsExist);
-            showQuestion(1); // show first question
-          }
-        }, 100);
       });
     </script>
   </body>

@@ -1,19 +1,18 @@
 package LearnToeic.model;
 
 import jakarta.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tests")
 public class Test {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int testId;
 
     private String testName;
 
-    private Date testDate;
+    private LocalDate testDate; 
 
     private int totalQuestions;
 
@@ -21,16 +20,20 @@ public class Test {
 
     private String description;
 
+    private String status;
+
+    
     // Constructors, Getters, and Setters
     public Test() {
     }
 
-    public Test(String testName, Date testDate, int totalQuestions, Integer maxScore, String description) {
+    public Test(String testName, LocalDate testDate, int totalQuestions, Integer maxScore, String description, String status) {
         this.testName = testName;
         this.testDate = testDate;
         this.totalQuestions = totalQuestions;
         this.maxScore = maxScore;
         this.description = description;
+        this.status = status;        
     }
 
     public int getTestId() {
@@ -49,11 +52,11 @@ public class Test {
         this.testName = testName;
     }
 
-    public Date getTestDate() {
+    public LocalDate getTestDate() {
         return testDate;
     }
 
-    public void setTestDate(Date testDate) {
+    public void setTestDate(LocalDate testDate) {
         this.testDate = testDate;
     }
 
@@ -80,4 +83,13 @@ public class Test {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }

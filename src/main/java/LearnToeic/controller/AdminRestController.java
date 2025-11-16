@@ -7,53 +7,29 @@ import LearnToeic.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
-
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminRestController {
-    @Autowired
-    private TestService testService;
+    private final TestService testService;
 
-    @Autowired
-    private QuestionService questionService;
-
-
-    @GetMapping("/tests")
-    public List<Test> getAllTests() {
-        return testService.getAllTests();
+    public AdminRestController(TestService testService) {
+        this.testService = testService;
     }
 
-    @GetMapping("/tests/{testId}")
-    public ResponseEntity<Test> getTestById(@PathVariable Integer testId) {
-        Optional<Test> test = testService.getTestById(testId);
-        return test.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/questions/test/{testId}")
-    public List<Question> getQuestionsByTestId(@PathVariable Integer testId) {
-        return questionService.getQuestionsByTestId(testId);
-    }
-
-    @PutMapping("/questions/{testId}/{questionNumber}")
-    public ResponseEntity<?> updateQuestion(
-        @PathVariable Integer testId,
-        @PathVariable Integer questionNumber,
-        @RequestBody Question updatedQuestion
-    ) {
-        Optional<Question> existing = questionService.getQuestionById(testId, questionNumber);
-        if (existing.isPresent()) {
-            updatedQuestion.setTestId(testId);
-            updatedQuestion.setQuestionNumber(questionNumber);
-            questionService.saveQuestion(updatedQuestion);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
+    @PutMapping("/tests/{id}/status")
+    public ResponseEntity<Void> updateTestStatus(@PathVariable("id") Integer testId) {
+        try {
+            testService.updateTestStatus(testId);
+            return ResponseEntity.ok().build(); // HTTP 200 OK
+        } catch (Exception e) {
+            // Log the error
+            return ResponseEntity.badRequest().build(); // HTTP 400 Bad Request or 500 Internal Server Error
         }
     }
-
-    
 }

@@ -1,0 +1,162 @@
+<aside class="left-sidebar" th:fragment="sidebar">
+  <!-- Sidebar scroll-->
+  <div>
+    <div class="brand-logo d-flex align-items-center justify-content-between">
+      <a href="./index.html" class="text-nowrap logo-img">
+        <img src="assets/images/logos/logo.svg" alt="" />
+      </a>
+      <div
+        class="close-btn d-xl-none d-block sidebartoggler cursor-pointer"
+        id="sidebarCollapse"
+      >
+        <i class="ti ti-x fs-6"></i>
+      </div>
+    </div>
+    <!-- Sidebar navigation-->
+    <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+      <ul id="sidebarnav">
+        <li class="nav-small-cap">
+          <iconify-icon
+            icon="solar:menu-dots-linear"
+            class="nav-small-cap-icon fs-4"
+          ></iconify-icon>
+          <span class="hide-menu">Home</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin" aria-expanded="false">
+            <i class="ti ti-atom"></i>
+            <span class="hide-menu">Dashboard</span>
+          </a>
+        </li>
+        <!-- ---------------------------------- -->
+        <!-- Dashboard -->
+        <!-- ---------------------------------- -->
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link justify-content-between"
+            href="/admin/tests"
+            aria-expanded="false"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <span class="d-flex">
+                <i class="ti ti-aperture"></i>
+              </span>
+              <span class="hide-menu">Tests</span>
+            </div>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link justify-content-between"
+            href="/admin/users"
+            aria-expanded="false"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <span class="d-flex">
+                <i class="ti ti-user-circle"></i>
+              </span>
+              <span class="hide-menu">Users</span>
+            </div>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link justify-content-between"
+            href="/admin/blogs"
+            aria-expanded="false"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <span class="d-flex">
+                <i class="ti ti-chart-donut-3"></i>
+              </span>
+              <span class="hide-menu">Blogs</span>
+            </div>
+          </a>
+        </li>
+
+        <li>
+          <span class="sidebar-divider lg"></span>
+        </li>
+        <li class="nav-small-cap">
+          <iconify-icon
+            icon="solar:menu-dots-linear"
+            class="nav-small-cap-icon fs-4"
+          ></iconify-icon>
+          <span class="hide-menu">Apps</span>
+        </li>
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link justify-content-between"
+            href="/admin/create_test"
+            aria-expanded="false"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <span class="d-flex">
+                <i class="ti ti-file-pencil"></i>
+              </span>
+              <span class="hide-menu">Create new Test</span>
+            </div>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link justify-content-between"
+            href="/admin/create_blog"
+            aria-expanded="false"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <span class="d-flex">
+                <i class="ti ti-chart-area"></i>
+              </span>
+              <span class="hide-menu">Create new blog</span>
+            </div>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link justify-content-between"
+            href="#"
+            aria-expanded="false"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <span class="d-flex">
+                <i class="ti ti-layout"></i>
+              </span>
+              <span class="hide-menu">Statistic</span>
+            </div>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link justify-content-between"
+            href="#"
+            aria-expanded="false"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <span class="d-flex">
+                <i class="ti ti-layout"></i>
+              </span>
+              <span class="hide-menu">Ranking</span>
+            </div>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link justify-content-between"
+            href="#"
+            aria-expanded="false"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <span class="d-flex">
+                <i class="ti ti-layout"></i>
+              </span>
+              <span class="hide-menu">Anounments</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- End Sidebar navigation -->
+  </div>
+  <!-- End Sidebar scroll-->
+</aside>
