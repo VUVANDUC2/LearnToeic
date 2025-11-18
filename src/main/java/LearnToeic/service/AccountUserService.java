@@ -37,9 +37,21 @@ public class AccountUserService {
 
         userRepo.save(u);
     }
-     public User fetchUserByEmail(String email) {
+    public User fetchUserByEmail(String email) {
         return userRepo.findByEmail(email)
                 .orElse(null);
+    }
+
+    @Transactional
+    public void updateProfile(User user, String fullName, Boolean gender) {
+        if (user == null) return;
+
+        if (fullName != null && !fullName.isBlank()) {
+            user.setFullName(fullName.trim());
+        }
+        user.setGender(gender);
+
+        userRepo.save(user);
     }
 
     // public void sendResetLink(String email, String siteURL) {

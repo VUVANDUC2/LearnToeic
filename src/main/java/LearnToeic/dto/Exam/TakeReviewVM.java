@@ -9,7 +9,8 @@ public record TakeReviewVM(
         String testName,
         Integer totalQuestions,
         Integer score,                         // lấy từ Take hoặc tính nếu null
-        Integer currentPart,                   // part đang review
+        Integer currentPart,
+        long remaining,                // part đang review
         Map<Integer, List<Integer>> partMap,   // Map<partNumber, List<questionNumber>>
         Map<Integer, Character> selectedMap,   // Map<questionNumber, selectedOption>
         Map<Integer, Character> correctMap,    // Map<questionNumber, correctOption>

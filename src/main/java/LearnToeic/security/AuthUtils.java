@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthUtils {
 
-      private final AccountUserRepository userRepo;
+    private final AccountUserRepository userRepo;
 
     public Integer currentUserId() {
         var auth = SecurityContextHolder.getContext().getAuthentication();

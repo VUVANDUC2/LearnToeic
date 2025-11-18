@@ -1,5 +1,6 @@
 package LearnToeic.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +24,6 @@ public interface  TakeRepository extends JpaRepository<Take, Integer>{
 
          Optional<Take> findTopByUser_UserIdAndTest_TestIdOrderByAttemptNoDesc(
             Integer userId, Integer testId);
+
+        List<Take> findByUser_UserIdAndStatusOrderByStartTimeDesc(Integer userId, String status);
 }

@@ -1,6 +1,6 @@
 package LearnToeic.dto.Exam;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public record  TakeHomeVM (
@@ -10,9 +10,9 @@ public record  TakeHomeVM (
     Integer totalQuestions,
     Integer selectedCount,
     String status,
-    Instant startTime,
-    Instant endTime,
-    Integer timeRemaining,
+    LocalDateTime startTime,
+    LocalDateTime endTime,
+    long remaining,
     Map<Integer, Character> selectedMap,
     Map<Integer, List<Integer>> partMap
 ){}

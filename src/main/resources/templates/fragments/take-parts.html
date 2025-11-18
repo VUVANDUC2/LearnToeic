@@ -1,10 +1,11 @@
 <!-- Dispatcher: chọn fragment theo pv.part -->
-<th:block th:fragment="partBlock(pv, takeId)"
-          th:replace="~{::${'part' + pv.part}(${pv}, ${takeId})}">
+<th:block th:fragment="partBlock"
+          th:replace="~{::${'part' + pv.part}}">
 </th:block>
 
+
 <!-- ====== PART 1: PHOTO (IMAGE_CHOICE) ====== -->
-<th:block th:fragment="part1(pv, takeId)" th:remove="tag">
+<th:block th:fragment="part1" th:remove="tag">
   <section >
     <div class="vstack gap-3 questions-scroll">
 
@@ -18,92 +19,132 @@
 
 
       <div th:each="q, it : ${pv.questions}"
-          class="card question-card p-3 p-lg-4"
-          th:attr="data-type=${q.questionType}"
-          th:id="${'q' + (it.index + 1)}">
+     class="card question-card p-3 p-lg-4"
+     th:id="${'q' + (it.index + 1)}"
+     th:attr="data-type=${q.questionType}">
 
-          <!-- Header: Số câu thật từ DB -->
-          <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="badge text-bg-secondary">
-              Câu [[${q.questionNumber}]]
-              </span>
-          </div>
+    <!-- Header: Số câu thật từ DB -->
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="badge text-bg-secondary">
+            Câu [[${q.questionNumber}]]
+        </span>
+    </div>
         <!-- Chỉ render ảnh khi là Part 1 hoặc khi có field hasImage -->
         <img th:if="${pv.part == 1}"
-            th:src="@{|/assets/tests/p001/test_1_${q.questionNumber}.png|}"
-            class="w-100 rounded mb-3" loading="lazy">
+     th:src="@{|/assets/tests/p001/test_1_${q.questionNumber}.png|}"
+     class="mb-3 w-100 rounded"
+     style="max-width:500px; max-height:300px; object-fit:cover;"
+     loading="lazy">
 
+<!--
+        <div class="answer-form"
+     th:with="sel=${selectedMap != null ? selectedMap[q.questionNumber] : null},
+              ok=${correctFlagMap != null ? correctFlagMap[q.questionNumber] : null}"
+     th:attr="data-qn=${q.questionNumber}"> -->
+        <!-- <div class="answer-form"
+     th:with="sel=${selectedMap != null ? selectedMap[q.questionNumber] : null},
+              correct=${correctMap != null ? correctMap.get(q.questionNumber) : null},
+              ok=${correctFlagMap != null ? correctFlagMap.get(q.questionNumber) : null}"
+              th:attr="data-qn=${q.questionNumber}"> -->
+          <div class="answer-form"
+     th:with="
+         selChar=${selectedMap?.get(q.questionNumber)},
+         correctChar=${correctMap?.get(q.questionNumber)},
+         sel=${selChar != null ? selChar.toString() : null},
+         correct=${correctChar != null ? correctChar.toString() : null},
+         ok=${correctFlagMap?.get(q.questionNumber)}"
+          th:attr="data-qn=${q.questionNumber}">
 
-        <!-- Các đáp án -->
-        <div class="answer-form" th:attr="data-qn=${q.questionNumber}">
-          <!-- Bao quanh mỗi câu hỏi -->
-<div th:with="sel=${selectedMap?.get(q.questionNumber)},
-     cor=${correctMap?.get(q.questionNumber)}">
   <!-- A -->
   <label class="option d-block mb-2"
-         th:classappend="${ review ? (cor == 'A' ? ' correct' : (sel == 'A' and cor != 'A') ? ' incorrect' : '')
-                                     : (sel == 'A' ? ' active' : '') }">
+        th:classappend="|${review
+         ? (correct == 'A'
+              ? (sel == 'A' ? ' active correct' : ' correct')
+              : (sel == 'A' ? ' active incorrect' : '')
+            )
+         : (sel == 'A' ? ' active' : '')
+       }|">
     <input type="radio"
            th:name="${'q' + q.questionNumber}"
-           th:attr="disabled=${review} ? true : null"
            value="A"
-           th:checked="${sel == 'A'}"/>
+           th:checked="${sel == 'A'}"
+           th:attr="disabled=${review} ? true : null" />
     <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
   </label>
 
   <!-- B -->
   <label class="option d-block mb-2"
-         th:classappend="${ review ? (cor == 'B' ? ' correct' : (sel == 'B' and cor != 'B') ? ' incorrect' : '')
-                                     : (sel == 'B' ? ' active' : '') }">
+         th:classappend="|${review
+         ? (correct == 'B'
+              ? (sel == 'B' ? ' active correct' : ' correct')
+              : (sel == 'B' ? ' active incorrect' : '')
+            )
+         : (sel == 'B' ? ' active' : '')
+       }|">
     <input type="radio"
            th:name="${'q' + q.questionNumber}"
-           th:attr="disabled=${review} ? true : null"
            value="B"
-           th:checked="${sel == 'B'}"/>
+           th:checked="${sel == 'B'}"
+           th:attr="disabled=${review} ? true : null" />
     <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
   </label>
 
   <!-- C -->
   <label class="option d-block mb-2"
-         th:classappend="${ review ? (cor == 'C' ? ' correct' : (sel == 'C' and cor != 'C') ? ' incorrect' : '')
-                                     : (sel == 'C' ? ' active' : '') }">
+         th:classappend="|${review
+         ? (correct == 'C'
+              ? (sel == 'C' ? ' active correct' : ' correct')
+              : (sel == 'C' ? ' active incorrect' : '')
+            )
+         : (sel == 'C' ? ' active' : '')
+       }|">
     <input type="radio"
            th:name="${'q' + q.questionNumber}"
-           th:attr="disabled=${review} ? true : null"
            value="C"
-           th:checked="${sel == 'C'}"/>
+           th:checked="${sel == 'C'}"
+           th:attr="disabled=${review} ? true : null" />
     <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
   </label>
 
   <!-- D -->
   <label class="option d-block mb-2"
-         th:classappend="${ review ? (cor == 'D' ? ' correct' : (sel == 'D' and cor != 'D') ? ' incorrect' : '')
-                                     : (sel == 'D' ? ' active' : '') }">
+         th:classappend="|${review
+         ? (correct == 'D'
+              ? (sel == 'D' ? ' active correct' : ' correct')
+              : (sel == 'D' ? ' active incorrect' : '')
+            )
+         : (sel == 'D' ? ' active' : '')
+       }|">
     <input type="radio"
            th:name="${'q' + q.questionNumber}"
-           th:attr="disabled=${review} ? true : null"
            value="D"
-           th:checked="${sel == 'D'}"/>
+           th:checked="${sel == 'D'}"
+           th:attr="disabled=${review} ? true : null" />
     <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
   </label>
 
-</div>
+  <p class="text-danger small mt-2" th:if="${review and sel == null}">
+    Bạn chưa có câu trả lời cho câu hỏi này.
+  </p>
+  <p class="text-success small" th:if="${review and correct != null}">
+    Đáp án đúng: <strong th:text="${correct}">A</strong>
+  </p>
 
           <!-- Nút xóa chọn -->
           <button type="button"
                   class="btn btn-sm btn-outline-secondary btn-clear"
+                  th:if="${!review}"
                   th:attr="data-qn=${q.questionNumber}">
             Xóa chọn
           </button>
+          </div>
         </div>
       </div>
-    </div>
   </section>
 </th:block>
 
-
 <!-- ====== PART 2: QUESTION-RESPONSE (AUDIO_ONLY) ====== -->
-<th:block th:fragment="part2(pv, takeId)" th:remove="tag">
+<th:block th:fragment="part2" th:remove="tag">
   <section>
     <div class="vstack gap-3 questions-scroll">
     <!-- Audio chung cho toàn Part 2 -->
@@ -124,38 +165,88 @@
         <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
       </div>
 
-      <div class="answer-form" th:attr="data-qn=${q.questionNumber}">
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'A'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="A"
-                  th:attr="disabled=${review} ? true : null"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'A'}"/>
-          <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
-        </label>
+      <div class="answer-form"
+     th:with="
+         selChar=${selectedMap?.get(q.questionNumber)},
+         correctChar=${correctMap?.get(q.questionNumber)},
+         sel=${selChar != null ? selChar.toString() : null},
+         correct=${correctChar != null ? correctChar.toString() : null},
+         ok=${correctFlagMap?.get(q.questionNumber)}"
+          th:attr="data-qn=${q.questionNumber}">
+        <!-- A -->
+  <label class="option d-block mb-2"
+        th:classappend="|${review
+         ? (correct == 'A'
+              ? (sel == 'A' ? ' active correct' : ' correct')
+              : (sel == 'A' ? ' active incorrect' : '')
+            )
+         : (sel == 'A' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="A"
+           th:checked="${sel == 'A'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'B'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="B"
-                th:attr="disabled=${review} ? true : null"
-                th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'B'}"/>
-          <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
-        </label>
+  <!-- B -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'B'
+              ? (sel == 'B' ? ' active correct' : ' correct')
+              : (sel == 'B' ? ' active incorrect' : '')
+            )
+         : (sel == 'B' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="B"
+           th:checked="${sel == 'B'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'C'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="C"
-                  th:attr="disabled=${review} ? true : null"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'C'}"/>
-          <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
-        </label>
+  <!-- C -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'C'
+              ? (sel == 'C' ? ' active correct' : ' correct')
+              : (sel == 'C' ? ' active incorrect' : '')
+            )
+         : (sel == 'C' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="C"
+           th:checked="${sel == 'C'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'D'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="D"
-                  th:attr="disabled=${review} ? true : null"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'D'}"/>
-          <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
-        </label>
+  <!-- D -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'D'
+              ? (sel == 'D' ? ' active correct' : ' correct')
+              : (sel == 'D' ? ' active incorrect' : '')
+            )
+         : (sel == 'D' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="D"
+           th:checked="${sel == 'D'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
+  </label>
+
+        <p class="text-danger small mt-2" th:if="${review and sel == null}">
+          Bạn chưa có câu trả lời cho câu hỏi này.
+        </p>
+        <p class="text-success small" th:if="${review and correct != null}">
+          Đáp án đúng: <strong th:text="${correct}">A</strong>
+        </p>
 
         <button type="button" class="btn btn-sm btn-outline-secondary btn-clear"
                 th:attr="data-qn=${q.questionNumber}">
@@ -163,13 +254,13 @@
         </button>
       </div>
     </div>
+     </div>
   </section>
-  </div>
 </th:block>
 
 
 <!-- ====== PART 3: SHORT CONVERSATIONS ====== -->
-<th:block th:fragment="part3(pv, takeId)" th:remove="tag">
+<th:block th:fragment="part3" th:remove="tag">
   <section>
     <div class="vstack gap-3 questions-scroll">
     <div class="mb-3">
@@ -188,40 +279,89 @@
       </div>
 
       <!-- !!! answer-form phải nằm TRONG vòng lặp -->
-      <div class="answer-form" th:attr="data-qn=${q.questionNumber}">
+      <div class="answer-form"
+     th:with="
+         selChar=${selectedMap?.get(q.questionNumber)},
+         correctChar=${correctMap?.get(q.questionNumber)},
+         sel=${selChar != null ? selChar.toString() : null},
+         correct=${correctChar != null ? correctChar.toString() : null},
+         ok=${correctFlagMap?.get(q.questionNumber)}"
+          th:attr="data-qn=${q.questionNumber}">
         <!-- 4 lựa chọn A-D (y như Part 2) -->
-        <!-- ... giống block ở Part 2 ... -->
-         <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'A'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="A"
-                  th:attr="disabled=${review} ? true : null"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'A'}"/>
-          <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
-        </label>
+        <!-- A -->
+  <label class="option d-block mb-2"
+        th:classappend="|${review
+         ? (correct == 'A'
+              ? (sel == 'A' ? ' active correct' : ' correct')
+              : (sel == 'A' ? ' active incorrect' : '')
+            )
+         : (sel == 'A' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="A"
+           th:checked="${sel == 'A'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'B'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="B"
-                th:attr="disabled=${review} ? true : null"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'B'}"/>
-          <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
-        </label>
+  <!-- B -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'B'
+              ? (sel == 'B' ? ' active correct' : ' correct')
+              : (sel == 'B' ? ' active incorrect' : '')
+            )
+         : (sel == 'B' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="B"
+           th:checked="${sel == 'B'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'C'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="C"
-                  th:attr="disabled=${review} ? true : null"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'C'}"/>
-          <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
-        </label>
+  <!-- C -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'C'
+              ? (sel == 'C' ? ' active correct' : ' correct')
+              : (sel == 'C' ? ' active incorrect' : '')
+            )
+         : (sel == 'C' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="C"
+           th:checked="${sel == 'C'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'D'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="D"
-                th:attr="disabled=${review} ? true : null"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'D'}"/>
-          <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
-        </label>
+  <!-- D -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'D'
+              ? (sel == 'D' ? ' active correct' : ' correct')
+              : (sel == 'D' ? ' active incorrect' : '')
+            )
+         : (sel == 'D' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="D"
+           th:checked="${sel == 'D'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
+  </label>
+
+        <p class="text-danger small mt-2" th:if="${review and sel == null}">
+          Bạn chưa có câu trả lời cho câu hỏi này.
+        </p>
+        <p class="text-success small" th:if="${review and correct != null}">
+          Đáp án đúng: <strong th:text="${correct}">A</strong>
+        </p>
 
         <button type="button" class="btn btn-sm btn-outline-secondary btn-clear"
                 th:attr="data-qn=${q.questionNumber}">
@@ -231,12 +371,11 @@
       </div>
     </div>
   </section>
-  </div>
 </th:block>
 
 
 <!-- ====== PART 4…7: Tùy cấu trúc của bạn (đoạn văn, điền chỗ trống, reading…) ====== -->
-<th:block th:fragment="part4(pv, takeId)" th:remove="tag">
+<th:block th:fragment="part4" th:remove="tag">
   <section>
     <div class="vstack gap-3 questions-scroll">
     <div class="mb-3">
@@ -251,39 +390,89 @@
         <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
       </div>
 
-      <div class="answer-form" th:attr="data-qn=${q.questionNumber}">
+      <div class="answer-form"
+     th:with="
+         selChar=${selectedMap?.get(q.questionNumber)},
+         correctChar=${correctMap?.get(q.questionNumber)},
+         sel=${selChar != null ? selChar.toString() : null},
+         correct=${correctChar != null ? correctChar.toString() : null},
+         ok=${correctFlagMap?.get(q.questionNumber)}"
+          th:attr="data-qn=${q.questionNumber}">
         <!-- 4 lựa chọn A-D (y như Part 2) -->
-         <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'A'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="A"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'A'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
-        </label>
+         <!-- A -->
+  <label class="option d-block mb-2"
+        th:classappend="|${review
+         ? (correct == 'A'
+              ? (sel == 'A' ? ' active correct' : ' correct')
+              : (sel == 'A' ? ' active incorrect' : '')
+            )
+         : (sel == 'A' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="A"
+           th:checked="${sel == 'A'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'B'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="B"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'B'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
-        </label>
+  <!-- B -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'B'
+              ? (sel == 'B' ? ' active correct' : ' correct')
+              : (sel == 'B' ? ' active incorrect' : '')
+            )
+         : (sel == 'B' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="B"
+           th:checked="${sel == 'B'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'C'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="C"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'C'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
-        </label>
+  <!-- C -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'C'
+              ? (sel == 'C' ? ' active correct' : ' correct')
+              : (sel == 'C' ? ' active incorrect' : '')
+            )
+         : (sel == 'C' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="C"
+           th:checked="${sel == 'C'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'D'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="D"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'D'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
-        </label>
+  <!-- D -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'D'
+              ? (sel == 'D' ? ' active correct' : ' correct')
+              : (sel == 'D' ? ' active incorrect' : '')
+            )
+         : (sel == 'D' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="D"
+           th:checked="${sel == 'D'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
+  </label>
+
+        <p class="text-danger small mt-2" th:if="${review and sel == null}">
+          Bạn chưa có câu trả lời cho câu hỏi này.
+        </p>
+        <p class="text-success small" th:if="${review and correct != null}">
+          Đáp án đúng: <strong th:text="${correct}">A</strong>
+        </p>
 
         <button type="button" class="btn btn-sm btn-outline-secondary btn-clear"
                 th:attr="data-qn=${q.questionNumber}">
@@ -293,12 +482,11 @@
       </div>
     </div>
   </section>
-  </div>
 </th:block>
 
 
 <!-- ====== PART 5: INCOMPLETE SENTENCES ====== -->
-<th:block th:fragment="part5(pv, takeId)" th:remove="tag">
+<th:block th:fragment="part5" th:remove="tag">
   <section>
     <div class="vstack gap-3 questions-scroll">
     <div th:each="q, it : ${pv.questions}"
@@ -314,38 +502,88 @@
       <!-- Nếu sau này có trường stem/text → hiển thị ở đây -->
       <!-- <p class="mb-3" th:text="${q.stem}"></p> -->
 
-      <div class="answer-form" th:attr="data-qn=${q.questionNumber}">
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'A'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="A"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'A'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
-        </label>
+      <div class="answer-form"
+     th:with="
+         selChar=${selectedMap?.get(q.questionNumber)},
+         correctChar=${correctMap?.get(q.questionNumber)},
+         sel=${selChar != null ? selChar.toString() : null},
+         correct=${correctChar != null ? correctChar.toString() : null},
+         ok=${correctFlagMap?.get(q.questionNumber)}"
+          th:attr="data-qn=${q.questionNumber}">
+        <!-- A -->
+  <label class="option d-block mb-2"
+        th:classappend="|${review
+         ? (correct == 'A'
+              ? (sel == 'A' ? ' active correct' : ' correct')
+              : (sel == 'A' ? ' active incorrect' : '')
+            )
+         : (sel == 'A' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="A"
+           th:checked="${sel == 'A'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'B'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="B"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'B'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
-        </label>
+  <!-- B -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'B'
+              ? (sel == 'B' ? ' active correct' : ' correct')
+              : (sel == 'B' ? ' active incorrect' : '')
+            )
+         : (sel == 'B' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="B"
+           th:checked="${sel == 'B'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'C'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="C"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'C'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
-        </label>
+  <!-- C -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'C'
+              ? (sel == 'C' ? ' active correct' : ' correct')
+              : (sel == 'C' ? ' active incorrect' : '')
+            )
+         : (sel == 'C' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="C"
+           th:checked="${sel == 'C'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'D'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="D"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'D'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
-        </label>
+  <!-- D -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'D'
+              ? (sel == 'D' ? ' active correct' : ' correct')
+              : (sel == 'D' ? ' active incorrect' : '')
+            )
+         : (sel == 'D' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="D"
+           th:checked="${sel == 'D'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
+  </label>
+
+        <p class="text-danger small mt-2" th:if="${review and sel == null}">
+          Bạn chưa có câu trả lời cho câu hỏi này.
+        </p>
+        <p class="text-success small" th:if="${review and correct != null}">
+          Đáp án đúng: <strong th:text="${correct}">A</strong>
+        </p>
 
         <button type="button" class="btn btn-sm btn-outline-secondary btn-clear"
                 th:attr="data-qn=${q.questionNumber}">
@@ -353,12 +591,12 @@
         </button>
       </div>
     </div>
+     </div>
   </section>
-  </div>
 </th:block>
 
 <!-- ====== PART 6: TEXT COMPLETION ====== -->
-<th:block th:fragment="part6(pv, takeId)" th:remove="tag">
+<th:block th:fragment="part6" th:remove="tag">
   <section>
     <div class="vstack gap-3 questions-scroll">
     <!-- Nếu sau này có group theo đoạn, chuyển sang vòng lặp groups ở đây -->
@@ -378,38 +616,88 @@
       <!-- Nếu có q.context/passageLine → hiển thị ở đây -->
       <!-- <p class="text-muted small" th:text="${q.context}"></p> -->
 
-      <div class="answer-form" th:attr="data-qn=${q.questionNumber}">
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'A'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="A"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'A'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
-        </label>
+      <div class="answer-form"
+     th:with="
+         selChar=${selectedMap?.get(q.questionNumber)},
+         correctChar=${correctMap?.get(q.questionNumber)},
+         sel=${selChar != null ? selChar.toString() : null},
+         correct=${correctChar != null ? correctChar.toString() : null},
+         ok=${correctFlagMap?.get(q.questionNumber)}"
+          th:attr="data-qn=${q.questionNumber}">
+        <!-- A -->
+  <label class="option d-block mb-2"
+        th:classappend="|${review
+         ? (correct == 'A'
+              ? (sel == 'A' ? ' active correct' : ' correct')
+              : (sel == 'A' ? ' active incorrect' : '')
+            )
+         : (sel == 'A' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="A"
+           th:checked="${sel == 'A'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'B'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="B"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'B'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
-        </label>
+  <!-- B -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'B'
+              ? (sel == 'B' ? ' active correct' : ' correct')
+              : (sel == 'B' ? ' active incorrect' : '')
+            )
+         : (sel == 'B' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="B"
+           th:checked="${sel == 'B'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'C'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="C"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'C'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
-        </label>
+  <!-- C -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'C'
+              ? (sel == 'C' ? ' active correct' : ' correct')
+              : (sel == 'C' ? ' active incorrect' : '')
+            )
+         : (sel == 'C' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="C"
+           th:checked="${sel == 'C'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'D'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="D"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'D'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
-        </label>
+  <!-- D -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'D'
+              ? (sel == 'D' ? ' active correct' : ' correct')
+              : (sel == 'D' ? ' active incorrect' : '')
+            )
+         : (sel == 'D' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="D"
+           th:checked="${sel == 'D'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
+  </label>
+
+        <p class="text-danger small mt-2" th:if="${review and sel == null}">
+          Bạn chưa có câu trả lời cho câu hỏi này.
+        </p>
+        <p class="text-success small" th:if="${review and correct != null}">
+          Đáp án đúng: <strong th:text="${correct}">A</strong>
+        </p>
 
         <button type="button" class="btn btn-sm btn-outline-secondary btn-clear"
                 th:attr="data-qn=${q.questionNumber}">
@@ -417,12 +705,12 @@
         </button>
       </div>
     </div>
+     </div>
   </section>
-  </div>
 </th:block>
 
 <!-- ====== PART 7: READING COMPREHENSION ====== -->
-<th:block th:fragment="part7(pv, takeId)" th:remove="tag">
+<th:block th:fragment="part7" th:remove="tag">
   <section>
     <div class="vstack gap-3 questions-scroll">
     <!-- Sau này nếu có passages:
@@ -444,45 +732,96 @@
       <!-- Nếu có q.passageSnippet hoặc q.imageUrl → hiển thị ở đây -->
       <!-- <img th:if="${q.imageUrl != null}" th:src="${q.imageUrl}" class="w-100 rounded mb-3"/> -->
 
-      <div class="answer-form" th:attr="data-qn=${q.questionNumber}">
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'A'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="A"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'A'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
-        </label>
+      <div class="answer-form"
+     th:with="
+         selChar=${selectedMap?.get(q.questionNumber)},
+         correctChar=${correctMap?.get(q.questionNumber)},
+         sel=${selChar != null ? selChar.toString() : null},
+         correct=${correctChar != null ? correctChar.toString() : null},
+         ok=${correctFlagMap?.get(q.questionNumber)}"
+          th:attr="data-qn=${q.questionNumber}">
+        <!-- A -->
+  <label class="option d-block mb-2"
+        th:classappend="|${review
+         ? (correct == 'A'
+              ? (sel == 'A' ? ' active correct' : ' correct')
+              : (sel == 'A' ? ' active incorrect' : '')
+            )
+         : (sel == 'A' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="A"
+           th:checked="${sel == 'A'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>A</strong>. <span th:text="${q.optionA}">Option A</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'B'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="B"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'B'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
-        </label>
+  <!-- B -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'B'
+              ? (sel == 'B' ? ' active correct' : ' correct')
+              : (sel == 'B' ? ' active incorrect' : '')
+            )
+         : (sel == 'B' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="B"
+           th:checked="${sel == 'B'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>B</strong>. <span th:text="${q.optionB}">Option B</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'C'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="C"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'C'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
-        </label>
+  <!-- C -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'C'
+              ? (sel == 'C' ? ' active correct' : ' correct')
+              : (sel == 'C' ? ' active incorrect' : '')
+            )
+         : (sel == 'C' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="C"
+           th:checked="${sel == 'C'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>C</strong>. <span th:text="${q.optionC}">Option C</span>
+  </label>
 
-        <label class="option d-block mb-2"
-               th:classappend="${selectedMap != null and selectedMap[q.questionNumber] == 'D'} ? ' active'">
-          <input type="radio" th:name="${'q' + q.questionNumber}" value="D"
-                 th:checked="${selectedMap != null and selectedMap[q.questionNumber] == 'D'}"
-                 th:attr="disabled=${review} ? true : null"/>
-          <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
-        </label>
+  <!-- D -->
+  <label class="option d-block mb-2"
+         th:classappend="|${review
+         ? (correct == 'D'
+              ? (sel == 'D' ? ' active correct' : ' correct')
+              : (sel == 'D' ? ' active incorrect' : '')
+            )
+         : (sel == 'D' ? ' active' : '')
+       }|">
+    <input type="radio"
+           th:name="${'q' + q.questionNumber}"
+           value="D"
+           th:checked="${sel == 'D'}"
+           th:attr="disabled=${review} ? true : null" />
+    <strong>D</strong>. <span th:text="${q.optionD}">Option D</span>
+  </label>
+
+        <p class="text-danger small mt-2" th:if="${review and sel == null}">
+          Bạn chưa có câu trả lời cho câu hỏi này.
+        </p>
+        <p class="text-success small" th:if="${review and correct != null}">
+          Đáp án đúng: <strong th:text="${correct}">A</strong>
+        </p>
 
         <button type="button" class="btn btn-sm btn-outline-secondary btn-clear"
                 th:attr="data-qn=${q.questionNumber}">Xóa chọn</button>
       </div>
     </div>
+     </div>
   </section>
-  </div>
 </th:block>
+
 
 

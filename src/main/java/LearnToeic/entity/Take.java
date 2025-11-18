@@ -1,7 +1,7 @@
 package LearnToeic.entity;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
@@ -23,10 +23,10 @@ public class Take implements Serializable
     private Integer attemptNo;
 
     @Column(name = "start_time")
-    private Instant startTime = Instant.now();
+    private LocalDateTime startTime;
 
     @Column(name = "end_time")
-    private Instant endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "status")
     private String status = "STARTED";
@@ -67,19 +67,19 @@ public class Take implements Serializable
         this.attemptNo = attemptNo;
     }
 
-    public Instant getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Instant startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Instant getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Instant endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 

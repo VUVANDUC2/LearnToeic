@@ -1,216 +1,374 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title th:text="${view != null and view.testName != null ? view.testName : 'Bài thi'}">Bài thi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title th:text="${view != null and view.testName != null ? view.testName : 'Bài thi'}">
+    Bài thi
+  </title>
 
-  <!-- CSRF -->
-  <meta name="_csrf" th:content="${_csrf.token}"/>
-  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <!-- CSRF: dùng cho submit form bảo mật với Spring Security -->
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
 
   <style>
+    /* ================== BIẾN CSS GIAO DIỆN TRANG THI ================== */
     :root {
-      --sidebar-w: 320px;
-      --header-h: 72px;
+      --sidebar-w: 320px;   /* chiều rộng sidebar phải */
+      --header-h: 72px;     /* chiều cao header trên cùng */
+      --tabs-h: 48px;       /* chiều cao thanh Part 1..7 (ước lượng) */
     }
 
-    body { background:#f7f8fb; }
+    body {
+      background: #f7f8fb;
+    }
 
+    /* ================== HEADER TRÊN CÙNG ================== */
     .exam-header {
-      position:sticky; top:0; z-index:1030;
-      background:#fff; border-bottom:1px solid #eee;
-      height:var(--header-h);
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      height: var(--header-h);
     }
 
+    /* ================== LAYOUT CHÍNH: CỘT TRÁI (CÂU HỎI) + CỘT PHẢI (SIDEBAR) ================== */
     .exam-wrapper {
-      display:grid;
-      grid-template-columns:1fr var(--sidebar-w);
-      gap:1.25rem;
+      display: grid;
+      grid-template-columns: 1fr var(--sidebar-w);
+      gap: 1.25rem;
     }
 
-    @media (max-width: 992px){ .exam-wrapper{grid-template-columns:1fr;} }
+    /* Màn hình nhỏ thì ẩn cột phải, cho 1 cột */
+    @media (max-width: 992px) {
+      .exam-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
 
-    .questions-scroll{max-height:calc(100vh - 160px);overflow:auto;padding-right:6px}
-    aside .sticky{position:sticky;top:88px}
+    /* Cuộn khối câu hỏi bên trái (nếu cần) theo chiều cao viewport */
+    .questions-scroll {
+      max-height: calc(100vh - var(--header-h) - var(--tabs-h) - 32px);
+      overflow: auto;
+      padding-right: 6px;
+    }
 
-    /* Câu hỏi */
+    /* Sidebar sticky theo chiều dọc, cuộn riêng */
+    aside .sticky {
+      position: sticky;
+      top: calc(var(--header-h) + var(--tabs-h) + 8px);
+      max-height: calc(100vh - var(--header-h) - var(--tabs-h) - 32px);
+      overflow-y: auto;
+    }
+
+    /* ================== CARD CÂU HỎI ================== */
     .question-card {
-      border:none;
-      box-shadow:0 6px 20px rgba(0,0,0,.06);
-      border-radius:1rem;
+      border: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      border-radius: 1rem;
     }
 
+    /* ================== OPTION ĐÁP ÁN ================== */
     .option {
-      border:1px solid #e9ecef;
-      border-radius:.75rem;
-      padding:.75rem 1rem;
-      cursor:pointer;
-      transition:background .2s,border-color .2s;
+      border: 1px solid #e9ecef;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
     }
 
-    .option:hover { background:#f5f9ff; border-color:#bcd2ff; }
-    .option input { display:none; }
-    .option.active { background:#e8f0ff; border-color:#0d6efd; }
-    .option.correct { border-color:#28a745; background:#e9f7ef; }
-    .option.incorrect { border-color:#dc3545; background:#fdecea; }
-    /* Sidebar nút câu hỏi */
+    .option:hover {
+      background: #f5f9ff;
+      border-color: #bcd2ff;
+    }
+
+    .option input {
+      display: none; /* ẩn radio, chỉ dùng box option đẹp hơn */
+    }
+
+    /* Đáp án đang được chọn trong card */
+    .option.active {
+      background: #e8f0ff;
+      border-color: #0d6efd;
+    }
+
+    /* Dùng cho trạng thái review (đúng/sai) nếu cần */
+    .option.correct {
+      border-color: #28a745;
+      background: #e9f7ef;
+    }
+
+    .option.incorrect {
+      border-color: #dc3545;
+      background: #fdecea;
+    }
+
+    /* ================== SIDEBAR: LƯỚI CÁC NÚT SỐ CÂU ================== */
     .qgrid {
-      list-style:none;
-      margin:0; padding:0;
-      display:grid;
-      grid-template-columns:repeat(6,1fr);
-      gap:.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.5rem;
     }
 
     .qbtn {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      width:36px; height:36px;
-      border:1px solid #dee2e6;
-      border-radius:6px;
-      background:#fff;
-      color:#333;
-      font-weight:500;
-      transition:all .2s;
-      text-decoration:none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      background: #fff;
+      color: #333;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
     }
 
     .qbtn:hover {
-      background:#f0f8ff;
-      border-color:#0d6efd;
-      color:#0d6efd;
+      background: #f0f8ff;
+      border-color: #0d6efd;
+      color: #0d6efd;
     }
 
-    /* Hiện tại (current) */
+    /* Câu hiện tại (current) */
     .qbtn.current {
-      background-color:#ffffff;
-      color:#0d6efd;
-      border:2px solid #0d6efd;
-      font-weight:600;
+      background-color: #ffffff;
+      color: #0d6efd;
+      border: 2px solid #0d6efd;
+      font-weight: 600;
     }
 
-    /* Đã chọn (answered) */
+    /* Câu đã chọn (answered) */
     .qbtn.answered {
-      background-color:#0d6efd;
-      color:#fff;
-      border:1px solid #0d6efd;
-      font-weight:600;
+      background-color: #0d6efd;
+      color: #fff;
+      border: 1px solid #0d6efd;
+      font-weight: 600;
     }
 
-    /* Khi cả current và answered */
+    /* Khi vừa current vừa answered */
     .qbtn.current.answered {
-      background-color:#0b5ed7;
-      color:#fff;
-      border:2px solid #0b5ed7;
+      background-color: #0b5ed7;
+      color: #fff;
+      border: 2px solid #0b5ed7;
     }
-    .qbtn.answered.correct { background:#d1e7dd; color:#0f5132; border-color:#badbcc; }
-    .qbtn.answered.wrong   { background:#f8d7da; color:#842029; border-color:#f5c2c7; }
 
+    /* Dùng cho chế độ review (đúng/sai) nếu muốn phân màu */
+    .qbtn.answered.correct {
+      background: #d1e7dd;
+      color: #0f5132;
+      border-color: #badbcc;
+    }
 
-    @media (max-width:576px){
-      .qgrid{grid-template-columns:repeat(5,1fr);gap:.4rem;}
-      .qbtn{min-width:34px;}
+    .qbtn.answered.wrong {
+      background: #f8d7da;
+      color: #842029;
+      border-color: #f5c2c7;
+    }
+
+    /* Responsive cho màn hình rất nhỏ */
+    @media (max-width: 576px) {
+      .qgrid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.4rem;
+      }
+
+      .qbtn {
+        min-width: 34px;
+      }
     }
   </style>
 </head>
 
 <body>
+  <!-- ================== HEADER TRÊN CÙNG: TÊN ĐỀ + TIMER + NỘP BÀI ================== -->
+  <header class="exam-header d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between gap-3">
+      <!-- LEFT: thông tin đề thi -->
+      <div class="d-flex align-items-center gap-3">
+        <a th:href="@{/tests}" class="btn btn-outline-secondary btn-sm">
+          Danh sách đề
+        </a>
 
-<header class="exam-header d-flex align-items-center">
-  <div class="container d-flex align-items-center justify-content-between gap-3">
-    <div class="d-flex align-items-center gap-3">
-      <a th:href="@{/tests}" class="btn btn-outline-secondary btn-sm">Danh sách đề</a>
-      <div>
-        <h6 class="mb-0" th:text="${view.testName}">TOEIC Practice Test</h6>
-        <small class="text-muted">
-          Mã đề: <span th:text="${view.testId}">0</span>
-          • Tổng câu: <span th:text="${view.totalQuestions}">0</span>
-        </small>
+        <div>
+          <h6 class="mb-0" th:text="${view.testName}">TOEIC Practice Test</h6>
+          <small class="text-muted">
+            Mã đề:
+            <span th:text="${view.testId}">0</span>
+            • Tổng câu:
+            <span th:text="${view.totalQuestions}">0</span>
+          </small>
+        </div>
+      </div>
+
+      <!-- RIGHT: Timer + nút nộp bài, chỉ hiện khi KHÔNG review -->
+      <div th:if="${!review}" class="d-flex align-items-center gap-3">
+        <div class="text-end" th:if="${!review}">
+          <div class="small text-muted">Thời gian còn lại</div>
+          <!-- LƯU Ý: id="timer" cũng bị dùng ở sidebar phía dưới -->
+          <div id="timer" class="fw-bold text-danger fs-4"></div>
+        </div>
+
+        <!-- Form nộp bài ở header -->
+        <form
+          th:if="${!review}"
+          th:action="@{|/tests/${view.takeId}/submit|}"
+          method="post"
+          class="m-0"
+           id="submitForm"
+        >
+          <input type="hidden" name="answersJson" id="answersJson" />
+          <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          <button id="btnSubmitTop" type="submit" class="btn btn-primary">
+            Nộp bài
+          </button>
+        </form>
+
+        <!-- Nút quay về danh sách đề -->
+        <a
+          th:if="${not (review ?: false)}"
+          th:href="@{/tests}"
+          class="btn btn-outline-primary"
+        >
+          Quay về
+        </a>
       </div>
     </div>
+  </header>
 
-    <div class="d-flex align-items-center gap-3">
-      <div class="text-center" th:if="${!review}">
-        <div class="small text-muted">Thời gian còn lại</div>
-        <div id="countdown" class="fs-5 fw-bold">--:--:--</div>
-      </div>
+  <!-- ================== TABS CHỌN PART 1..7 ================== -->
+  <div class="bg-white border-bottom">
+    <div class="container py-2">
+      <ul class="nav nav-pills gap-2" id="nav-parts">
 
-      <form th:if="${not (review ?: false)}" th:action="@{|/take/${view.takeId}/submit|}" method="post" class="m-0">
-        <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <button id="btnSubmitTop" type="submit" class="btn btn-primary">Nộp bài</button>
-      </form>
+        <!-- === EXAM MODE: dùng HTMX, SPA === -->
+        <li class="nav-item" th:if="${!review}"
+            th:each="p : ${#numbers.sequence(1,7)}">
+          <a class="nav-link"
+            th:classappend="${p} == ${pv.part} ? 'active' : ''"
+            href="javascript:void(0)"
+            th:attr="
+              data-part=${p},
+              data-hx-get=@{|/tests/take/${view.takeId}/part/${p}|},
+              data-hx-target='#part-container',
+              data-hx-swap='innerHTML',
+              data-hx-push-url=@{|/tests/take/${view.takeId}?part=${p}|}
+            ">
+            Part [[${p}]]
+          </a>
+        </li>
 
-      <a th:if="${not (review ?: false)}" th:href="@{/tests}" class="btn btn-outline-primary">Quay về</a>
+        <!-- === REVIEW MODE: link thẳng, reload trang === -->
+        <li class="nav-item" th:if="${review}"
+            th:each="p : ${#numbers.sequence(1,7)}">
+          <a class="nav-link"
+            th:classappend="${p} == ${pv.part} ? 'active' : ''"
+            th:attr="data-part=${p}"
+            th:href="@{|/tests/${view.takeId}/review?part=${p}|}">
+            Part [[${p}]]
+          </a>
+
+        </li>
+
+      </ul>
+
     </div>
   </div>
-</header>
+  <!-- ================== MAIN CONTENT: CÂU HỎI + SIDEBAR ================== -->
+ <main class="container my-3">
+  <div class="exam-wrapper">
 
-<!-- Tabs Part 1..7 -->
-<div class="bg-white border-bottom">
-  <div class="container py-2">
-    <ul class="nav nav-pills gap-2" id="nav-parts">
-      <li class="nav-item" th:each="p : ${#numbers.sequence(1,7)}">
-        <a class="nav-link"
-           th:classappend="${p} == ${pv.part} ? 'active' : ''"
-           href="javascript:void(0)"
-           th:attr="
-             data-part=${p},
-             data-hx-get=@{|/tests/take/${view.takeId}/part/${p}|},
-             data-hx-target='#part-container',
-             data-hx-swap='innerHTML',
-             data-hx-push-url=@{|/tests/take/${view.takeId}?part=${p}|},
-             data-review=@{|/tests/${view.takeId}/review?part=${p}|}
-           ">
-          Part [[${p}]]
-        </a>
-      </li>
-    </ul>
+    <!-- Cột trái: câu hỏi -->
+    <div id="part-container"
+         th:insert="~{fragments/take-parts :: partBlock}">
+    </div>
+
+    <!-- Cột phải: sidebar -->
+    <aside>
+      <div
+        class="card p-3 mb-3 sticky"
+        style="border:none; box-shadow:0 6px 20px rgba(0,0,0,.06); border-radius:1rem;"
+      >
+        <!-- Timer sidebar (dùng class exam-timer, không dùng id trùng) -->
+        <div class="mb-3" th:if="${!review}">
+          <div class="text-muted small">Thời gian còn lại:</div>
+          <div id="timer" fw-bold text-danger fs-4></div>
+        </div>
+
+        <div class="mt-4 p-3 rounded-3 bg-white shadow-sm" th:if="${review}">
+
+  <h6 class="fw-semibold mb-3">Kết quả bài làm</h6>
+
+  <!-- <div class="d-flex justify-content-between mb-2">
+    <span>Điểm:</span>
+    <strong th:text="${score}"></strong>
+  </div> -->
+
+  <div class="d-flex justify-content-between mb-1">
+    <span class="text-success">✔ Số câu đúng:</span>
+    <strong th:text="${score}">0</strong>
+  </div>
+
+  <div class="d-flex justify-content-between mb-1">
+    <span class="text-danger">✘ Số câu sai:</span>
+    <strong th:text="${view.totalQuestions - score}">0</strong>
   </div>
 </div>
 
-<main class="container my-3">
-  <div class="exam-wrapper">
 
-    <!-- Main content -->
-    <div id="part-container"
-         th:insert="~{fragments/take-parts :: partBlock(${pv}, ${view.takeId})}">
-    </div>
-
-    <!-- Sidebar -->
-    <aside>
-      <div class="card p-3 mb-3 sticky" style="border:none; box-shadow:0 6px 20px rgba(0,0,0,.06); border-radius:1rem;">
-
-        <div class="mb-3">
-          <div class="text-muted small">Thời gian làm bài:</div>
-          <div id="countdown" class="fs-2 fw-bold">00:00</div>
-        </div>
-
-        <form id="autoSubmitForm" th:action="@{|/tests/${view.takeId}/submit|}" method="post" class="mb-3">
-          <button class="btn btn-primary btn-lg w-100" type="submit">NỘP BÀI</button>
+        <form
+          id="autoSubmitForm"
+          th:if="${!review}"
+          th:action="@{|/tests/${view.takeId}/submit|}"
+          method="post"
+          class="mb-3"
+        >
+          <button class="btn btn-primary btn-lg w-100" type="submit">
+            NỘP BÀI
+          </button>
         </form>
 
         <div th:each="p : ${#numbers.sequence(1,7)}" class="mb-3">
           <div class="fw-semibold mb-2">Part [[${p}]]</div>
 
           <ul class="qgrid">
-            <li th:each="qnum, it : ${view.partMap.get(p) ?: view.partMap.get(T(java.lang.Integer).valueOf(p)) ?: {}}">
+            <li th:each="qnum, it : ${view.partMap.get(p)}"
+    th:with="
+      sel=${selectedMap != null ? selectedMap.get(qnum) : null},
+      flag=${correctFlagMap != null ? correctFlagMap.get(qnum) : null}">
 
-              <a class="qbtn"
-                 th:text="${qnum}"
-                 th:attr="data-qn=${qnum}"
-                 th:classappend="${(p == pv.part ? ' current' : '') +
-                                 ((view.selectedMap != null and view.selectedMap.containsKey(qnum)) ? ' answered' : '')}"
-                 th:href="${p} == ${pv.part}
-                            ? ${'#q' + (it.index + 1)}
-                            : (${review}
-                                ? @{|/tests/${view.takeId}/review?part=${p}|}
-                                : @{|/take/${view.takeId}?part=${p}|})">
+              <a
+                class="qbtn"
+                href="#"
+                th:text="${qnum}"
+                th:attr="
+                  data-part=${p},
+                  data-qn=${qnum},
+                  data-qidx=${it.index + 1},
+                  hx-get=@{|/take/${view.takeId}/part/${p}|},
+                  hx-target='#part-container',
+                  hx-swap='innerHTML' "
+                 th:classappend="|${p == pv.part ? ' current' : ''}${
+  review ?
+    (flag != null
+        ? (flag ? ' answered correct' : ' answered wrong')
+        : ' answered wrong')
+    :
+    (sel != null ? ' answered' : '')
+                 }|">
+
               </a>
-
             </li>
           </ul>
         </div>
@@ -219,118 +377,311 @@
   </div>
 </main>
 
-<!-- JS -->
-<script src="https://unpkg.com/htmx.org@1.9.10"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script th:inline="javascript">
-  const IS_REVIEW = /*[[${review}]]*/ false;
-  window._answers = {};
 
-  // --- Khôi phục highlight & đồng bộ sidebar sau khi HTMX swap (chạy ở cả 2 chế độ) ---
-  document.body.addEventListener('htmx:afterSwap', e => {
-    // Nếu muốn chỉ áp dụng khi thay #part-container, mở comment dưới:
-    // if (e.detail.target.id !== 'part-container') return;
+  <!-- ================== JS LIBS ================== -->
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    // Phục hồi highlight trong card dựa trên radio đang checked
-    document.querySelectorAll('.answer-form input[type=radio]:checked')
-      .forEach(input => input.closest('.option')?.classList.add('active'));
+  <!-- ================== SCRIPT LOGIC THI / REVIEW ================== -->
+  <script th:inline="javascript">
+    // IS_REVIEW: backend bắn xuống (true/false) để phân biệt hai chế độ
+    const IS_REVIEW = /*[[${review} ?: false]]*/ false;
+    // Nếu review = true => remaining = 0, còn đang làm bài => lấy view.remaining
+    //let remaining = /*[[${review} ? 0 : view.remaining]]*/ 0;
 
-    // Đồng bộ sidebar (ô số câu) theo radio đang checked
-    document.querySelectorAll('.answer-form').forEach(f => {
-      const qn = f.dataset.qn;
-      const checked = f.querySelector('input[type=radio]:checked');
-      document.querySelectorAll(`.qbtn[data-qn="${qn}"]`).forEach(btn => {
-        btn.classList.toggle('answered', !!checked);
-      });
-    });
+    // _answers: object lưu câu trả lời cục bộ trên browser {qn: option}
+    window._answers = {};
 
-    // Ở chế độ làm bài, bật lại wireCollectOnly và phục hồi theo state (_answers)
-    if (!IS_REVIEW) {
-      wireCollectOnly();
-      // Phục hồi chọn theo state khi chuyển part
+    // _focusIdx: index câu trong PART khi người dùng click nút số câu ở sidebar
+    // -> dùng để scroll tới đúng câu sau khi HTMX load part
+    window._focusIdx = null;
+
+    /* ================================================================
+       1) Sau mỗi lần HTMX swap #part-container:
+          - Khôi phục highlight đáp án
+          - Đồng bộ trạng thái "answered" ở sidebar
+          - Gắn lại listener cho radio nếu đang thi
+          - Scroll tới đúng câu nếu user vừa chọn từ sidebar
+       ================================================================ */
+    document.body.addEventListener('htmx:afterSwap', e => {
+      // Nếu muốn giới hạn chỉ khi target là #part-container thì mở lại dòng dưới:
+      // if (e.detail.target.id !== 'part-container') return;
+
+      // 1. Phục hồi highlight trong card (option.active) theo radio đang checked
+      document
+        .querySelectorAll('.answer-form input[type=radio]:checked')
+        .forEach(input => {
+          input.closest('.option')?.classList.add('active');
+        });
+
+      // 2. Đồng bộ sidebar: với mỗi answer-form, nếu có option được chọn
+      // thì gắn class "answered" cho .qbtn tương ứng với qn
       document.querySelectorAll('.answer-form').forEach(f => {
-        const qn = parseInt(f.dataset.qn, 10);
-        const sel = window._answers[qn];
-        if (sel) {
-          const input = f.querySelector(`input[type=radio][value="${sel}"]`);
-          if (input) {
-            input.checked = true;
-            input.closest('.option')?.classList.add('active');
-            document.querySelectorAll(`.qbtn[data-qn="${qn}"]`).forEach(btn => btn.classList.add('answered'));
+        const qn = f.dataset.qn;
+        const checked = f.querySelector('input[type=radio]:checked');
+        document
+          .querySelectorAll(`.qbtn[data-qn="${qn}"]`)
+          .forEach(btn => btn.classList.toggle('answered', !!checked));
+      });
+
+      // 3. Ở chế độ làm bài: gắn lại listener cho radio, và phục hồi lựa chọn theo _answers
+      if (!IS_REVIEW) {
+        wireCollectOnly();
+
+        // Phục hồi lựa chọn từ _answers khi chuyển part
+        document.querySelectorAll('.answer-form').forEach(f => {
+          const qn = parseInt(f.dataset.qn, 10);
+          const sel = window._answers[qn];
+
+          if (sel) {
+            const input = f.querySelector(
+              `input[type=radio][value="${sel}"]`
+            );
+            if (input) {
+              input.checked = true;
+              input.closest('.option')?.classList.add('active');
+              document
+                .querySelectorAll(`.qbtn[data-qn="${qn}"]`)
+                .forEach(btn => btn.classList.add('answered'));
+            }
+          }
+        });
+      }
+
+      // 4. Nếu có _focusIdx (user vừa click số câu ở sidebar), scroll tới câu đó
+      if (window._focusIdx != null) {
+        const container = document.getElementById('part-container');
+        if (container) {
+          const target = container.querySelector('#q' + window._focusIdx);
+          if (target) {
+            // delay nhẹ để đảm bảo HTML đã render đầy đủ
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
           }
         }
-      });
-    }
-  });
+        // reset sau khi dùng xong
+        window._focusIdx = null;
+      }
+    });
 
-  // --- Đổi tab Part (UI only) ---
-  document.body.addEventListener('htmx:beforeRequest', function(e){
-    const a = e.detail.elt;
-    if (!a || !a.matches('#nav-parts .nav-link')) return;
-    document.querySelectorAll('#nav-parts .nav-link').forEach(x => x.classList.remove('active'));
-    a.classList.add('active');
-  });
+    /* ================================================================
+       2) Đổi tab Part (UI only) trước khi HTMX request:
+          - Bỏ class 'active' tab cũ
+          - Gắn 'active' cho tab vừa click
+       ================================================================ */
+    document.body.addEventListener('htmx:beforeRequest', e => {
+      const a = e.detail.elt;
+      if (!a || !a.matches('#nav-parts .nav-link')) return;
 
-  // --- Lỗi HTMX ---
-  document.body.addEventListener('htmx:error', function (e) {
-    if (e.detail?.requestConfig?.target?.id === 'part-container') {
-      e.detail.requestConfig.target.innerHTML =
-        '<div class="alert alert-danger mb-0">Không tải được phần này (500). Vui lòng thử lại.</div>';
-    }
-  });
+      document
+        .querySelectorAll('#nav-parts .nav-link')
+        .forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+    });
 
-  // --- Chỉ dùng ở chế độ LÀM BÀI: gom câu trả lời vào _answers & tô "answered" ---
-  function wireCollectOnly() {
-    // Nếu đang review thì thoát (không gắn listener)
-    if (IS_REVIEW) return;
+    /* ================================================================
+       3) Xử lý lỗi HTMX khi load part-container thất bại
+       ================================================================ */
+    document.body.addEventListener('htmx:error', e => {
+      if (e.detail?.requestConfig?.target?.id === 'part-container') {
+        e.detail.requestConfig.target.innerHTML =
+          '<div class="alert alert-danger mb-0">Không tải được phần này (500). Vui lòng thử lại.</div>';
+      }
+    });
 
-    document.querySelectorAll('.answer-form').forEach(block => {
-      const qn = parseInt(block.dataset.qn, 10);
-      block.querySelectorAll('input[type=radio]').forEach(input => {
-        // Tránh gắn trùng nhiều lần khi swap nhiều lần:
-        if (input.__wired) return;
-        input.__wired = true;
+    /* ================================================================
+       4) Hàm wireCollectOnly():
+          - Chỉ dùng ở chế độ LÀM BÀI (không phải review)
+          - Gắn listener change cho radio trong mỗi .answer-form
+          - Khi đổi đáp án:
+              + Highlight option trong card (option.active)
+              + Gắn class 'answered' cho qbtn tương ứng
+              + Cập nhật state cục bộ window._answers
+       ================================================================ */
+    function wireCollectOnly() {
+      if (IS_REVIEW) return; // đang review thì không gắn event
 
-        input.addEventListener('change', e => {
-          // Highlight trong card
-          block.querySelectorAll('.option').forEach(l => l.classList.remove('active'));
-          e.target.closest('.option')?.classList.add('active');
+      document.querySelectorAll('.answer-form').forEach(block => {
+        const qn = parseInt(block.dataset.qn, 10);
 
-          // Đánh dấu sidebar
-          document.querySelectorAll(`.qbtn[data-qn="${qn}"]`).forEach(btn => btn.classList.add('answered'));
+        block.querySelectorAll('input[type=radio]').forEach(input => {
+          // Tránh gắn trùng nhiều lần (sau nhiều lần HTMX swap)
+          if (input.__wired) return;
+          input.__wired = true;
 
-          // Cập nhật state cục bộ (không gửi server ngay)
-          window._answers[qn] = e.target.value;
+          input.addEventListener('change', e => {
+            // 1. Highlight option trong card
+            block
+              .querySelectorAll('.option')
+              .forEach(l => l.classList.remove('active'));
+            e.target.closest('.option')?.classList.add('active');
+
+            // 2. Đánh dấu "answered" ở sidebar cho câu này
+            document
+              .querySelectorAll(`.qbtn[data-qn="${qn}"]`)
+              .forEach(btn => btn.classList.add('answered'));
+
+            // 3. Cập nhật state cục bộ (chưa gửi server)
+            window._answers[qn] = e.target.value;
+          });
         });
       });
-    });
-  }
-
-  // --- DOM Ready ---
-  document.addEventListener('DOMContentLoaded', () => {
-    // Chỉ gắn listener thu câu trả lời khi KHÔNG phải review
-    if (!IS_REVIEW) {
-      wireCollectOnly();
     }
-  });
 
-  // --- Trước khi submit form: nhét JSON vào hidden input (CHỈ ở chế độ làm bài) ---
-  if (!IS_REVIEW) {
-    document.addEventListener('submit', e => {
-      const form = e.target;
-      if (!form.matches('#autoSubmitForm, #submitTopForm')) return;
-
-      // Tạo/ cập nhật input ẩn
-      let hidden = form.querySelector('input[name="answersJson"]');
-      if (!hidden) {
-        hidden = document.createElement('input');
-        hidden.type = 'hidden';
-        hidden.name = 'answersJson';
-        form.appendChild(hidden);
+    /* ================================================================
+       5) DOMContentLoaded:
+          - Khi trang load xong lần đầu, nếu đang thi thì gắn listener cho radio
+       ================================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!IS_REVIEW) {
+        wireCollectOnly();
       }
-      hidden.value = JSON.stringify(window._answers); // {"101":"B","102":"D",...}
     });
-  }
-</script>
+
+    // 5b) Xóa lựa chọn khi nhấn nút "Xóa chọn"
+    document.body.addEventListener('click', e => {
+      const clearBtn = e.target.closest('.btn-clear[data-qn]');
+      if (!clearBtn) return;
+      e.preventDefault();
+      if (IS_REVIEW) return;
+
+      const qn = parseInt(clearBtn.getAttribute('data-qn'), 10);
+      if (Number.isNaN(qn)) return;
+
+      const form =
+        clearBtn.closest('.card')?.querySelector(`.answer-form[data-qn="${qn}"]`) ??
+        document.querySelector(`.answer-form[data-qn="${qn}"]`);
+
+      if (form) {
+        form.querySelectorAll('input[type=radio]').forEach(input => {
+          input.checked = false;
+        });
+        form
+          .querySelectorAll('.option')
+          .forEach(opt => opt.classList.remove('active'));
+      }
+
+      if (window._answers) {
+        delete window._answers[qn];
+      }
+
+      document
+        .querySelectorAll(`.qbtn[data-qn="${qn}"]`)
+        .forEach(btn => btn.classList.remove('answered', 'correct', 'wrong'));
+    });
+
+    /* ================================================================
+       6) Click nút số câu ở sidebar (.qbtn):
+          - Lưu index câu trong part (data-qidx) vào _focusIdx
+          - Trigger click tab part tương ứng để HTMX load part
+          - Sau khi load xong, htmx:afterSwap sẽ scroll tới #q{_focusIdx}
+       ================================================================ */
+    document.body.addEventListener('click', e => {
+      const btn = e.target.closest('.qbtn[data-part][data-qidx]');
+      if (!btn) return;
+
+      e.preventDefault();
+
+      const part = btn.getAttribute('data-part');
+      const qidx = btn.getAttribute('data-qidx');
+      if (!part || !qidx) return;
+
+      // 1) Lưu index câu trong part
+      window._focusIdx = parseInt(qidx, 10);
+
+      // 2) Tìm tab part tương ứng và trigger click để HTMX load nội dung part
+      const tab = document.querySelector(
+        `#nav-parts .nav-link[data-part="${part}"]`
+      );
+      if (tab) {
+        tab.click();
+      }
+    });
+
+    /* ================================================================
+       7) Trước khi submit form:
+          - Nhét JSON chứa _answers vào input hidden "answersJson"
+          - Áp dụng cho cả form autoSubmitForm, submitTopForm, submitForm
+       ================================================================ */
+    if (!IS_REVIEW) {
+      document.addEventListener('submit', e => {
+        const form = e.target;
+
+        // Tùy bạn đặt id form nào, ở đây check 3 id thường dùng
+        if (
+          !form.matches('#autoSubmitForm, #submitForm')
+        )
+          return;
+
+        // Tìm hoặc tạo input hidden answersJson
+        let hidden = form.querySelector('input[name="answersJson"]');
+        if (!hidden) {
+          hidden = document.createElement('input');
+          hidden.type = 'hidden';
+          hidden.name = 'answersJson';
+          form.appendChild(hidden);
+        }
+
+        // Gắn JSON string: {"101":"B","102":"D",...}
+        hidden.value = JSON.stringify(window._answers);
+      });
+    }
+
+    /* ================================================================
+       8) Đồng hồ đếm ngược:
+          - remaining: số giây còn lại backend tính sẵn: endTime - now
+          - formatTime: hiển thị HH:mm:ss
+          - Khi hết thời gian: hiển thị 00:00 và auto submit form #submitForm (nếu có)
+       ================================================================ */
+    // ===== ĐỒNG HỒ ĐẾM NGƯỢC =====
+  (function () {
+    // Lấy tất cả chỗ hiển thị thời gian (header + sidebar)
+    const timerEls = document.querySelectorAll('#timer');
+    if (!timerEls.length) {
+      console.warn("Không tìm thấy #timer");
+      return;
+    }
+
+    // REVIEW MODE: chỉ show 00:00:00 rồi thoát, KHÔNG đếm, KHÔNG submit
+    if (IS_REVIEW) {
+      timerEls.forEach(el => el.textContent = "00:00:00");
+      return;
+    }
+
+    // EXAM MODE: dùng view.remaining (backend đã set)
+    let remaining = /*[[${view.remaining}]]*/ 0;
+
+    function formatTime(sec) {
+      if (sec < 0) sec = 0;
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      return `${h.toString().padStart(2,'0')}:` +
+             `${m.toString().padStart(2,'0')}:` +
+             `${s.toString().padStart(2,'0')}`;
+    }
+
+    // Hiển thị lần đầu
+    timerEls.forEach(el => el.textContent = formatTime(remaining));
+
+    // Đếm ngược
+    const interval = setInterval(() => {
+      if (remaining <= 0) {
+        timerEls.forEach(el => el.textContent = "00:00:00");
+        clearInterval(interval);
+
+        // Hết giờ thì auto submit (nếu có form submit tự động)
+        const form = document.getElementById("submitForm")
+                  || document.getElementById("autoSubmitForm");
+        if (form) form.submit();
+        return;
+      }
+
+      remaining--;
+      timerEls.forEach(el => el.textContent = formatTime(remaining));
+    }, 1000);
+  })();
+  </script>
 </body>
 </html>

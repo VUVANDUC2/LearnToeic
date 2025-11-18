@@ -1,6 +1,7 @@
 package LearnToeic.entity;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
@@ -21,7 +22,7 @@ public class TestResult {
     private Integer score;
 
     @Column(name = "taken_on", nullable = false)
-    private Instant takenOn;
+    private LocalDateTime takenOn;
 
     // getter/setter
     public Long getResultId() {
@@ -48,11 +49,11 @@ public class TestResult {
         this.score = score;
     }
 
-    public Instant getTakenOn() {
+    public LocalDateTime getTakenOn() {
         return takenOn;
     }
 
-    public void setTakenOn(Instant takenOn) {
+    public void setTakenOn(LocalDateTime takenOn) {
         this.takenOn = takenOn;
     }
 }

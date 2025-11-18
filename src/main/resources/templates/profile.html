@@ -112,6 +112,13 @@
 <div class="profile-wrapper">
   <h1 class="profile-title">Thông tin cá nhân</h1>
 
+  <div th:if="${message}" class="alert mb-4 text-center"
+       th:classappend="' alert-' + (${alertClass} ?: 'info')"
+       data-auto-dismiss="true"
+       th:text="${message}">
+    Cập nhật thông tin thành công!
+  </div>
+
   <div class="profile-card">
     <div class="row g-4 align-items-center">
 
@@ -121,7 +128,9 @@
           <!-- nếu sau này có ảnh: thay i bằng <img src="..." class="w-100 h-100 rounded-circle"> -->
           <i class="bi bi-person-fill"></i>
         </div>
-        <div class="profile-name">sdfghj</div>
+        <div class="profile-name" th:text="${user?.fullName ?: 'Người dùng'}">
+          User Name
+        </div>
       </div>
 
       <!-- Cột phải: thông tin -->
@@ -129,20 +138,28 @@
         <!-- Dòng tài khoản -->
         <p class="mb-3">
           <span class="profile-label">Tài khoản:</span>
-          <span>du1244567@gmail.com</span>
-          <button type="button" class="btn btn-link btn-sm text-decoration-none ps-2 copy-email">
+          <span th:text="${user?.email}">email@example.com</span>
+          <button type="button"
+                  class="btn btn-link btn-sm text-decoration-none ps-2 copy-email"
+                  th:data-email="${user?.email}">
             <i class="bi bi-clipboard"></i>
           </button>
         </p>
 
         <!-- Form thông tin -->
-        <form>
+        <form th:action="@{/profile}" method="post">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
           <div class="row g-3">
             <!-- Họ tên -->
             <div class="col-md-6">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" class="form-control" placeholder="Họ tên" value="sdfghj">
+                <input type="text"
+                       class="form-control"
+                       name="fullName"
+                       placeholder="Họ tên"
+                       th:value="${user?.fullName}"
+                       required>
               </div>
             </div>
 
@@ -150,23 +167,41 @@
             <div class="col-md-6">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" class="form-control" value="du1244567@gmail.com" readonly>
+                <input type="email" class="form-control" th:value="${user?.email}" readonly>
               </div>
             </div>
 
-            <!-- Ngày sinh -->
-            <div class="col-md-6">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
-                <input type="date" class="form-control" placeholder="dd/mm/yyyy">
-              </div>
-            </div>
-
-            <!-- SĐT -->
-            <div class="col-md-6">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                <input type="text" class="form-control" placeholder="Số điện thoại">
+            <!-- Giới tính -->
+            <div class="col-12">
+              <span class="profile-label d-block mb-2">Giới tính</span>
+              <div class="d-flex flex-wrap gap-3">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="gender"
+                         id="genderMale"
+                         value="true"
+                         th:checked="${user?.gender == true}">
+                  <label class="form-check-label" for="genderMale">Nam</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="gender"
+                         id="genderFemale"
+                         value="false"
+                         th:checked="${user?.gender == false}">
+                  <label class="form-check-label" for="genderFemale">Nữ</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="gender"
+                         id="genderOther"
+                         th:value="${null}"
+                         th:checked="${user?.gender == null}">
+                  <label class="form-check-label" for="genderOther">Khác / Không tiết lộ</label>
+                </div>
               </div>
             </div>
 
@@ -187,6 +222,51 @@
       </div>
     </div>
   </div>
+
+  <div class="profile-card mt-4">
+    <h2 class="h5 fw-bold mb-3">Lịch sử bài làm</h2>
+    <div th:if="${#lists.isEmpty(history)}" class="text-muted">
+      Bạn chưa có bài thi nào hoàn thành.
+    </div>
+    <div th:if="${!#lists.isEmpty(history)}" class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Bài thi</th>
+            <th>Lần làm</th>
+            <th>Điểm</th>
+            <th>Thời gian</th>
+            <th class="text-end">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="take : ${history}">
+            <td>
+              <div class="fw-semibold" th:text="${take.testName()}">TOEIC Test</div>
+              <small class="text-muted" th:text="'Mã: #' + ${take.testId()}">#1</small>
+            </td>
+            <td th:text="${take.attemptNo()}">1</td>
+            <td th:text="${take.score() != null ? take.score() : '-'}">0</td>
+            <td>
+              <div th:text="${take.startTime() != null ? #temporals.format(take.startTime(), 'dd/MM/yyyy HH:mm') : '–'}">
+                01/01/2025 10:00
+              </div>
+              <small class="text-muted"
+                     th:text="${take.endTime() != null ? #temporals.format(take.endTime(), 'HH:mm dd/MM') : ''}">
+                11:30 01/01
+              </small>
+            </td>
+            <td class="text-end">
+              <a class="btn btn-sm btn-outline-primary"
+                 th:href="@{|/tests/${take.takeId()}/review?part=1|}">
+                Xem lại
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- Bootstrap JS -->
@@ -197,12 +277,19 @@
   // copy email nhỏ nhỏ
   document.addEventListener('DOMContentLoaded', function () {
     const btn = document.querySelector('.copy-email');
-    if (!btn) return;
-    btn.addEventListener('click', function () {
-      const email = 'du1244567@gmail.com'; // sau này lấy từ data-th-text/currentUser
-      navigator.clipboard.writeText(email).then(() => {
-        alert('Đã copy email vào clipboard');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        const email = btn.getAttribute('data-email');
+        if (!email) return;
+        navigator.clipboard.writeText(email).then(() => {
+          alert('Đã copy email vào clipboard');
+        });
       });
+    }
+
+    const autoAlerts = document.querySelectorAll('.alert[data-auto-dismiss]');
+    autoAlerts.forEach(alert => {
+      setTimeout(() => alert.remove(), 5000);
     });
   });
 </script>
