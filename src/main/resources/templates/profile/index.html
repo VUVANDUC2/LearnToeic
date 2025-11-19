@@ -105,6 +105,32 @@
       background:#f97316;
       border-color:#f97316;
     }
+
+    .dashboard-card{
+      background:#fff;
+      border-radius:20px;
+      padding:20px;
+      box-shadow:0 10px 30px rgba(15,23,42,.1);
+      height:100%;
+    }
+
+    .dashboard-label{
+      text-transform:uppercase;
+      font-size:.8rem;
+      letter-spacing:.08em;
+      color:#6b7280;
+    }
+
+    .dashboard-value{
+      font-size:2rem;
+      font-weight:700;
+      color:var(--ink);
+    }
+
+    .dashboard-sub{
+      color:#6b7280;
+      font-size:.9rem;
+    }
   </style>
 </head>
 <body>
@@ -117,6 +143,51 @@
        data-auto-dismiss="true"
        th:text="${message}">
     Cập nhật thông tin thành công!
+  </div>
+
+  <div class="row g-3 mb-4" th:if="${dashboard != null}">
+    <div class="col-md-3 col-sm-6">
+      <div class="dashboard-card text-center">
+        <div class="dashboard-label">Bài thi đã làm</div>
+        <div class="dashboard-value" th:text="${dashboard.totalTests()}">0</div>
+        <div class="dashboard-sub">Tổng số lượt làm bài</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="dashboard-card text-center">
+        <div class="dashboard-label">Điểm trung bình</div>
+        <div class="dashboard-value"
+             th:text="${dashboard.averageScore() != null ? #numbers.formatDecimal(dashboard.averageScore(), 0, 'HALF_UP') : '-'}">
+          0
+        </div>
+        <div class="dashboard-sub">Tính theo bài đã có điểm</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="dashboard-card text-center">
+        <div class="dashboard-label">Điểm cao nhất</div>
+        <div class="dashboard-value" th:text="${dashboard.bestScore() != null ? dashboard.bestScore() : '-'}">0</div>
+        <div class="dashboard-sub">Thành tích tốt nhất</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="dashboard-card text-center" th:if="${dashboard.latestTake() != null}">
+        <div class="dashboard-label">Bài gần nhất</div>
+        <div class="dashboard-value" th:text="${dashboard.latestTake().score() != null ? dashboard.latestTake().score() : '-'}">
+          0
+        </div>
+        <div class="dashboard-sub" th:text="${dashboard.latestTake().testName()}">TOEIC Test</div>
+        <a class="btn btn-sm btn-outline-primary mt-2"
+           th:href="@{|/tests/${dashboard.latestTake().takeId()}/review?part=1|}">
+          Xem lại
+        </a>
+      </div>
+      <div class="dashboard-card text-center" th:if="${dashboard.latestTake() == null}">
+        <div class="dashboard-label">Bài gần nhất</div>
+        <div class="dashboard-value">-</div>
+        <div class="dashboard-sub">Bạn chưa có bài thi nào</div>
+      </div>
+    </div>
   </div>
 
   <div class="profile-card">
