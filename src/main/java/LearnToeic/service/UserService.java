@@ -35,4 +35,8 @@ public class UserService {
 
         return userRepository.findAll(pageable);
     }
+
+    public int getDistinctUserCount(){
+        return userRepository.countDistinctUsers();
+    }
 }
