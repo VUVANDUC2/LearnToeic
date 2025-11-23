@@ -1,94 +1,128 @@
 <div th:fragment="siteHeader">
   <!-- Header / Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="box-shadow:0 5px 15px rgba(0,0,0,.04)">
+  <nav
+    class="navbar navbar-expand-lg navbar-light bg-white"
+    style="box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04)"
+  >
     <div class="container">
       <a class="navbar-brand fw-bold" href="/">LEARN TOEIC</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navMain"
+        aria-controls="navMain"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navMain">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-          <li class="nav-item ">
-            <a class="nav-link  fw-semibold" href="#" role="button"
+          <li class="nav-item">
+            <a
+              class="nav-link fw-semibold"
+              href="#"
+              role="button"
               th:href="@{/tests}"
-              th:classappend="${requestURI != null && requestURI.startsWith('/tests') ? 'active' : ''}">
+              th:classappend="${requestURI != null && requestURI.startsWith('/tests') ? 'active' : ''}"
+            >
               Luyện đề
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link fw-semibold"
+            <a
+              class="nav-link fw-semibold"
               th:href="@{/}"
-              th:classappend="${requestURI != null && requestURI == '/phuong-phap' ? 'active' : ''}">
+              th:classappend="${requestURI != null && requestURI == '/phuong-phap' ? 'active' : ''}"
+            >
               Phương pháp
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link fw-semibold"
+            <a
+              class="nav-link fw-semibold"
               th:href="@{/flashcards}"
-              th:classappend="${requestURI != null && requestURI == '/flashcards' ? 'active' : ''}">
+              th:classappend="${requestURI != null && requestURI == '/flashcards' ? 'active' : ''}"
+            >
               Flashcards
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link fw-semibold"
+            <a
+              class="nav-link fw-semibold"
               th:href="@{/resources}"
-              th:classappend="${requestURI != null && requestURI == '/resources' ? 'active' : ''}">
+              th:classappend="${requestURI != null && requestURI == '/resources' ? 'active' : ''}"
+            >
               Tài liệu
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link fw-semibold"
+            <a
+              class="nav-link fw-semibold"
               th:href="@{/blog}"
-              th:classappend="${requestURI != null && requestURI.startsWith('/blog') ? 'active' : ''}">
+              th:classappend="${requestURI != null && requestURI.startsWith('/blog') ? 'active' : ''}"
+            >
               Blog
             </a>
           </li>
         </ul>
         <div class="d-flex align-items-center gap-2">
+          <!-- CHƯA login -->
+          <a
+            class="btn btn-primary px-4"
+            sec:authorize="isAnonymous()"
+            th:href="@{/auth/login}"
+          >
+            Đăng nhập
+          </a>
 
-  <!-- CHƯA login -->
-  <a class="btn btn-primary px-4"
-     sec:authorize="isAnonymous()"
-     th:href="@{/auth/login}">
-    Đăng nhập
-  </a>
-
-  <!-- ĐÃ login -->
-  <div class="account-dropdown-wrapper position-relative"
-       sec:authorize="isAuthenticated()">
-
-    <button class="btn p-0 border-0 bg-transparent"
-            type="button"
-            id="userMenuBtn">
-      <span class="avatar-text-circle">
-        <span th:text="${#strings.substring(
+          <!-- ĐÃ login -->
+          <div
+            class="account-dropdown-wrapper position-relative"
+            sec:authorize="isAuthenticated()"
+          >
+            <button
+              class="btn p-0 border-0 bg-transparent"
+              type="button"
+              id="userMenuBtn"
+            >
+              <span class="avatar-text-circle">
+                <span
+                  th:text="${#strings.substring(
                             #strings.listSplit(currentUser.fullName, ' ')
                                      .get(#strings.listSplit(currentUser.fullName, ' ').size() - 1),
-                            0, 1).toUpperCase()}">
-          D
-        </span>
-      </span>
-    </button>
+                            0, 1).toUpperCase()}"
+                >
+                  D
+                </span>
+              </span>
+            </button>
 
-    <!-- menu tự làm, KHÔNG dùng class dropdown-menu nữa -->
-    <ul class="account-menu-dropdown" id="userMenu">
-      <li><a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a></li>
-      <li><a class="dropdown-item text-danger" th:href="@{/account/delete}">Xoá tài khoản</a></li>
-      <li>
-        <form th:action="@{/logout}" method="post">
-          <button type="submit" class="dropdown-item">Đăng xuất</button>
-        </form>
-      </li>
-    </ul>
-
-  </div>
-</div>
-
+            <!-- menu tự làm, KHÔNG dùng class dropdown-menu nữa -->
+            <ul class="account-menu-dropdown" id="userMenu">
+              <li>
+                <a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item text-danger"
+                  th:href="@{/account/delete}"
+                  >Xoá tài khoản</a
+                >
+              </li>
+              <li>
+                <form th:action="@{/logout}" method="post">
+                  <button type="submit" class="dropdown-item">Đăng xuất</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
