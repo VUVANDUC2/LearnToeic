@@ -197,7 +197,7 @@
     <div class="container d-flex align-items-center justify-content-between gap-3">
       <!-- LEFT: thông tin đề thi -->
       <div class="d-flex align-items-center gap-3">
-        <a th:href="@{/tests}" class="btn btn-outline-secondary btn-sm">
+        <a th:href="@{/tests}" class="btn btn-outline-secondary btn-sm" data-exam-exit="true">
           Danh sách đề
         </a>
 
@@ -240,6 +240,7 @@
           th:if="${not (review ?: false)}"
           th:href="@{/tests}"
           class="btn btn-outline-primary"
+          data-exam-exit="true"
         >
           Quay về
         </a>
@@ -386,8 +387,12 @@
   <script th:inline="javascript">
     // IS_REVIEW: backend bắn xuống (true/false) để phân biệt hai chế độ
     const IS_REVIEW = /*[[${review} ?: false]]*/ false;
-    // Nếu review = true => remaining = 0, còn đang làm bài => lấy view.remaining
-    //let remaining = /*[[${review} ? 0 : view.remaining]]*/ 0;
+    const EXIT_CONFIRM_MESSAGE = 'Bạn có muốn thoát khỏi bài test không?';
+    const SUBMIT_URL = /*[[@{|/tests/${view.takeId}/submit|}]]*/ '';
+    const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');
+    const csrfHeaderMeta = document.querySelector('meta[name="_csrf_header"]');
+    const CSRF_TOKEN = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : null;
+    const CSRF_HEADER = csrfHeaderMeta ? csrfHeaderMeta.getAttribute('content') : null;
 
     // _answers: object lưu câu trả lời cục bộ trên browser {qn: option}
     window._answers = {};
@@ -395,6 +400,127 @@
     // _focusIdx: index câu trong PART khi người dùng click nút số câu ở sidebar
     // -> dùng để scroll tới đúng câu sau khi HTMX load part
     window._focusIdx = null;
+    window._remainingSeconds = 0;
+
+    let hasSubmitted = false;
+    let pendingUnloadSubmit = false;
+    let exitBeaconSent = false;
+
+    function getSubmitForm() {
+      return document.getElementById('submitForm') || document.getElementById('autoSubmitForm');
+    }
+
+    function buildAnswersJson() {
+      try {
+        return JSON.stringify(window._answers || {});
+      } catch (err) {
+        return '{}';
+      }
+    }
+
+    function ensureAnswersField(form) {
+      if (!form) return null;
+      let hidden = form.querySelector('input[name="answersJson"]');
+      if (!hidden) {
+        hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'answersJson';
+        form.appendChild(hidden);
+      }
+      hidden.value = buildAnswersJson();
+      return hidden;
+    }
+
+    function markSubmitted() {
+      hasSubmitted = true;
+      pendingUnloadSubmit = false;
+    }
+
+    function shouldGuardExit() {
+      const remainingSeconds =
+        typeof window._remainingSeconds === 'number' ? window._remainingSeconds : 0;
+      return !IS_REVIEW && !hasSubmitted && remainingSeconds > 0;
+    }
+
+    function sendExitSubmissionBeacon() {
+      if (exitBeaconSent) return;
+      exitBeaconSent = true;
+
+      const payload = new URLSearchParams();
+      payload.set('answersJson', buildAnswersJson());
+
+      const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      };
+      if (CSRF_HEADER && CSRF_TOKEN) {
+        headers[CSRF_HEADER] = CSRF_TOKEN;
+      }
+
+      try {
+        fetch(SUBMIT_URL, {
+          method: 'POST',
+          body: payload.toString(),
+          keepalive: true,
+          credentials: 'same-origin',
+          headers
+        });
+      } catch (err) {
+        console.warn('Không thể gửi bài thi khi thoát đột ngột', err);
+      }
+    }
+
+    function submitCurrentTest(forceBeacon = false) {
+      if (hasSubmitted) return;
+
+      if (!forceBeacon) {
+        const form = getSubmitForm();
+        if (form) {
+          if (typeof form.requestSubmit === 'function') {
+            form.requestSubmit();
+          } else {
+            ensureAnswersField(form);
+            markSubmitted();
+            form.submit();
+          }
+          return;
+        }
+      }
+
+      markSubmitted();
+      sendExitSubmissionBeacon();
+    }
+
+    function handleBeforeUnload(e) {
+      if (!shouldGuardExit()) return;
+
+      pendingUnloadSubmit = true;
+      e.preventDefault();
+      e.returnValue = EXIT_CONFIRM_MESSAGE;
+      return EXIT_CONFIRM_MESSAGE;
+    }
+
+    if (!IS_REVIEW) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      window.addEventListener('unload', () => {
+        if (pendingUnloadSubmit && !hasSubmitted) {
+          sendExitSubmissionBeacon();
+        }
+      });
+
+      document.addEventListener('click', e => {
+        const exitTrigger = e.target.closest('[data-exam-exit]');
+        if (!exitTrigger) return;
+        if (!shouldGuardExit()) return;
+
+        e.preventDefault();
+        const confirmed = window.confirm(EXIT_CONFIRM_MESSAGE);
+        if (!confirmed) {
+          return;
+        }
+
+        submitCurrentTest();
+      });
+    }
 
     /* ================================================================
        1) Sau mỗi lần HTMX swap #part-container:
@@ -608,23 +734,12 @@
       document.addEventListener('submit', e => {
         const form = e.target;
 
-        // Tùy bạn đặt id form nào, ở đây check 3 id thường dùng
-        if (
-          !form.matches('#autoSubmitForm, #submitForm')
-        )
+        if (!form.matches('#autoSubmitForm, #submitForm')) {
           return;
-
-        // Tìm hoặc tạo input hidden answersJson
-        let hidden = form.querySelector('input[name="answersJson"]');
-        if (!hidden) {
-          hidden = document.createElement('input');
-          hidden.type = 'hidden';
-          hidden.name = 'answersJson';
-          form.appendChild(hidden);
         }
 
-        // Gắn JSON string: {"101":"B","102":"D",...}
-        hidden.value = JSON.stringify(window._answers);
+        ensureAnswersField(form);
+        markSubmitted();
       });
     }
 
@@ -645,12 +760,14 @@
 
     // REVIEW MODE: chỉ show 00:00:00 rồi thoát, KHÔNG đếm, KHÔNG submit
     if (IS_REVIEW) {
+      window._remainingSeconds = 0;
       timerEls.forEach(el => el.textContent = "00:00:00");
       return;
     }
 
     // EXAM MODE: dùng view.remaining (backend đã set)
     let remaining = /*[[${view.remaining}]]*/ 0;
+    window._remainingSeconds = remaining;
 
     function formatTime(sec) {
       if (sec < 0) sec = 0;
@@ -670,15 +787,15 @@
       if (remaining <= 0) {
         timerEls.forEach(el => el.textContent = "00:00:00");
         clearInterval(interval);
+        window._remainingSeconds = 0;
 
         // Hết giờ thì auto submit (nếu có form submit tự động)
-        const form = document.getElementById("submitForm")
-                  || document.getElementById("autoSubmitForm");
-        if (form) form.submit();
+        submitCurrentTest();
         return;
       }
 
       remaining--;
+      window._remainingSeconds = remaining;
       timerEls.forEach(el => el.textContent = formatTime(remaining));
     }, 1000);
   })();

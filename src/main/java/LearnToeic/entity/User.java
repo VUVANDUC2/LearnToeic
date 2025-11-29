@@ -26,6 +26,13 @@ public class User {
     @Column(name = "gender")
     private Boolean gender;
 
+    @Lob
+    @Column(name = "avatar_data")
+    private byte[] avatarData;
+
+    @Column(name = "avatar_content_type", length = 100)
+    private String avatarContentType;
+
     // Constructor
     public User() {}
 
@@ -84,5 +91,21 @@ public class User {
 
     public void setGender(Boolean gender) {
         this.gender = gender;
+    }
+
+    public byte[] getAvatarData() {
+        return avatarData;
+    }
+
+    public void setAvatarData(byte[] avatarData) {
+        this.avatarData = avatarData;
+    }
+
+    public String getAvatarContentType() {
+        return avatarContentType;
+    }
+
+    public void setAvatarContentType(String avatarContentType) {
+        this.avatarContentType = avatarContentType;
     }
 }

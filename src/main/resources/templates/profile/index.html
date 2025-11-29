@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Thông tin cá nhân • LearnToeic</title>
@@ -9,343 +9,648 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/Home.css}">
+
   <style>
-    :root{
-      --brand:#ff7a45;
-      --ink:#111827;
+    :root {
+      --brand: #ff7a45;
+      --brand-soft: #fff1ea;
+      --ink: #0f172a;
+      --muted: #6b7280;
+      --surface: #ffffff;
+      --stroke: #e5e7eb;
     }
 
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at top left,#ffe7f3 0,transparent 55%),
-        radial-gradient(circle at bottom right,#e0f2ff 0,transparent 55%),
+        radial-gradient(circle at top right, rgba(255, 234, 215, 0.7), transparent 50%),
+        radial-gradient(circle at bottom left, rgba(224, 242, 255, 0.65), transparent 50%),
         #f6f8ff;
-      min-height:100vh;
-      color:var(--ink);
+      min-height: 100vh;
+      color: var(--ink);
     }
 
-    .profile-wrapper{
-      padding:60px 12px 40px;
+    .profile-shell {
+      padding: 90px 16px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .profile-title{
-      font-weight:800;
-      text-align:center;
-      margin-bottom:32px;
-      font-size:2rem;
+    .profile-hero {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 32px;
     }
 
-    .profile-card{
-      max-width:1100px;
-      margin:0 auto;
-      background:#fff;
-      border-radius:24px;
-      box-shadow:0 16px 40px rgba(15,23,42,.12);
-      padding:32px 26px;
+    .profile-hero .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 12px;
     }
 
-    @media (min-width:992px){
-      .profile-card{padding:40px 38px;}
+    .profile-hero h1 {
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      margin-bottom: 12px;
     }
 
-    .profile-avatar{
-      width:220px;
-      height:220px;
-      border-radius:50%;
-      background:#9ca3af;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin:0 auto;
-      color:#fff;
+    .profile-hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
     }
 
-    .profile-avatar i{
-      font-size:64px;
+    .alert-floating {
+      max-width: 640px;
+      margin: 0 auto 24px;
+      border-radius: 16px;
+      border: none;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
     }
 
-    .profile-name{
-      font-weight:600;
-      margin-top:14px;
-      font-size:1.05rem;
+    .profile-card {
+      background: var(--surface);
+      border-radius: 32px;
+      padding: 36px;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.25);
     }
 
-    .profile-label{
-      font-weight:600;
-      margin-bottom:4px;
+    .profile-main {
+      padding: 44px 38px;
     }
 
-    .profile-card .form-control{
-      border-radius:999px;
-      padding-top:.55rem;
-      padding-bottom:.55rem;
-      border-color:#e5e7eb;
+    .identity-panel {
+      text-align: center;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 24px;
+      padding: 28px 22px 24px;
+      background: linear-gradient(180deg, rgba(255, 241, 234, 0.4), rgba(255, 255, 255, 0.9));
     }
 
-    .profile-card .input-group-text{
-      border-radius:999px 0 0 999px;
-      border-color:#e5e7eb;
-      background:#f9fafb;
-      color:#6b7280;
+    .avatar-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 18px;
     }
 
-    .btn-pill{
-      border-radius:999px;
-      padding:.55rem 1.4rem;
+    .avatar-ring {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 3px dashed rgba(255, 122, 69, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      overflow: hidden;
     }
 
-    .btn-primary{
-      background:var(--brand);
-      border-color:var(--brand);
+    .avatar-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .btn-primary:hover{
-      background:#f97316;
-      border-color:#f97316;
+    .avatar-ring i {
+      font-size: 80px;
+      color: #e5e7eb;
     }
 
-    .dashboard-card{
-      background:#fff;
-      border-radius:20px;
-      padding:20px;
-      box-shadow:0 10px 30px rgba(15,23,42,.1);
-      height:100%;
+    .badge-soft {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.2rem 0.8rem;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 0.85rem;
+      font-weight: 600;
     }
 
-    .dashboard-label{
-      text-transform:uppercase;
-      font-size:.8rem;
-      letter-spacing:.08em;
-      color:#6b7280;
+    .identity-panel h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 18px 0 4px;
     }
 
-    .dashboard-value{
-      font-size:2rem;
-      font-weight:700;
-      color:var(--ink);
+    .identity-panel p {
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-size: 0.95rem;
     }
 
-    .dashboard-sub{
-      color:#6b7280;
-      font-size:.9rem;
+    .profile-meta {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+    }
+
+    .profile-meta li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .profile-meta li:last-child {
+      border-bottom: none;
+    }
+
+    .profile-meta span {
+      display: block;
+    }
+
+    .profile-meta .meta-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .profile-meta .meta-value {
+      font-weight: 600;
+      margin-top: 4px;
+      color: var(--ink);
+    }
+
+    .copy-email {
+      border: none;
+      background: rgba(15, 23, 42, 0.06);
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      transition: background 0.2s ease;
+    }
+
+    .copy-email:hover {
+      background: rgba(255, 122, 69, 0.15);
+      color: var(--brand);
+    }
+
+    .avatar-upload input[type="file"] {
+      border-radius: 14px;
+      border: 1.5px dashed rgba(15, 23, 42, 0.15);
+      padding: 0.85rem 1rem;
+      background: #fff;
+    }
+
+    .details-panel {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 10px 6px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    .form-control-modern {
+      border-radius: 16px;
+      background: #f9fafb;
+      border: 1.5px solid #e5e7eb;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-control-modern:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(255, 122, 69, 0.18);
+      background: #fff;
+    }
+
+    .input-icon {
+      position: relative;
+    }
+
+    .input-icon i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+    }
+
+    .input-icon .form-control-modern {
+      padding-left: 44px;
+    }
+
+    .gender-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .gender-options .btn-check + .gender-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1.4rem;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      font-weight: 600;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .gender-options .btn-check:checked + .gender-chip {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(255, 122, 69, 0.35);
+    }
+
+    .btn-pill {
+      border-radius: 999px;
+      padding: 0.75rem 1.8rem;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      border-color: var(--brand);
+      box-shadow: 0 15px 35px rgba(255, 122, 69, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: #ff6a33;
+      border-color: #ff6a33;
+    }
+
+    .btn-soft {
+      background: rgba(15, 23, 42, 0.04);
+      border-color: rgba(15, 23, 42, 0.08);
+      color: var(--ink);
+    }
+
+    .btn-soft:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    .stats-cluster {
+      margin-top: 40px;
+    }
+
+    .stat-card {
+      border-radius: 22px;
+      padding: 24px;
+      background: #fff;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+      height: 100%;
+    }
+
+    .stat-card .label {
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .stat-card .sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .activity-card {
+      margin-top: 36px;
+    }
+
+    .activity-card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .table-modern thead {
+      background: rgba(15, 23, 42, 0.03);
+    }
+
+    .table-modern thead th {
+      border-bottom: none;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .table-modern tbody tr {
+      border-bottom-color: rgba(148, 163, 184, 0.2);
+    }
+
+    .table-modern tbody tr:hover {
+      background: rgba(255, 241, 234, 0.4);
+    }
+
+    .history-empty {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 992px) {
+      .profile-card {
+        border-radius: 24px;
+        padding: 28px;
+      }
+
+      .profile-main {
+        padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .profile-shell {
+        padding: 60px 14px 40px;
+      }
+
+      .identity-panel {
+        padding: 24px 18px;
+      }
+
+      .avatar-ring {
+        width: 150px;
+        height: 150px;
+      }
     }
   </style>
 </head>
 <body>
 <div th:replace="fragments/header :: siteHeader"></div>
-<div class="profile-wrapper">
-  <h1 class="profile-title">Thông tin cá nhân</h1>
 
-  <div th:if="${message}" class="alert mb-4 text-center"
+<main class="profile-shell">
+  <section class="profile-hero">
+    <p class="eyebrow">Hồ sơ cá nhân</p>
+    <h1>Quản lý thông tin và tiến trình học tập của bạn</h1>
+    <p>Cập nhật hồ sơ, kiểm tra thành tích và tiếp tục hành trình chinh phục TOEIC với LearnToeic.</p>
+  </section>
+
+  <div th:if="${message}" class="alert alert-floating mb-4 text-center"
        th:classappend="' alert-' + (${alertClass} ?: 'info')"
        data-auto-dismiss="true"
        th:text="${message}">
     Cập nhật thông tin thành công!
   </div>
 
-  <div class="row g-3 mb-4" th:if="${dashboard != null}">
-    <div class="col-md-3 col-sm-6">
-      <div class="dashboard-card text-center">
-        <div class="dashboard-label">Bài thi đã làm</div>
-        <div class="dashboard-value" th:text="${dashboard.totalTests()}">0</div>
-        <div class="dashboard-sub">Tổng số lượt làm bài</div>
-      </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="dashboard-card text-center">
-        <div class="dashboard-label">Điểm trung bình</div>
-        <div class="dashboard-value"
-             th:text="${dashboard.averageScore() != null ? #numbers.formatDecimal(dashboard.averageScore(), 0, 'HALF_UP') : '-'}">
-          0
-        </div>
-        <div class="dashboard-sub">Tính theo bài đã có điểm</div>
-      </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="dashboard-card text-center">
-        <div class="dashboard-label">Điểm cao nhất</div>
-        <div class="dashboard-value" th:text="${dashboard.bestScore() != null ? dashboard.bestScore() : '-'}">0</div>
-        <div class="dashboard-sub">Thành tích tốt nhất</div>
-      </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="dashboard-card text-center" th:if="${dashboard.latestTake() != null}">
-        <div class="dashboard-label">Bài gần nhất</div>
-        <div class="dashboard-value" th:text="${dashboard.latestTake().score() != null ? dashboard.latestTake().score() : '-'}">
-          0
-        </div>
-        <div class="dashboard-sub" th:text="${dashboard.latestTake().testName()}">TOEIC Test</div>
-        <a class="btn btn-sm btn-outline-primary mt-2"
-           th:href="@{|/tests/${dashboard.latestTake().takeId()}/review?part=1|}">
-          Xem lại
-        </a>
-      </div>
-      <div class="dashboard-card text-center" th:if="${dashboard.latestTake() == null}">
-        <div class="dashboard-label">Bài gần nhất</div>
-        <div class="dashboard-value">-</div>
-        <div class="dashboard-sub">Bạn chưa có bài thi nào</div>
-      </div>
-    </div>
-  </div>
+  <div class="profile-card profile-main">
+    <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-  <div class="profile-card">
-    <div class="row g-4 align-items-center">
-
-      <!-- Cột trái: avatar -->
-      <div class="col-lg-4 text-center">
-        <div class="profile-avatar">
-          <!-- nếu sau này có ảnh: thay i bằng <img src="..." class="w-100 h-100 rounded-circle"> -->
-          <i class="bi bi-person-fill"></i>
-        </div>
-        <div class="profile-name" th:text="${user?.fullName ?: 'Người dùng'}">
-          User Name
-        </div>
-      </div>
-
-      <!-- Cột phải: thông tin -->
-      <div class="col-lg-8">
-        <!-- Dòng tài khoản -->
-        <p class="mb-3">
-          <span class="profile-label">Tài khoản:</span>
-          <span th:text="${user?.email}">email@example.com</span>
-          <button type="button"
-                  class="btn btn-link btn-sm text-decoration-none ps-2 copy-email"
-                  th:data-email="${user?.email}">
-            <i class="bi bi-clipboard"></i>
-          </button>
-        </p>
-
-        <!-- Form thông tin -->
-        <form th:action="@{/profile}" method="post">
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-          <div class="row g-3">
-            <!-- Họ tên -->
-            <div class="col-md-6">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text"
-                       class="form-control"
-                       name="fullName"
-                       placeholder="Họ tên"
-                       th:value="${user?.fullName}"
-                       required>
+      <div class="row g-4 align-items-start">
+        <div class="col-xl-4">
+          <section class="identity-panel">
+            <div class="avatar-wrapper">
+              <div class="avatar-ring">
+                <img th:if="${avatarData != null}" th:src="${avatarData}" alt="Ảnh đại diện người dùng">
+                <i class="bi bi-person-fill" th:if="${avatarData == null}"></i>
               </div>
             </div>
 
-            <!-- Email -->
-            <div class="col-md-6">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" class="form-control" th:value="${user?.email}" readonly>
-              </div>
-            </div>
+            <span class="badge-soft">
+              <i class="bi bi-stars"></i>
+              Thành viên LearnToeic
+            </span>
 
-            <!-- Giới tính -->
-            <div class="col-12">
-              <span class="profile-label d-block mb-2">Giới tính</span>
-              <div class="d-flex flex-wrap gap-3">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input"
+            <h2 th:text="${user?.fullName ?: 'Người dùng LearnToeic'}">User Name</h2>
+            <p>Tối ưu hồ sơ của bạn để được gợi ý lộ trình học phù hợp hơn.</p>
+
+            <ul class="profile-meta">
+              <li>
+                <span class="meta-label">Tài khoản</span>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="meta-value" th:text="${user?.email}">email@example.com</span>
+                  <button type="button"
+                          class="copy-email"
+                          aria-label="Copy email"
+                          th:data-email="${user?.email}">
+                    <i class="bi bi-clipboard"></i>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <span class="meta-label">Giới tính</span>
+                <span class="meta-value"
+                      th:text="${user?.gender == null ? 'Chưa cập nhật' : (user?.gender ? 'Nam' : 'Nữ')}">
+                  Chưa cập nhật
+                </span>
+              </li>
+            </ul>
+
+            <div class="avatar-upload mt-4">
+              <label class="form-label">Ảnh đại diện</label>
+              <input type="file" name="avatar" accept="image/*">
+              <small class="text-muted d-block mt-1">Định dạng PNG/JPG, dung lượng tối đa 2MB.</small>
+            </div>
+          </section>
+        </div>
+
+        <div class="col-xl-8">
+          <section class="details-panel">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="fullName" class="form-label">Họ tên</label>
+                <div class="input-icon">
+                  <i class="bi bi-person"></i>
+                  <input id="fullName"
+                         type="text"
+                         class="form-control form-control-modern"
+                         name="fullName"
+                         placeholder="Họ và tên"
+                         th:value="${user?.fullName}"
+                         required>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <div class="input-icon">
+                  <i class="bi bi-envelope"></i>
+                  <input type="email"
+                         class="form-control form-control-modern"
+                         th:value="${user?.email}"
+                         readonly>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Giới tính</label>
+                <div class="gender-options">
+                  <input class="btn-check"
                          type="radio"
                          name="gender"
                          id="genderMale"
                          value="true"
                          th:checked="${user?.gender == true}">
-                  <label class="form-check-label" for="genderMale">Nam</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input"
+                  <label class="gender-chip" for="genderMale">Nam</label>
+
+                  <input class="btn-check"
                          type="radio"
                          name="gender"
                          id="genderFemale"
                          value="false"
                          th:checked="${user?.gender == false}">
-                  <label class="form-check-label" for="genderFemale">Nữ</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input"
+                  <label class="gender-chip" for="genderFemale">Nữ</label>
+
+                  <input class="btn-check"
                          type="radio"
                          name="gender"
                          id="genderOther"
                          th:value="${null}"
                          th:checked="${user?.gender == null}">
-                  <label class="form-check-label" for="genderOther">Khác / Không tiết lộ</label>
+                  <label class="gender-chip" for="genderOther">Khác / Không tiết lộ</label>
                 </div>
               </div>
             </div>
-
-            <!-- Nút -->
-            <div class="col-md-6 mt-3">
-              <button type="button" class="btn btn-outline-secondary btn-pill w-100">
-                Đổi mật khẩu
-              </button>
-            </div>
-            <div class="col-md-6 mt-3 text-md-end">
-              <button type="submit" class="btn btn-primary btn-pill w-100 w-md-auto">
-                Cập nhật
-              </button>
-            </div>
-          </div>
-        </form>
-
+          </section>
+        </div>
       </div>
-    </div>
+
+      <div class="row g-3 align-items-center mt-4">
+        <div class="col-md-6 order-md-1 order-2">
+          <button type="submit" class="btn btn-primary btn-pill w-100">
+            Lưu thay đổi
+          </button>
+        </div>
+        <div class="col-md-6 order-md-2 order-1 text-md-end">
+          <a class="btn btn-soft btn-pill w-100 w-md-auto"
+             th:href="@{|/auth/reset-password?token=${resetToken}|}"
+             role="button">
+            Đổi mật khẩu
+          </a>
+        </div>
+      </div>
+    </form>
   </div>
 
-  <div class="profile-card mt-4">
-    <h2 class="h5 fw-bold mb-3">Lịch sử bài làm</h2>
-    <div th:if="${#lists.isEmpty(history)}" class="text-muted">
+  <section class="stats-cluster" th:if="${dashboard != null}">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+      <div class="col">
+        <div class="stat-card text-center">
+          <div class="label">Bài thi đã làm</div>
+          <div class="value" th:text="${dashboard.totalTests()}">0</div>
+          <div class="sub">Tổng số lượt luyện tập</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="stat-card text-center">
+          <div class="label">Điểm trung bình</div>
+          <div class="value"
+               th:text="${dashboard.averageScore() != null
+          ? #numbers.formatDecimal(dashboard.averageScore(), 0, 0)
+          : '-'}">
+            0
+          </div>
+          <div class="sub">Các bài đã có kết quả</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="stat-card text-center">
+          <div class="label">Điểm cao nhất</div>
+          <div class="value" th:text="${dashboard.bestScore() != null ? dashboard.bestScore() : '-'}">0</div>
+          <div class="sub">Thành tích tốt nhất</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="stat-card text-center" th:if="${dashboard.latestTake() != null}">
+          <div class="label">Bài gần nhất</div>
+          <div class="value" th:text="${dashboard.latestTake().score() != null ? dashboard.latestTake().score() : '-'}">-</div>
+          <div class="sub" th:text="${dashboard.latestTake().testName()}">TOEIC Test</div>
+          <a class="btn btn-outline-primary btn-sm mt-3"
+             th:href="@{|/tests/${dashboard.latestTake().takeId()}/review?part=1|}">
+            Xem lại
+          </a>
+        </div>
+        <div class="stat-card text-center" th:if="${dashboard.latestTake() == null}">
+          <div class="label">Bài gần nhất</div>
+          <div class="value">-</div>
+          <div class="sub">Bạn chưa có bài thi nào</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="profile-card activity-card">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+      <h2 class="mb-0">Lịch sử bài làm</h2>
+      <span class="text-muted small">Theo dõi hành trình học tập của bạn</span>
+    </div>
+
+    <div th:if="${#lists.isEmpty(history)}" class="history-empty">
       Bạn chưa có bài thi nào hoàn thành.
     </div>
+
     <div th:if="${!#lists.isEmpty(history)}" class="table-responsive">
-      <table class="table align-middle mb-0">
-        <thead class="table-light">
-          <tr>
-            <th>Bài thi</th>
-            <th>Lần làm</th>
-            <th>Điểm</th>
-            <th>Thời gian</th>
-            <th class="text-end">Hành động</th>
-          </tr>
+      <table class="table table-modern align-middle mb-0">
+        <thead>
+        <tr>
+          <th scope="col">Bài thi</th>
+          <th scope="col">Lần làm</th>
+          <th scope="col">Điểm</th>
+          <th scope="col">Thời gian</th>
+          <th scope="col" class="text-end">Hành động</th>
+        </tr>
         </thead>
         <tbody>
-          <tr th:each="take : ${history}">
-            <td>
-              <div class="fw-semibold" th:text="${take.testName()}">TOEIC Test</div>
-              <small class="text-muted" th:text="'Mã: #' + ${take.testId()}">#1</small>
-            </td>
-            <td th:text="${take.attemptNo()}">1</td>
-            <td th:text="${take.score() != null ? take.score() : '-'}">0</td>
-            <td>
-              <div th:text="${take.startTime() != null ? #temporals.format(take.startTime(), 'dd/MM/yyyy HH:mm') : '–'}">
-                01/01/2025 10:00
-              </div>
-              <small class="text-muted"
-                     th:text="${take.endTime() != null ? #temporals.format(take.endTime(), 'HH:mm dd/MM') : ''}">
-                11:30 01/01
-              </small>
-            </td>
-            <td class="text-end">
-              <a class="btn btn-sm btn-outline-primary"
-                 th:href="@{|/tests/${take.takeId()}/review?part=1|}">
-                Xem lại
-              </a>
-            </td>
-          </tr>
+        <tr th:each="take : ${history}">
+          <td>
+            <div class="fw-semibold" th:text="${take.testName()}">TOEIC Test</div>
+            <small class="text-muted" th:text="'Mã #' + ${take.testId()}">#1</small>
+          </td>
+          <td th:text="${take.attemptNo()}">1</td>
+          <td th:text="${take.score() != null ? take.score() : '-'}">0</td>
+          <td>
+            <div th:text="${take.startTime() != null ? #temporals.format(take.startTime(), 'dd/MM/yyyy HH:mm') : '–'}">
+              01/01/2025 10:00
+            </div>
+            <small class="text-muted"
+                   th:text="${take.endTime() != null ? #temporals.format(take.endTime(), 'HH:mm dd/MM') : ''}">
+              11:30 01/01
+            </small>
+          </td>
+          <td class="text-end">
+            <a class="btn btn-outline-primary btn-sm"
+               th:href="@{|/tests/${take.takeId()}/review?part=1|}">
+              Xem lại
+            </a>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
   </div>
-</div>
+</main>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <div th:replace="fragments/footer :: siteFooter"></div>
 <script src="/js/Home.js" defer></script>
 <script>
-  // copy email nhỏ nhỏ
   document.addEventListener('DOMContentLoaded', function () {
     const btn = document.querySelector('.copy-email');
     if (btn) {
@@ -364,6 +669,5 @@
     });
   });
 </script>
-
 </body>
 </html>

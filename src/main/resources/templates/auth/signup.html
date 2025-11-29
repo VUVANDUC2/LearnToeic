@@ -2,244 +2,25 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Đăng ký • LearnToeic</title>
 
   <!-- Bootstrap & Icons -->
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
-
-<style>
-  :root{
-    --brand:#ff7a45;
-    --brand-2:#ff6a33;
-    --ink:#111827;
-    --muted:#6b7280;
-    --line:#e5e7eb;
-    --field:#e5e7eb;
-    --shadow:0 6px 16px rgba(248,114,67,.30);
-    --shadow-lg:0 10px 22px rgba(248,114,67,.45);
-    --radius:10px;
-    --narrow:420px; /* chiều ngang form */
-  }
-  *,
-  *::before,
-  *::after{
-    box-sizing: border-box;
-  }
-
-
-  body.signup-page{
-    margin:0;
-    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    color:var(--ink);
-    background:#fff;
-  }
-
-  .signup-wrapper{
-    max-width:980px;
-    margin:48px auto 40px;
-    padding:0 24px;
-    text-align:center;
-  }
-
-  /* ===== Heading ===== */
-  .signup-heading{
-    font-size:44px;
-    font-weight:800;
-    line-height:1.15;
-    margin:0 0 8px;
-    color:#0f172a;
-  }
-  .signup-subtitle{
-    margin:0 auto 26px;
-    color:var(--muted);
-    max-width:600px;
-    font-size:16px;
-  }
-
-  /* ===== Form tổng ===== */
-  .signup-form{
-    max-width: var(--narrow);
-    margin: 0 auto;
-    padding: 0;
-  }
-
-  .control-narrow{
-    width:100%;
-    margin:0 0 16px;
-    text-align:left;
-  }
-
-  .form-label{
-    display:block;
-    text-align:left;
-    font-weight:700;
-    color:#374151;
-    margin:0 0 6px;
-    font-size:14px;
-  }
-  /* ===== Input ===== */
-  .form-control{
-    width:100%;
-    height:40px;             /* cùng chiều cao với button */
-    border-radius:var(--radius);
-    padding:8px 12px;        /* giống button */
-    font-size:0.95rem;
-    border:1.5px solid var(--field);
-    transition:.2s;
-    box-shadow:none;
-    display:block;
-  }
-  .form-control::placeholder{ color:#9ca3af; }
-  .form-control:focus{
-    border-color:var(--brand);
-    box-shadow:0 0 0 3px rgba(255,122,69,.18);
-  }
-
-  /* Ẩn viền xanh hợp lệ của Bootstrap */
-  .was-validated .form-control:valid,
-  .form-control.is-valid{
-    border-color:#ced4da !important;
-    box-shadow:none !important;
-    background-image:none !important;
-  }
-
-  /* ===== Mật khẩu + icon mắt ===== */
-  .field-wrapper{
-    position:relative;
-  }
-  /* Input trong field-wrapper (mật khẩu) */
-  .field-wrapper .form-control{
-    padding-right:44px;       /* chừa chỗ cho icon mắt */
-  }
-
-  .btn-eye{
-    position:absolute;
-    top:50%;
-    right:10px;
-    transform:translateY(-50%);
-    background:transparent;
-    border:0;
-    padding:3px;
-    cursor:pointer;
-    z-index:5;
-  }
-  .btn-eye i{ font-size:18px; }
-  .btn-eye:hover{
-    background-color:#ffeae0;
-    border-radius:8px;
-  }
-
-  /* ===== Alerts ===== */
-  .alert{
-    max-width:var(--narrow);
-    margin:12px auto;
-    text-align:left;
-  }
-
-  /* ===== Buttons ===== */
-  .btn-signup,
-  .btn-google{
-    width:100%;
-    height:40px;              /* bằng input */
-    border-radius:var(--radius);
-    padding:8px 12px;         /* bằng input */
-    line-height:1;
-    display:block;
-    margin-left:auto;
-    margin-right:auto;
-  }
-
-  .btn-signup{
-    margin-top:18px;
-    font-weight:700;
-    font-size:1rem;
-    color:#fff;
-    background:var(--brand);
-    border:none;
-    box-shadow:var(--shadow);
-    transition:.2s;
-  }
-  .btn-signup:hover{
-    background:var(--brand-2);
-    transform:translateY(-1px);
-    box-shadow:var(--shadow-lg);
-  }
-
-  .btn-google{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    border:1px solid var(--line);
-    background:#fff;
-    font-weight:600;
-    font-size:.95rem;
-    color:#111827;
-    text-decoration:none;
-    transition:.2s;
-  }
-  .btn-google img{
-    width:20px;
-    height:20px;
-  }
-  .btn-google:hover{
-    background:#f9fafb;
-    box-shadow:0 4px 12px rgba(15,23,42,.08);
-  }
-
-  /* ===== Divider ===== */
-  .signup-divider{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    margin:22px auto 16px;
-    color:#9ca3af;
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:2px;
-  }
-  .signup-divider::before,
-  .signup-divider::after{
-    content:"";
-    flex:1;
-    height:1px;
-    background:var(--line);
-  }
-
-  /* ===== Link login ===== */
-  .login-text{
-    margin-top:16px;
-    font-size:.9rem;
-    color:var(--muted);
-    text-align:left;
-  }
-  .login-text a{
-    color:var(--brand);
-    text-decoration:none;
-    font-weight:600;
-  }
-  .login-text a:hover{ text-decoration:underline; }
-
-  /* ===== Responsive ===== */
-  @media (max-width:576px){
-    .signup-heading{ font-size:34px; }
-    .signup-wrapper{ margin-top:32px; }
-    :root{ --narrow:100%; }
-    .login-text{ text-align:center; }
-  }
-
-</style>
-
-
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" th:href="@{/css/signup.css}" />
 </head>
 
 <body class="signup-page">
   <main class="signup-wrapper">
     <h1 class="signup-heading">Tạo tài khoản miễn phí của bạn</h1>
-    <p class="signup-subtitle">Chỉ mất vài giây để bắt đầu học TOEIC hiệu quả hơn. Điền thông tin bên dưới để chúng mình tạo tài khoản cho bạn.</p>
+    <p class="signup-subtitle">
+      Chỉ mất vài giây để bắt đầu học TOEIC hiệu quả hơn. Điền thông tin bên dưới để chúng mình tạo tài khoản cho bạn.
+    </p>
 
     <form class="signup-form needs-validation"
+          th:classappend="${#fields.hasErrors()} ? ' was-validated' : ''"
           th:action="@{/auth/signup}"
           th:object="${form}"
           method="post"
@@ -254,62 +35,120 @@
       <!-- Server-side messages -->
       <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
       <div th:if="${msg}"   class="alert alert-success" th:text="${msg}"></div>
+
       <div th:if="${#fields.hasGlobalErrors()}"
            class="alert alert-danger"
            th:each="e : ${#fields.globalErrors()}"
-           th:text="${e}">Lỗi chung</div>
+           th:text="${e}">
+        Lỗi chung
+      </div>
 
       <!-- Họ và tên -->
-<div class="control-narrow">
-  <label for="fullName" class="form-label">Họ và tên *</label>
-  <input id="fullName" type="text" th:field="*{fullName}" class="form-control"
-         placeholder="Họ và tên của bạn" required>
-  <div th:if="${#fields.hasErrors('fullName')}" class="text-danger small" th:errors="*{fullName}"></div>
-</div>
+      <div class="control-narrow">
+        <label for="fullName" class="form-label">Họ và tên *</label>
+        <input id="fullName"
+               type="text"
+               th:field="*{fullName}"
+               class="form-control"
+               placeholder="Họ và tên của bạn"
+               required />
+        <div class="invalid-feedback"
+             data-default="Vui lòng nhập họ và tên của bạn.">
+          Vui lòng nhập họ và tên của bạn.
+        </div>
+        <div th:if="${#fields.hasErrors('fullName')}"
+             class="text-danger small"
+             th:errors="*{fullName}"></div>
+      </div>
 
-<!-- Email -->
-<div class="control-narrow">
-  <label for="email" class="form-label">Tài khoản *</label>
-  <input id="email" type="email" th:field="*{email}" class="form-control"
-         placeholder="Nhập địa chỉ email của bạn" required>
-  <div th:if="${#fields.hasErrors('email')}" class="text-danger small" th:errors="*{email}"></div>
-</div>
+      <!-- Email -->
+      <div class="control-narrow">
+        <label for="email" class="form-label">Tài khoản *</label>
+        <input id="email"
+               type="email"
+               th:field="*{email}"
+               class="form-control"
+               placeholder="Nhập địa chỉ email của bạn"
+               required />
+        <div class="invalid-feedback"
+             data-default="Email không được để trống và phải đúng định dạng.">
+          Email không được để trống và phải đúng định dạng.
+        </div>
+        <div th:if="${#fields.hasErrors('email')}"
+             class="text-danger small server-error"
+             data-error-field="email"
+             th:errors="*{email}"></div>
+      </div>
 
-<!-- Mật khẩu -->
-<div class="control-narrow">
-  <label for="password" class="form-label">Mật khẩu *</label>
-  <div class="field-wrapper">
-    <input id="password" type="password" th:field="*{password}" class="form-control"
-           placeholder="Nhập mật khẩu" required>
-    <button type="button" class="btn-eye" onclick="togglePassword('password', this)" aria-label="Hiện/ẩn mật khẩu">
-      <i class="bi bi-eye"></i>
-    </button>
-  </div>
-  <div th:if="${#fields.hasErrors('password')}" class="text-danger small" th:errors="*{password}"></div>
-</div>
+      <!-- Mật khẩu -->
+      <div class="control-narrow">
+        <label for="password" class="form-label">Mật khẩu *</label>
+        <div class="field-wrapper">
+          <input id="password"
+                 type="password"
+                 th:field="*{password}"
+                 class="form-control"
+                 placeholder="Nhập mật khẩu"
+                 minlength="6"
+                 required />
+          <button type="button"
+                  class="btn-eye"
+                  onclick="togglePassword('password', this)"
+                  aria-label="Hiện/ẩn mật khẩu">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+        <div class="invalid-feedback"
+             data-default="Vui lòng nhập mật khẩu (tối thiểu 6 ký tự).">
+          Vui lòng nhập mật khẩu (tối thiểu 6 ký tự).
+        </div>
+        <div th:if="${#fields.hasErrors('password')}"
+             class="text-danger small"
+             th:errors="*{password}"></div>
+      </div>
 
-<!-- Xác nhận mật khẩu -->
-<div class="control-narrow">
-  <label for="confirmPassword" class="form-label">Xác nhận mật khẩu *</label>
-  <div class="field-wrapper">
-    <input id="confirmPassword" type="password" th:field="*{confirmPassword}" class="form-control"
-           placeholder="Nhập lại mật khẩu" required>
-    <button type="button" class="btn-eye" onclick="togglePassword('confirmPassword', this)" aria-label="Hiện/ẩn mật khẩu">
-      <i class="bi bi-eye"></i>
-    </button>
-  </div>
-  <div th:if="${#fields.hasErrors('confirmPassword')}" class="text-danger small" th:errors="*{confirmPassword}"></div>
-</div>
+      <!-- Xác nhận mật khẩu -->
+      <div class="control-narrow">
+        <label for="confirmPassword" class="form-label">Xác nhận mật khẩu *</label>
+        <div class="field-wrapper">
+          <input id="confirmPassword"
+                 type="password"
+                 th:field="*{confirmPassword}"
+                 class="form-control"
+                 placeholder="Nhập lại mật khẩu"
+                 minlength="6"
+                 required />
+          <button type="button"
+                  class="btn-eye"
+                  onclick="togglePassword('confirmPassword', this)"
+                  aria-label="Hiện/ẩn mật khẩu">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+        <div class="invalid-feedback"
+             data-default="Vui lòng xác nhận lại mật khẩu.">
+          Vui lòng xác nhận lại mật khẩu.
+        </div>
+        <div th:if="${#fields.hasErrors('confirmPassword')}"
+             class="text-danger small"
+             th:errors="*{confirmPassword}"></div>
+      </div>
 
-<!-- Nút -->
-<button type="submit" class="btn-signup">Đăng ký</button>
+      <!-- Nút -->
+      <button type="submit" class="btn-signup">Đăng ký</button>
+
       <!-- Divider -->
-      <div class="signup-divider"><span>Hoặc</span></div>
-<!-- Google -->
-<a th:href="@{/oauth2/authorization/google}" class="btn-google">
-  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-  Đăng ký với Google
-</a>
+      <div class="signup-divider">
+        <span>Hoặc</span>
+      </div>
+
+      <!-- Google -->
+      <a th:href="@{/oauth2/authorization/google}" class="btn-google">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+             alt="Google" />
+        Đăng ký với Google
+      </a>
+
       <!-- Link login -->
       <p class="login-text">
         Đã có tài khoản?
@@ -319,30 +158,6 @@
   </main>
 
   <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-  <script>
-    // Ẩn/hiện mật khẩu
-    function togglePassword(id, btn){
-      const input = document.getElementById(id);
-      const icon  = btn.querySelector('i');
-      const isHidden = input.type === 'password';
-      input.type = isHidden ? 'text' : 'password';
-      icon.classList.toggle('bi-eye', !isHidden);
-      icon.classList.toggle('bi-eye-slash', isHidden);
-    }
-
-    // Validation Bootstrap — chỉ viền đỏ khi sai, không viền xanh khi đúng
-    (() => {
-      const forms = document.querySelectorAll('.needs-validation');
-      Array.from(forms).forEach(form => {
-        form.addEventListener('submit', e => {
-          if (!form.checkValidity()){
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          form.classList.add('was-validated');
-        }, false);
-      });
-    })();
-  </script>
+  <script th:src="@{/js/signup.js}"></script>
 </body>
 </html>

@@ -20,7 +20,7 @@ public class JwtPasswordResetService {
                 .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
 
         String token = jwtUtil.generateResetToken(user.getEmail(), 15); // 15 phút
-        String link = siteURL + "/reset_password?token=" + token;
+        String link = siteURL + "/auth/reset-password?token=" + token;
 
         String content = """
                 Xin chào,

@@ -31,8 +31,6 @@ public class Take implements Serializable
     @Column(name = "status")
     private String status = "STARTED";
 
-    @Column(name = "elapsed_seconds")
-    private Integer elapsedSeconds = 0;
 
     //  Getter & Setter
     public Integer getTakeId() {
@@ -91,11 +89,4 @@ public class Take implements Serializable
         this.status = status;
     }
 
-    public Integer getElapsedSeconds() {
-        return elapsedSeconds;
-    }
-
-    public void setElapsedSeconds(Integer elapsedSeconds) {
-        this.elapsedSeconds = elapsedSeconds;
-    }
 }

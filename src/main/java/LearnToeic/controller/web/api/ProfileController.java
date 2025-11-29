@@ -1,6 +1,8 @@
 package LearnToeic.controller.web.api;
 
 import java.security.Principal;
+import java.io.IOException;
+import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import LearnToeic.dto.Exam.TakeHistoryVM;
 import LearnToeic.dto.Profile.ProfileDashboardVM;
 import LearnToeic.entity.User;
+import LearnToeic.security.JwtResetTokenUtil;
 import LearnToeic.service.AccountUserService;
 import LearnToeic.service.ExamService;
 
@@ -27,6 +31,8 @@ public class ProfileController {
     private AccountUserService accountUserService;
     @Autowired
     private ExamService examService;
+    @Autowired
+    private JwtResetTokenUtil jwtResetTokenUtil;
 
     @GetMapping("/profile")
     public String profile(Model model, Principal principal) {
@@ -34,16 +40,23 @@ public class ProfileController {
             return "redirect:/auth/login";
         }
         User user = accountUserService.fetchUserByEmail(principal.getName());
+        if (user == null) {
+            return "redirect:/auth/login";
+        }
         model.addAttribute("user", user);
+        model.addAttribute("avatarData", buildAvatarData(user));
         List<TakeHistoryVM> history = examService.buildTakeHistory(user.getUserId());
         model.addAttribute("history", history);
         model.addAttribute("dashboard", buildDashboard(history));
+        String resetToken = jwtResetTokenUtil.generateResetToken(user.getEmail(), 15);
+        model.addAttribute("resetToken", resetToken);
         return "profile/index";
     }
 
     @PostMapping("/profile")
     public String updateProfile(@RequestParam("fullName") String fullName,
                                 @RequestParam(value = "gender", required = false) Boolean gender,
+                                @RequestParam(value = "avatar", required = false) MultipartFile avatar,
                                 Principal principal,
                                 RedirectAttributes ra) {
 
@@ -64,7 +77,30 @@ public class ProfileController {
             return "redirect:/auth/login";
         }
 
-        accountUserService.updateProfile(user, fullName, gender);
+        byte[] avatarBytes = null;
+        String avatarContentType = null;
+        if (avatar != null && !avatar.isEmpty()) {
+            if (avatar.getContentType() == null || !avatar.getContentType().startsWith("image/")) {
+                ra.addFlashAttribute("message", "Chỉ hỗ trợ tải lên file ảnh (jpeg, png, ...).");
+                ra.addFlashAttribute("alertClass", "danger");
+                return "redirect:/profile";
+            }
+            if (avatar.getSize() > 2 * 1024 * 1024) {
+                ra.addFlashAttribute("message", "Ảnh đại diện phải nhỏ hơn 2MB.");
+                ra.addFlashAttribute("alertClass", "danger");
+                return "redirect:/profile";
+            }
+            try {
+                avatarBytes = avatar.getBytes();
+                avatarContentType = avatar.getContentType();
+            } catch (IOException e) {
+                ra.addFlashAttribute("message", "Không thể đọc file ảnh. Vui lòng thử lại.");
+                ra.addFlashAttribute("alertClass", "danger");
+                return "redirect:/profile";
+            }
+        }
+
+        accountUserService.updateProfile(user, fullName, gender, avatarBytes, avatarContentType);
 
         ra.addFlashAttribute("message", "Cập nhật thông tin thành công!");
         ra.addFlashAttribute("alertClass", "success");
@@ -95,5 +131,16 @@ public class ProfileController {
                 best,
                 latest
         );
+    }
+
+    private String buildAvatarData(User user) {
+        if (user == null) return null;
+        byte[] data = user.getAvatarData();
+        String contentType = user.getAvatarContentType();
+        if (data == null || data.length == 0 || contentType == null) {
+            return null;
+        }
+        String base64 = Base64.getEncoder().encodeToString(data);
+        return "data:" + contentType + ";base64," + base64;
     }
 }

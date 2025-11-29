@@ -2,7 +2,6 @@ package LearnToeic.controller.web;
 
 import LearnToeic.dto.TestDTO;
 import LearnToeic.service.TestListService;
-import LearnToeic.service.UserQueryService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class TestWebController {
 
     private final TestListService testService;
-    private final UserQueryService userQueryService;
 
     // Danh sách đề (phân trang)
     @GetMapping("/tests")

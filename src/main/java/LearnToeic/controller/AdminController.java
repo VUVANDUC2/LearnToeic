@@ -18,12 +18,6 @@ public class AdminController {
         return "admin/test";
     }
 
-    @GetMapping("/admin/blog")
-    public String blog(Model model) {
-        model.addAttribute("pageTitle", "Quản trị");
-        return "admin/blog";
-    }
-
     @GetMapping("/admin/document")
     public String document(Model model) {
         model.addAttribute("pageTitle", "Quản trị");

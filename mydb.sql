@@ -652,6 +652,8 @@ CREATE TABLE `users` (
   `email` varchar(100) DEFAULT NULL,
   `role` varchar(50) DEFAULT NULL,
   `gender` tinyint(1) DEFAULT NULL,
+  `avatar_data` longblob,
+  `avatar_content_type` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

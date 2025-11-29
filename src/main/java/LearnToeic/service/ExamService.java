@@ -200,7 +200,6 @@ public class ExamService {
         take.setStatus("STARTED");
         take.setStartTime(start);
         take.setEndTime(end);
-        take.setElapsedSeconds(0);
 
         take = takeRepo.save(take);
 

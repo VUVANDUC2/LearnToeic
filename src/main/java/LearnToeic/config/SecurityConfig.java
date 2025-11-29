@@ -1,10 +1,17 @@
 package LearnToeic.config;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.FlashMapManager;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.support.SessionFlashMapManager;
 
 @Configuration
 public class SecurityConfig {
@@ -14,42 +21,54 @@ public class SecurityConfig {
 
         http
             .authorizeHttpRequests(auth -> auth
-                // Static
-                .requestMatchers("/css/**","/js/**","/images/**","/webjars/**").permitAll()
-
-                // Trang công khai
-                .requestMatchers("/","/auth/forgot-password", "/auth/login", "/auth/signup", "/search", "/playlist", "/error").permitAll()
-
-                // BẮT đúng URL BẮT ĐẦU BÀI (đặt TRƯỚC rule /tests/**)
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/uploads/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/blog/**").permitAll()
+                .requestMatchers("/", "/auth/forgot-password", "/auth/login", "/auth/signup", "/search", "/playlist", "/error").permitAll()
                 .requestMatchers(HttpMethod.GET, "/tests/*/start").authenticated()
-
-                // Còn lại các trang tests/lessons GET thì xem công khai
                 .requestMatchers(HttpMethod.GET, "/tests/**", "/lessons/**").permitAll()
-
-                // Các thao tác POST cần đăng nhập
-                .requestMatchers(HttpMethod.POST, "/tests/**","/take/**", "/attempts/**", "/progress/**", "/profile/**").authenticated()
-
-                // Những URL khác tuỳ bạn:
+                .requestMatchers(HttpMethod.POST, "/tests/**", "/take/**", "/attempts/**", "/progress/**", "/profile/**").authenticated()
                 .anyRequest().authenticated()
             )
-
             .formLogin(login -> login
                 .loginPage("/auth/login").permitAll()
                 .loginProcessingUrl("/auth/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                // ĐỂ Spring quay về SavedRequest (URL /tests/{id}/start sau khi login)
-                .defaultSuccessUrl("/", false)
+                .successHandler((request, response, authentication) -> {
+                    addFlashMessage(request, response, "Dang nhap thanh cong!", "success");
+                    SavedRequestAwareAuthenticationSuccessHandler handler = new SavedRequestAwareAuthenticationSuccessHandler();
+                    handler.setDefaultTargetUrl("/");
+                    handler.setAlwaysUseDefaultTargetUrl(false);
+                    handler.onAuthenticationSuccess(request, response, authentication);
+                })
             )
-
             .logout(logout -> logout
-            .logoutUrl("/logout")                // URL để logout
-            .logoutSuccessUrl("/") // Điều hướng sau khi logout
-            .invalidateHttpSession(true)         // Xoá session
-            .clearAuthentication(true)           // Xoá authentication
-            .deleteCookies("JSESSIONID")         // Xoá cookie
-        );
+                .logoutUrl("/logout")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    addFlashMessage(request, response, "Ban da dang xuat thanh cong!", "info");
+                    response.sendRedirect("/");
+                })
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
+            );
 
         return http.build();
+    }
+
+    private void addFlashMessage(HttpServletRequest request, HttpServletResponse response,
+                                 String message, String alertClass) {
+        FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
+        if (flashMap == null) {
+            flashMap = new FlashMap();
+        }
+        flashMap.put("message", message);
+        flashMap.put("alertClass", alertClass);
+
+        FlashMapManager manager = RequestContextUtils.getFlashMapManager(request);
+        if (manager == null) {
+            manager = new SessionFlashMapManager();
+        }
+        manager.saveOutputFlashMap(flashMap, request, response);
     }
 }

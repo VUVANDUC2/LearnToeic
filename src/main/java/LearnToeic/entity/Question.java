@@ -29,9 +29,6 @@ public class Question implements Serializable{
     @Column(name = "option_d")
     private String optionD;
 
-    @Column(name = "correct_option", length = 1)
-    private String correctOption;
-
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
 
@@ -92,13 +89,6 @@ public class Question implements Serializable{
         this.optionD = optionD;
     }
 
-    public String getCorrectOption() {
-        return correctOption;
-    }
-
-    public void setCorrectOption(String correctOption) {
-        this.correctOption = correctOption;
-    }
 
     public String getNote() {
         return note;

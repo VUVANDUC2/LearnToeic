@@ -31,7 +31,7 @@ public class JwtPasswordController {
             // ẩn lỗi thực tế
         }
         redirect.addFlashAttribute("msg", "Nếu email tồn tại, liên kết đặt lại đã được gửi.");
-        return "redirect:/forgot-password";
+        return "redirect:/auth/forgot-password";
     }
 
     @GetMapping("/reset-password")
@@ -48,7 +48,7 @@ public class JwtPasswordController {
         boolean ok = resetService.resetPassword(token, password);
         if (!ok) {
             redirect.addFlashAttribute("error", "Link không hợp lệ hoặc đã hết hạn.");
-            return "redirect:/reset-password?token=" + token;
+            return "redirect:/auth/reset-password?token=" + token;
         }
         redirect.addFlashAttribute("msg", "Đặt lại mật khẩu thành công.");
         return "redirect:/auth/login";

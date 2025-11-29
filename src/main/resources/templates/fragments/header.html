@@ -1,6 +1,6 @@
 <div th:fragment="siteHeader">
   <!-- Header / Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="box-shadow:0 5px 15px rgba(0,0,0,.04)">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="box-shadow:0 5px 10px rgba(0,0,0,.04)">
     <div class="container">
       <a class="navbar-brand fw-bold" href="/">LEARN TOEIC</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,7 @@
 
   <!-- CHƯA login -->
   <a class="btn btn-primary px-4"
+     id="navLoginBtn"
      sec:authorize="isAnonymous()"
      th:href="@{/auth/login}">
     Đăng nhập
@@ -92,4 +93,68 @@
       </div>
     </div>
   </nav>
+
+  <style>
+    .flash-bubble {
+      position: fixed;
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: #fff;
+      background: #0ea5e9;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+      white-space: nowrap;
+      max-width: 260px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      z-index: 9000;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    .flash-bubble.success { background: #22c55e; }
+    .flash-bubble.danger { background: #ef4444; }
+    .flash-bubble.info    { background: #0ea5e9; }
+    .flash-bubble.hide {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  </style>
+
+  <script th:inline="javascript">
+    (function() {
+      /*<![CDATA[*/
+      const flashMessage = /*[[${message} ?: null]]*/ null;
+      const flashType = /*[[${alertClass} ?: 'info']]*/ 'info';
+      /*]]>*/
+      if (!flashMessage) return;
+
+      const target = document.getElementById('userMenuBtn') || document.getElementById('navLoginBtn');
+      if (!target) return;
+
+      const bubble = document.createElement('div');
+      bubble.className = `flash-bubble ${flashType}`;
+      bubble.textContent = flashMessage;
+      bubble.style.visibility = 'hidden';
+      document.body.appendChild(bubble);
+
+      const rect = target.getBoundingClientRect();
+      const bw = bubble.offsetWidth;
+      const bh = bubble.offsetHeight;
+      const x = Math.min(
+        window.innerWidth - bw - 12,
+        Math.max(12, rect.right + window.scrollX + 12)
+      );
+      const y = Math.max(
+        12,
+        rect.top + window.scrollY + rect.height / 2 - bh / 2
+      );
+
+      bubble.style.left = `${x}px`;
+      bubble.style.top  = `${y}px`;
+      bubble.style.visibility = 'visible';
+
+      setTimeout(() => bubble.classList.add('hide'), 3200);
+      setTimeout(() => bubble.remove(), 3800);
+    })();
+  </script>
 </div>

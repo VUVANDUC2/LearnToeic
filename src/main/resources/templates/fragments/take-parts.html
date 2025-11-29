@@ -162,7 +162,13 @@
          th:id="${'q' + (it.index + 1)}">
 
       <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
+       <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
+      </div>
+
+      <div class="mb-3 question-text"
+           th:if="${q.questionText != null and !#strings.isEmpty(q.questionText)}"
+           th:text="${q.questionText}">
+        Nội dung câu hỏi
       </div>
 
       <div class="answer-form"
@@ -275,7 +281,13 @@
          th:id="${'q' + (it.index + 1)}">
 
       <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
+       <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
+      </div>
+
+      <div class="mb-3 question-text"
+           th:if="${q.questionText != null and !#strings.isEmpty(q.questionText)}"
+           th:text="${q.questionText}">
+        Nội dung câu hỏi
       </div>
 
       <!-- !!! answer-form phải nằm TRONG vòng lặp -->
@@ -389,6 +401,11 @@
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
       </div>
+      <div class="mb-3 question-text"
+           th:if="${q.questionText != null and !#strings.isEmpty(q.questionText)}"
+           th:text="${q.questionText}">
+        Nội dung câu hỏi
+      </div>
 
       <div class="answer-form"
      th:with="
@@ -496,11 +513,14 @@
 
       <!-- Header: số câu -->
       <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
+       <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
       </div>
 
-      <!-- Nếu sau này có trường stem/text → hiển thị ở đây -->
-      <!-- <p class="mb-3" th:text="${q.stem}"></p> -->
+      <div class="mb-3 question-text"
+           th:if="${q.questionText != null and !#strings.isEmpty(q.questionText)}"
+           th:text="${q.questionText}">
+        Nội dung câu hỏi
+      </div>
 
       <div class="answer-form"
      th:with="
@@ -726,11 +746,14 @@
          th:id="${'q' + (it.index + 1)}">
 
       <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
+       <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
       </div>
 
-      <!-- Nếu có q.passageSnippet hoặc q.imageUrl → hiển thị ở đây -->
-      <!-- <img th:if="${q.imageUrl != null}" th:src="${q.imageUrl}" class="w-100 rounded mb-3"/> -->
+      <div class="mb-3 question-text"
+           th:if="${q.questionText != null and !#strings.isEmpty(q.questionText)}"
+           th:text="${q.questionText}">
+        Nội dung câu hỏi
+      </div>
 
       <div class="answer-form"
      th:with="
