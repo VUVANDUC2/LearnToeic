@@ -11,38 +11,144 @@
     <link rel="stylesheet" th:href="@{/css/blog.css}">
     <link rel="stylesheet" th:href="@{/css/Home.css}">
 </head>
-<body class="page">
-<!-- Header fragment -->
+<body class="page blog-page">
 <div th:replace="fragments/header :: siteHeader"></div>
-<header class="header">
-    <div class="header-inner">
-        <h1>Blog</h1>
-        <p class="meta">Chia sẻ kiến thức TOEIC</p>
-    </div>
-</header>
 
-<main class="blog-container">
-    <section class="card list">
-        <div th:if="${#lists.isEmpty(posts)}" class="empty">
-            Chưa có bài viết nào.
+<main class="blog-shell">
+    <section class="blog-hero">
+        <p class="hero-eyebrow">LearnToeic Blog</p>
+        <h1>Khám phá kiến thức TOEIC mới mỗi ngày</h1>
+        <p class="hero-lead">
+            Những chiến lược luyện thi, mẹo làm bài và câu chuyện truyền cảm hứng dành cho người học TOEIC hiện đại.
+            Cập nhật thường xuyên bởi đội ngũ LearnToeic.
+        </p>
+        <div class="hero-actions">
+            <a href="#blog-list" class="btn hero-primary">Khám phá bài viết</a>
+            <a th:href="@{/flashcards/start}" class="btn hero-ghost">Luyện tập flashcard</a>
         </div>
-        <div th:each="post : ${posts}" class="post-item">
-            <div class="post-thumb" th:if="${post.thumbnail}">
-                <img th:src="${post.thumbnail}" alt="thumb">
+        <div class="hero-tags">
+            <span>Chiến lược 800+</span>
+            <span>Kinh nghiệm phòng thi</span>
+            <span>Listening nâng cao</span>
+            <span>Reading hiệu quả</span>
+        </div>
+    </section>
+
+    <section class="blog-spotlight">
+        <div class="spotlight-card">
+            <div class="icon-circle">
+                <i class="bi bi-lightning-charge"></i>
             </div>
-            <div class="post-body">
-                <a th:href="@{'/blog/' + ${post.slug}}" class="post-title" th:text="${post.title}">Tiêu đề</a>
-                <p class="post-meta">
-                    <span th:text="${post.category}">Chuyên mục</span> •
-                    <span th:text="${post.program}">Chương trình</span> •
-                    <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">Ngày</span>
-                </p>
-                <p class="post-excerpt" th:text="${post.excerpt}">Mô tả ngắn</p>
+            <div>
+                <p class="spotlight-label">Gợi ý theo lộ trình</p>
+                <p class="spotlight-desc">Chọn bài viết theo mục tiêu điểm số và kỹ năng cần cải thiện.</p>
+            </div>
+        </div>
+        <div class="spotlight-card">
+            <div class="icon-circle">
+                <i class="bi bi-journal-richtext"></i>
+            </div>
+            <div>
+                <p class="spotlight-label">Tổng hợp chi tiết</p>
+                <p class="spotlight-desc">Từ mẹo làm bài, phân tích đề cho đến checklist trước ngày thi.</p>
+            </div>
+        </div>
+        <div class="spotlight-card">
+            <div class="icon-circle">
+                <i class="bi bi-stars"></i>
+            </div>
+            <div>
+                <p class="spotlight-label">Truyền cảm hứng</p>
+                <p class="spotlight-desc">Câu chuyện thực tế giúp bạn giữ động lực đến ngày thi.</p>
             </div>
         </div>
     </section>
+
+    <section class="blog-listing" id="blog-list">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Bài viết mới</p>
+                <h2>Đi sâu vào từng kỹ năng TOEIC</h2>
+                <p>Chọn bài phù hợp mục tiêu của bạn và lưu lại để luyện tập cùng LearnToeic.</p>
+            </div>
+            <div class="section-note">
+                <i class="bi bi-clock-history"></i>
+                Nội dung được cập nhật hàng tuần
+            </div>
+        </div>
+
+        <div th:if="${posts == null or posts.empty}" class="empty-state">
+            <div class="empty-icon">
+                <i class="bi bi-journal-x"></i>
+            </div>
+            <p>Chưa có bài viết nào. Quay lại sau nhé!</p>
+        </div>
+
+        <div class="blog-grid" th:if="${posts != null and !posts.empty}">
+            <article class="post-card" th:each="post : ${posts}">
+                <div class="post-media" th:classappend="${post.thumbnail} == null ? ' no-thumb'">
+                    <img th:if="${post.thumbnail}" th:src="${post.thumbnail}" alt="thumbnail bài viết">
+                    <div class="media-placeholder" th:if="${post.thumbnail == null}">
+                        <i class="bi bi-image"></i>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-chip" th:text="${post.category ?: 'Blog'}">Listening</div>
+                    <a th:href="@{'/blog/' + ${post.slug}}" class="post-title" th:text="${post.title}">
+                        Tiêu đề bài viết
+                    </a>
+                    <p class="post-excerpt" th:text="${post.excerpt}">
+                        Tóm tắt ngắn về bài viết để người học dễ hình dung nội dung chính.
+                    </p>
+                    <div class="post-meta">
+                        <span>
+                            <i class="bi bi-journal-text"></i>
+                            <span th:text="${post.program ?: 'Chung'}">Chương trình</span>
+                        </span>
+                        <span>
+                            <i class="bi bi-calendar3"></i>
+                            <span th:text="${#temporals.format(post.createdAt, 'dd/MM/yyyy')}">Ngày</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="post-footer">
+                    <a th:href="@{'/blog/' + ${post.slug}}" class="btn post-link">
+                        Đọc bài viết
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+            </article>
+        </div>
+
+        <nav class="blog-pagination"
+             th:if="${posts != null and posts.totalPages > 1}">
+            <a class="page-btn prev"
+               th:classappend="${posts.first} ? ' disabled'"
+               th:href="${posts.first} ? '#' : @{|/blog?page=${currentPage - 1}|}">
+                <i class="bi bi-arrow-left"></i>
+                Trang trước
+            </a>
+
+            <div class="page-numbers">
+                <a class="page-number"
+                   th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+                   th:classappend="${pageNum == currentPage} ? ' active'"
+                   th:href="@{|/blog?page=${pageNum}|}"
+                   th:text="${pageNum}">
+                    1
+                </a>
+            </div>
+
+            <a class="page-btn next"
+               th:classappend="${posts.last} ? ' disabled'"
+               th:href="${posts.last} ? '#' : @{|/blog?page=${currentPage + 1}|}">
+                Trang sau
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </nav>
+    </section>
 </main>
-<!-- Footer fragment -->
+
 <div th:replace="fragments/footer :: siteFooter"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/Home.js" defer></script>

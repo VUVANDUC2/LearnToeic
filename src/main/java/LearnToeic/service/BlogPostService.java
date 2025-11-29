@@ -5,6 +5,9 @@ import LearnToeic.entity.BlogProgram;
 import LearnToeic.repository.BlogPostRepository;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,6 +100,13 @@ public class BlogPostService {
 
     public Optional<BlogPost> findBySlug(String slug) {
         return blogPostRepository.findBySlug(slug);
+    }
+
+    public Page<BlogPost> listPage(int page, int size) {
+        int safePage = Math.max(page, 0);
+        int safeSize = size <= 0 ? 6 : size;
+        Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return blogPostRepository.findAll(pageable);
     }
 
     public List<BlogPost> listAll() {
