@@ -6,8 +6,8 @@
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 
-    <title>Danh sách đề thi</title>
-
+    <title>Luyện tập Flashcard</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -16,177 +16,300 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" th:href="@{/css/home.css}" />
+
+    <style>
+      body {
+        background-color: #f0f2f5; /* Màu nền nhẹ nhàng */
+        min-height: 100vh;
+      }
+      .flashcard-container {
+        max-width: 800px; /* Giới hạn chiều rộng thẻ để dễ đọc */
+        margin: 0 auto;
+      }
+      .card-content {
+        min-height: 300px; /* Chiều cao tối thiểu để thẻ không bị giật khi hiện đáp án */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      /* Hiệu ứng hover nhẹ cho nút đánh giá */
+      .btn-rating {
+        transition: transform 0.2s;
+        width: 100%; /* Trên mobile sẽ full width */
+      }
+      .btn-rating:hover {
+        transform: translateY(-2px);
+      }
+      @media (min-width: 768px) {
+        .btn-rating {
+          width: auto;
+          min-width: 100px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div th:replace="fragments/header :: siteHeader"></div>
+    <div th:replace="~{fragments/header :: siteHeader}"></div>
 
-    <main class="container">
-      <div id="quiz">
-        <div class="float-start">
-          <a href="#edit" class="btn btn-outline-primary"> Edit </a>
-          <button
-            class="btn btn-outline-primary"
-            type="button"
-            title="Bigger text"
-          >
-            +
-          </button>
-          <button
-            class="btn btn-outline-primary"
-            type="button"
-            title="Smaller text"
-          >
-            -
-          </button>
-        </div>
-
-        <div class="float-end">
-          <span class="count new">0</span>
-          <span class="count learn">0</span>
-          <span class="count review">0</span>
-        </div>
-
-        <div style="clear: both" class="pt-1"></div>
-        <!--New words-->
+    <main class="container py-4">
+      <div class="flashcard-container mb-4">
         <div
-          th:each="flashcard, stat : ${newWords}"
-          class="flashcard"
-          th:attr="data-id=${flashcard.flashcardId}"
+          class="d-flex justify-content-between align-items-center bg-white p-3 rounded shadow-sm"
         >
-          <div class="text-center fs-1" style="background-color: #f8f8f8">
-            <div th:text="${flashcard.content}">Content</div>
+          <div class="btn-group">
+            <a
+              href="#edit"
+              class="btn btn-outline-secondary btn-sm"
+              title="Chỉnh sửa"
+            >
+              <i class="bi bi-pencil-square"></i> Edit
+            </a>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              id="btn-increase-text"
+              title="Tăng cỡ chữ"
+            >
+              <i class="bi bi-type-h1"></i>+
+            </button>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              id="btn-decrease-text"
+              title="Giảm cỡ chữ"
+            >
+              <i class="bi bi-type"></i>-
+            </button>
           </div>
 
-          <div
-            class="text-center fs-1 mt-5 collapse"
-            th:id="'description-content-' + ${stat.index}"
-          >
-            <br /><br /><br /><br /><br />
-            <div th:text="${flashcard.description}">Description</div>
-          </div>
-
-          <div class="text-center" style="margin-top: 100px">
-            <button
-              class="btn btn-secondary btn-lg"
-              data-bs-toggle="collapse"
-              th:attr="data-bs-target='#description-content-' + ${stat.index}"
-              aria-expanded="false"
-              th:attrappend="aria-controls='description-content-' + ${stat.index}"
+          <div class="d-flex gap-2">
+            <span
+              class="badge bg-primary bg-opacity-10 text-primary border border-primary"
             >
-              Show Answer
-            </button>
-          </div>
-          <br /><br /><br /><br /><br />
-          <div class="d-flex justify-content-center gap-3">
-            <button class="btn btn-success btn-lg answer-btn" data-value="EASY">
-              Easy
-            </button>
-            <button
-              class="btn btn-primary btn-lg answer-btn"
-              data-value="NORMAL"
+              New: <span class="count new">0</span>
+            </span>
+            <span
+              class="badge bg-success bg-opacity-10 text-success border border-success"
             >
-              Normal
-            </button>
-            <button class="btn btn-danger btn-lg answer-btn" data-value="HARD">
-              Hard
-            </button>
-            <button
-              class="btn btn-warning btn-lg answer-btn"
-              data-value="AGAIN"
+              Review: <span class="count review">0</span>
+            </span>
+            <span
+              class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary"
             >
-              Again
-            </button>
-          </div>
-        </div>
-        <!--Review words-->
-        <div
-          th:each="flashcard, stat : ${reviewWords}"
-          class="flashcard"
-          th:attr="data-id=${flashcard.flashcardId}"
-        >
-          <div class="text-center fs-1" style="background-color: #f8f8f8">
-            <div th:text="${flashcard.content}">Content</div>
-          </div>
-
-          <div
-            class="text-center fs-1 mt-5 collapse"
-            th:id="'description-content-' + ${stat.index}"
-          >
-            <br /><br /><br /><br /><br />
-            <div th:text="${flashcard.description}">Description</div>
-          </div>
-
-          <div class="text-center" style="margin-top: 100px">
-            <button
-              class="btn btn-secondary btn-lg"
-              data-bs-toggle="collapse"
-              th:attr="data-bs-target='#description-content-' + ${stat.index}"
-              aria-expanded="false"
-              th:attrappend="aria-controls='description-content-' + ${stat.index}"
-            >
-              Show Answer
-            </button>
-          </div>
-          <br /><br /><br /><br /><br />
-          <div class="d-flex justify-content-center gap-3">
-            <button class="btn btn-success btn-lg answer-btn" data-value="EASY">
-              Easy
-            </button>
-            <button
-              class="btn btn-primary btn-lg answer-btn"
-              data-value="NORMAL"
-            >
-              Normal
-            </button>
-            <button class="btn btn-danger btn-lg answer-btn" data-value="HARD">
-              Hard
-            </button>
-            <button
-              class="btn btn-warning btn-lg answer-btn"
-              data-value="AGAIN"
-            >
-              Again
-            </button>
+              Learn: <span class="count learn">0</span>
+            </span>
           </div>
         </div>
       </div>
+
+      <div id="quiz" class="flashcard-container">
+        <th:block th:each="flashcard, stat : ${newWords}">
+          <div
+            class="card flashcard shadow-lg border-0 mb-3"
+            th:attr="data-id=${flashcard.flashcardId}"
+          >
+            <div class="card-body text-center p-5">
+              <div class="card-content mb-4">
+                <h2
+                  class="display-5 fw-bold text-dark content-text"
+                  th:text="${flashcard.content}"
+                >
+                  Content
+                </h2>
+
+                <div
+                  class="collapse mt-4 border-top pt-4"
+                  th:id="'answer-section-' + ${flashcard.flashcardId}"
+                >
+                  <p
+                    class="fs-4 text-muted description-text"
+                    th:text="${flashcard.description}"
+                  >
+                    Description goes here
+                  </p>
+                </div>
+              </div>
+
+              <div class="action-area mt-auto">
+                <button
+                  class="btn btn-dark btn-lg px-5 rounded-pill btn-show-answer"
+                  type="button"
+                  th:data-target="'#answer-section-' + ${flashcard.flashcardId}"
+                  th:data-controls="'#rating-area-' + ${flashcard.flashcardId}"
+                >
+                  Show Answer
+                </button>
+
+                <div
+                  class="d-none justify-content-center gap-2 flex-wrap mt-3"
+                  th:id="'rating-area-' + ${flashcard.flashcardId}"
+                >
+                  <button
+                    class="btn btn-outline-danger btn-rating answer-btn"
+                    data-value="AGAIN"
+                  >
+                    <i class="bi bi-arrow-repeat"></i> Again
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary btn-rating answer-btn"
+                    data-value="HARD"
+                  >
+                    Hard
+                  </button>
+                  <button
+                    class="btn btn-outline-primary btn-rating answer-btn"
+                    data-value="NORMAL"
+                  >
+                    Normal
+                  </button>
+                  <button
+                    class="btn btn-outline-success btn-rating answer-btn"
+                    data-value="EASY"
+                  >
+                    Easy
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              class="card-footer text-muted text-end bg-transparent border-0"
+            >
+              <small>Card <span th:text="${stat.count}"></span> (New)</small>
+            </div>
+          </div>
+        </th:block>
+
+        <th:block th:each="flashcard, stat : ${reviewWords}">
+          <div
+            class="card flashcard shadow-lg border-0 mb-3"
+            th:attr="data-id=${flashcard.flashcardId}"
+          >
+            <div class="card-body text-center p-5">
+              <div class="card-content mb-4">
+                <h2
+                  class="display-5 fw-bold text-dark content-text"
+                  th:text="${flashcard.content}"
+                >
+                  Content
+                </h2>
+                <div
+                  class="collapse mt-4 border-top pt-4"
+                  th:id="'answer-section-review-' + ${flashcard.flashcardId}"
+                >
+                  <p
+                    class="fs-4 text-muted description-text"
+                    th:text="${flashcard.description}"
+                  >
+                    Description
+                  </p>
+                </div>
+              </div>
+
+              <div class="action-area mt-auto">
+                <button
+                  class="btn btn-dark btn-lg px-5 rounded-pill btn-show-answer"
+                  type="button"
+                  th:data-target="'#answer-section-review-' + ${flashcard.flashcardId}"
+                  th:data-controls="'#rating-area-review-' + ${flashcard.flashcardId}"
+                >
+                  Show Answer
+                </button>
+
+                <div
+                  class="d-none justify-content-center gap-2 flex-wrap mt-3"
+                  th:id="'rating-area-review-' + ${flashcard.flashcardId}"
+                >
+                  <button
+                    class="btn btn-outline-danger btn-rating answer-btn"
+                    data-value="AGAIN"
+                  >
+                    Again
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary btn-rating answer-btn"
+                    data-value="HARD"
+                  >
+                    Hard
+                  </button>
+                  <button
+                    class="btn btn-outline-primary btn-rating answer-btn"
+                    data-value="NORMAL"
+                  >
+                    Normal
+                  </button>
+                  <button
+                    class="btn btn-outline-success btn-rating answer-btn"
+                    data-value="EASY"
+                  >
+                    Easy
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              class="card-footer text-muted text-end bg-transparent border-0"
+            >
+              <small>Card <span th:text="${stat.count}"></span> (Review)</small>
+            </div>
+          </div>
+        </th:block>
+      </div>
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/Home.js" defer></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const buttons = document.querySelectorAll(".answer-btn");
+        // 1. Logic cho Flashcards
+        const flashcards = document.querySelectorAll(".flashcard");
+        let currentIndex = 0;
 
+        // Ẩn tất cả trừ thẻ đầu tiên
+        flashcards.forEach((fc, idx) => {
+          if (idx !== 0) fc.style.display = "none";
+        });
+
+        if (flashcards.length === 0) {
+          document.querySelector(
+            "#quiz"
+          ).innerHTML = `<div class="alert alert-success text-center">Chúc mừng! Bạn đã hoàn thành tất cả thẻ hôm nay.</div>`;
+          return;
+        }
+
+        // 2. Logic Nút "Show Answer" (Xử lý UI cục bộ)
+        document.querySelectorAll(".btn-show-answer").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const targetId = this.getAttribute("data-target"); // ID của phần mô tả
+            const controlsId = this.getAttribute("data-controls"); // ID của nhóm nút đánh giá
+
+            // Hiện mô tả (sử dụng Bootstrap Collapse API)
+            const collapseElement = document.querySelector(targetId);
+            const bsCollapse = new bootstrap.Collapse(collapseElement, {
+              toggle: true,
+            });
+
+            // Ẩn nút "Show Answer" và hiện các nút đánh giá
+            this.style.display = "none";
+            const ratingArea = document.querySelector(controlsId);
+            ratingArea.classList.remove("d-none");
+            ratingArea.classList.add("d-flex");
+          });
+        });
+
+        // 3. Logic Gửi kết quả (Backend)
+        const buttons = document.querySelectorAll(".answer-btn");
         const csrfToken = document.querySelector('meta[name="_csrf"]').content;
         const csrfHeader = document.querySelector(
           'meta[name="_csrf_header"]'
         ).content;
 
-        console.log("CSRF Token:", csrfToken);
-        console.log("CSRF Header:", csrfHeader);
-
-        const flashcards = document.querySelectorAll(".flashcard");
-        let currentIndex = 0;
-
-        // Hide all except first
-        flashcards.forEach((fc, idx) => {
-          if (idx !== 0) fc.style.display = "none";
-        });
-
         buttons.forEach((btn) => {
           btn.addEventListener("click", async (e) => {
+            // Ngăn sự kiện click lan truyền nếu cần thiết
+            e.preventDefault();
+
             const currentCard = flashcards[currentIndex];
-            if (!currentCard) {
-              console.error("No current flashcard found!");
-              return;
-            }
-
             const flashcardId = currentCard.dataset.id;
-            const difficulty = e.target.dataset.value;
-
-            console.log("Clicked difficulty:", difficulty);
-            console.log("Flashcard ID:", flashcardId);
+            // Lấy value từ data attribute, xử lý trường hợp click vào icon bên trong nút
+            const targetBtn = e.target.closest(".answer-btn");
+            const difficulty = targetBtn.dataset.value;
 
             try {
               const res = await fetch(
@@ -199,33 +322,52 @@
                 }
               );
 
-              console.log("Server response:", res.status);
-
               if (!res.ok) {
-                console.error("Error response:", await res.text());
-                alert("Server error: " + res.status);
+                console.error("Lỗi server:", await res.text());
+                alert("Có lỗi xảy ra khi lưu kết quả.");
                 return;
               }
+
+              // Chuyển sang thẻ tiếp theo
+              currentCard.style.display = "none";
+              currentIndex++;
+
+              if (currentIndex < flashcards.length) {
+                // Reset trạng thái thẻ tiếp theo (nếu cần thiết, ví dụ đóng collapse lại)
+                // Ở đây ta chỉ cần hiện nó ra
+                flashcards[currentIndex].style.display = "block";
+
+                // Hoạt ảnh hiện thẻ nhẹ nhàng
+                flashcards[currentIndex].classList.add("fade-in");
+              } else {
+                alert("Hoàn thành bài học!");
+                window.location.href = "/flashcards";
+              }
             } catch (err) {
-              console.error("Fetch error:", err);
-              alert("Fetch failed. Check console.");
-              return;
-            }
-
-            // Move to next
-            currentCard.style.display = "none";
-            currentIndex++;
-
-            if (currentIndex < flashcards.length) {
-              flashcards[currentIndex].style.display = "block";
-              console.log("Showing next card at index:", currentIndex);
-            } else {
-              console.log("No more flashcards.");
-              alert("Done!");
-              window.location.href = "/flashcards";
+              console.error("Lỗi kết nối:", err);
+              alert("Không thể kết nối đến máy chủ.");
             }
           });
         });
+
+        // 4. Logic Thay đổi cỡ chữ (Optional)
+        let currentFontSize = 1; // rem
+        document.getElementById("btn-increase-text").onclick = () => {
+          document
+            .querySelectorAll(".content-text")
+            .forEach((el) => (el.style.fontSize = "3.5rem"));
+          document
+            .querySelectorAll(".description-text")
+            .forEach((el) => (el.style.fontSize = "2rem"));
+        };
+        document.getElementById("btn-decrease-text").onclick = () => {
+          document
+            .querySelectorAll(".content-text")
+            .forEach((el) => (el.style.fontSize = "1.5rem"));
+          document
+            .querySelectorAll(".description-text")
+            .forEach((el) => (el.style.fontSize = "1rem"));
+        };
       });
     </script>
   </body>

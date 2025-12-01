@@ -14,144 +14,154 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
   </head>
   <body>
     <!-- Header -->
     <div th:replace="fragments/header :: siteHeader"></div>
     <!--Main content-->
-    <main class="container">
-      <div th:each="name, stat : ${deckNames}">
-        <div class="row light-bottom-border">
-          <!-- First column -->
-          <div class="col-7 col-sm-8 col-lg-9">
-            <div class="col-7 col-sm-8 col-lg-9">
-              <a
-                class="btn btn-link"
-                th:href="@{/flashcards/start(name=${name})}"
-                th:text="${name}"
+    <main class="container py-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">My Decks</h2>
+        <div>
+          <a href="#shared" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-download"></i> Get Shared Decks
+          </a>
+          <button class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Create Deck
+          </button>
+        </div>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" th:each="name, stat : ${deckNames}">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body d-flex flex-column">
+              <div
+                class="d-flex justify-content-between align-items-start mb-3"
               >
+                <h5
+                  class="card-title text-truncate"
+                  th:text="${name}"
+                  th:title="${name}"
+                >
+                  Deck Name
+                </h5>
+
+                <div class="dropdown">
+                  <button
+                    class="btn btn-link text-muted p-0 text-decoration-none"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    &#8942;
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        type="button"
+                        data-bs-toggle="modal"
+                        th:data-bs-target="'#RenameModal__' + ${stat.index}"
+                      >
+                        Rename
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        type="button"
+                        th:onclick="'window.open(\'' + @{/decks/{name}/share(name=${name})} + '\', \'_blank\')'"
+                      >
+                        Share
+                      </button>
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                      <button
+                        class="dropdown-item text-danger delete-deck-btn"
+                        type="button"
+                        th:data-id="${name}"
+                      >
+                        Delete
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="mt-auto mb-3">
+                <div class="d-flex gap-2">
+                  <span
+                    class="badge bg-primary bg-opacity-10 text-primary border border-primary p-2"
+                  >
+                    <span th:text="${counts[stat.index]}">0</span> New
+                  </span>
+                  <span
+                    class="badge bg-success bg-opacity-10 text-success border border-success p-2"
+                  >
+                    0 Review
+                  </span>
+                </div>
+              </div>
+
+              <a
+                th:href="@{/flashcards/start(name=${name})}"
+                class="btn btn-outline-primary w-100 stretched-link"
+              >
+                Study Now
               </a>
             </div>
           </div>
 
-          <!-- Second column -->
-          <div class="col-1">
-            <div
-              class="number new"
-              th:text="${counts[stat.index]}"
-              style="color: blue; font-weight: bold"
-            ></div>
-            <div class="number review" style="color: green; font-weight: bold">
-              0
-            </div>
-          </div>
-
-          <!-- Third column -->
-          <div class="col-4 col-sm-3 col-lg-2">
-            <div class="dropdown">
-              <div style="float: right">
-                <button
-                  class="btn btn-link dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Actions
-                </button>
-                <div class="dropdown-menu">
-                  <button
-                    class="dropdown-item"
-                    type="button"
-                    data-bs-toggle="modal"
-                    th:data-bs-target="'#RenameModal__' + ${stat.index}"
-                  >
-                    Rename
-                  </button>
-                  <!--Shared-->
-                  <button
-                    class="dropdown-item"
-                    type="button"
-                    th:onclick="'window.open(\'' + @{/decks/{name}/share(name=${name})} + '\', \'_blank\')'"
-                  >
-                    Share
-                  </button>
-
-                  <button
-                    class="dropdown-item delete-deck-btn"
-                    type="button"
-                    th:data-id="${name}"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col text-center">
-          <a href="#shared" class="btn btn-outline-secondary"
-            >Get Shared Decks</a
+          <div
+            class="modal fade"
+            th:id="'RenameModal__' + ${stat.index}"
+            tabindex="-1"
+            aria-hidden="true"
           >
-          <button class="btn btn-outline-secondary">Create Deck</button>
-        </div>
-      </div>
-
-      <!---Modals--->
-      <div th:each="name, stat : ${deckNames}">
-        <div
-          class="modal fade"
-          th:id="'RenameModal__' + ${stat.index}"
-          tabindex="-1"
-          th:attr="aria-labelledby='RenameModalLabel__' + ${stat.index}"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <form th:action="@{/decks/rename}" method="post">
-                <div class="modal-header">
-                  <h1
-                    class="modal-title fs-5"
-                    th:id="'RenameModalLabel__' + ${stat.index}"
-                  >
-                    Deck rename
-                  </h1>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div class="modal-body">
-                  <input type="hidden" name="oldName" th:value="${name}" />
-                  <input
-                    type="text"
-                    name="newName"
-                    class="form-control"
-                    th:value="${name}"
-                    placeholder="Deck name"
-                    aria-label="Deck name"
-                    required
-                  />
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                  <button type="submit" class="btn btn-primary">
-                    Save changes
-                  </button>
-                </div>
-              </form>
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <form th:action="@{/decks/rename}" method="post">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Rename Deck</h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <input type="hidden" name="oldName" th:value="${name}" />
+                    <div class="form-floating">
+                      <input
+                        type="text"
+                        name="newName"
+                        class="form-control"
+                        th:value="${name}"
+                        id="deckNameInput"
+                        placeholder="Deck name"
+                        required
+                      />
+                      <label for="deckNameInput">Deck Name</label>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thông tin cá nhân • LearnToeic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/profile.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<main class="profile-shell">
+  <section class="profile-hero">
+    <p class="eyebrow">Hồ sơ cá nhân</p>
+    <h1>Quản lý thông tin và tiến trình học tập của bạn</h1>
+    <p>Cập nhật hồ sơ, kiểm tra thành tích và tiếp tục hành trình chinh phục TOEIC với LearnToeic.</p>
+  </section>
+
+  <div th:if="${message}" class="alert alert-floating mb-4 text-center"
+       th:classappend="' alert-' + (${alertClass} ?: 'info')"
+       data-auto-dismiss="true"
+       th:text="${message}">
+    Cập nhật thông tin thành công!
+  </div>
+
+  <div class="profile-card profile-main">
+    <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+      <div class="row g-4 align-items-start">
+        <div class="col-xl-4">
+          <section class="identity-panel">
+            <div class="avatar-wrapper">
+              <div class="avatar-ring">
+                <img th:if="${avatarData != null}" th:src="${avatarData}" alt="Ảnh đại diện người dùng">
+                <i class="bi bi-person-fill" th:if="${avatarData == null}"></i>
+              </div>
+            </div>
+
+            <span class="badge-soft">
+              <i class="bi bi-stars"></i>
+              Thành viên LearnToeic
+            </span>
+
+            <h2 th:text="${user?.fullName ?: 'Người dùng LearnToeic'}">User Name</h2>
+            <p>Tối ưu hồ sơ của bạn để được gợi ý lộ trình học phù hợp hơn.</p>
+
+            <ul class="profile-meta">
+              <li>
+                <span class="meta-label">Tài khoản</span>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="meta-value" th:text="${user?.email}">email@example.com</span>
+                  <button type="button"
+                          class="copy-email"
+                          aria-label="Copy email"
+                          th:data-email="${user?.email}">
+                    <i class="bi bi-clipboard"></i>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <span class="meta-label">Giới tính</span>
+                <span class="meta-value"
+                      th:text="${user?.gender == null ? 'Chưa cập nhật' : (user?.gender ? 'Nam' : 'Nữ')}">
+                  Chưa cập nhật
+                </span>
+              </li>
+            </ul>
+
+            <div class="avatar-upload mt-4">
+              <label class="form-label">Ảnh đại diện</label>
+              <input id="avatarInput" type="file" name="avatar" accept="image/*">
+              <small id="avatarFileStatus" class="text-muted d-block mt-2">Chưa có tệp nào được chọn.</small>
+              <small class="text-muted d-block mt-1">Định dạng PNG/JPG, dung lượng tối đa 2MB.</small>
+            </div>
+          </section>
+        </div>
+
+        <div class="col-xl-8">
+          <section class="details-panel">
+            <div class="panel-header">
+              <div>
+                <p class="panel-eyebrow">Thông tin tài khoản</p>
+                <h3>Quản lý thông tin</h3>
+              </div>
+              <span class="panel-note">Chỉ cần vài thông tin để LearnToeic cá nhân hoá hành trình của bạn.</span>
+            </div>
+
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="card-heading">
+                  <i class="bi bi-person-badge"></i>
+                  <div>
+                    <h4>Thông tin cơ bản</h4>
+                    <p>Cập nhật cách LearnToeic xưng hô và liên hệ với bạn.</p>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="fullName" class="form-label">Họ tên hiển thị</label>
+                    <div class="input-icon">
+                      <i class="bi bi-person"></i>
+                      <input id="fullName"
+                             type="text"
+                             class="form-control form-control-modern"
+                             name="fullName"
+                             placeholder="Họ và tên"
+                             th:value="${user?.fullName}"
+                             required>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Email đăng ký</label>
+                    <div class="input-icon">
+                      <i class="bi bi-envelope"></i>
+                      <input type="email"
+                             class="form-control form-control-modern"
+                             th:value="${user?.email}"
+                             readonly>
+                    </div>
+                    <p class="form-hint">Email được dùng làm tài khoản đăng nhập.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-card">
+                <div class="card-heading">
+                  <i class="bi bi-sliders"></i>
+                  <div>
+                    <h4>Tùy chọn hiển thị</h4>
+                    <p>Cá nhân hoá nội dung và số liệu trên bảng điều khiển.</p>
+                  </div>
+                </div>
+                <label class="form-label">Giới tính</label>
+                <div class="gender-options">
+                  <input class="btn-check"
+                         type="radio"
+                         name="gender"
+                         id="genderMale"
+                         value="true"
+                         th:checked="${user?.gender == true}">
+                  <label class="gender-chip" for="genderMale">Nam</label>
+
+                  <input class="btn-check"
+                         type="radio"
+                         name="gender"
+                         id="genderFemale"
+                         value="false"
+                         th:checked="${user?.gender == false}">
+                  <label class="gender-chip" for="genderFemale">Nữ</label>
+
+                  <input class="btn-check"
+                         type="radio"
+                         name="gender"
+                         id="genderOther"
+                         value=""
+                         th:value="${null}"
+                         th:checked="${user?.gender == null}">
+                  <label class="gender-chip" for="genderOther">Khác / Không tiết lộ</label>
+                </div>
+                <p class="form-hint">Bạn có thể bỏ qua nếu chưa sẵn sàng chia sẻ.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-center mt-4">
+        <div class="col-md-6 order-md-1 order-2">
+          <button type="submit" class="btn btn-primary btn-pill w-100">
+            Lưu thay đổi
+          </button>
+        </div>
+        <div class="col-md-6 order-md-2 order-1 text-md-end">
+          <a class="btn btn-soft btn-pill w-100 w-md-auto"
+             th:href="@{|/auth/reset-password?token=${resetToken}|}"
+             role="button">
+            Đổi mật khẩu
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <section class="stats-cluster" th:if="${dashboard != null}">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+      <div class="col">
+        <div class="stat-card text-center">
+          <div class="label">Bài thi đã làm</div>
+          <div class="value" th:text="${dashboard.totalTests()}">0</div>
+          <div class="sub">Tổng số lượt luyện tập</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="stat-card text-center">
+          <div class="label">Điểm trung bình</div>
+          <div class="value"
+               th:text="${dashboard.averageScore() != null
+          ? #numbers.formatDecimal(dashboard.averageScore(), 0, 0)
+          : '-'}">
+            0
+          </div>
+          <div class="sub">Các bài đã có kết quả</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="stat-card text-center">
+          <div class="label">Điểm cao nhất</div>
+          <div class="value" th:text="${dashboard.bestScore() != null ? dashboard.bestScore() : '-'}">0</div>
+          <div class="sub">Thành tích tốt nhất</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="stat-card text-center" th:if="${dashboard.latestTake() != null}">
+          <div class="label">Bài gần nhất</div>
+          <div class="value" th:text="${dashboard.latestTake().score() != null ? dashboard.latestTake().score() : '-'}">-</div>
+          <div class="sub" th:text="${dashboard.latestTake().testName()}">TOEIC Test</div>
+          <a class="btn btn-outline-primary btn-sm mt-3"
+             th:href="@{|/tests/${dashboard.latestTake().takeId()}/review?part=1|}">
+            Xem lại
+          </a>
+        </div>
+        <div class="stat-card text-center" th:if="${dashboard.latestTake() == null}">
+          <div class="label">Bài gần nhất</div>
+          <div class="value">-</div>
+          <div class="sub">Bạn chưa có bài thi nào</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="profile-card activity-card">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+      <h2 class="mb-0">Lịch sử bài làm</h2>
+      <span class="text-muted small">Theo dõi hành trình học tập của bạn</span>
+    </div>
+
+    <div th:if="${#lists.isEmpty(history)}" class="history-empty">
+      Bạn chưa có bài thi nào hoàn thành.
+    </div>
+
+    <div th:if="${!#lists.isEmpty(history)}" class="table-responsive">
+      <table class="table table-modern align-middle mb-0">
+        <thead>
+        <tr>
+          <th scope="col">Bài thi</th>
+          <th scope="col">Lần làm</th>
+          <th scope="col">Điểm</th>
+          <th scope="col">Thời gian</th>
+          <th scope="col" class="text-end">Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="take : ${history}">
+          <td>
+            <div class="fw-semibold" th:text="${take.testName()}">TOEIC Test</div>
+            <small class="text-muted" th:text="'Mã #' + ${take.testId()}">#1</small>
+          </td>
+          <td th:text="${take.attemptNo()}">1</td>
+          <td th:text="${take.score() != null ? take.score() : '-'}">0</td>
+          <td>
+            <div th:text="${take.startTime() != null ? #temporals.format(take.startTime(), 'dd/MM/yyyy HH:mm') : '–'}">
+              01/01/2025 10:00
+            </div>
+            <small class="text-muted"
+                   th:text="${take.endTime() != null ? #temporals.format(take.endTime(), 'HH:mm dd/MM') : ''}">
+              11:30 01/01
+            </small>
+          </td>
+          <td class="text-end">
+            <a class="btn btn-outline-primary btn-sm"
+               th:href="@{|/tests/${take.takeId()}/review?part=1|}">
+              Xem lại
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div th:replace="fragments/footer :: siteFooter"></div>
+<script src="/js/Home.js" defer></script>
+<script th:src="@{/js/profile.js}" defer></script>
+</body>
+</html>

@@ -94,11 +94,15 @@ public class DocxBlogService {
         Safelist safelist = Safelist.relaxed()
                 .addTags("table", "thead", "tbody", "tr", "th", "td", "blockquote", "pre",
                         "h1", "h2", "h3", "h4", "h5", "h6")
-                .addAttributes(":all", "style", "class", "id", "width", "height", "border", "cellspacing", "cellpadding", "align")
-                .addAttributes("img", "src", "alt", "title");
-        Document clean = Jsoup.parse(Jsoup.clean(html, safelist));
+                .addAttributes(":all", "style", "class", "id", "width", "height",
+                        "border", "cellspacing", "cellpadding", "align")
+                .addAttributes("img", "src", "alt", "title")
+                .preserveRelativeLinks(true)
+                .removeProtocols("img", "src", "http", "https");
+        Document clean = Jsoup.parse(Jsoup.clean(html, "", safelist));
         return clean.body().html();
     }
+
 
     private String buildExcerpt(String sanitizedHtml) {
         String text = Jsoup.parse(sanitizedHtml).text();

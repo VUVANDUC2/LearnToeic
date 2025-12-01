@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.List;
 import java.util.Optional;
 import java.nio.file.Files;
@@ -129,17 +130,19 @@ public class BlogPostService {
     }
 
     private String slugify(String input) {
-        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "")
-                .replaceAll("[^\\w\\s-]", "")
-                .replaceAll("\\s+", "-")
-                .replaceAll("-{2,}", "-")
-                .toLowerCase()
-                .trim();
-        if (normalized.isEmpty()) {
+        if (input == null || input.isBlank()) {
             return "post";
         }
-        return normalized;
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .replace('đ', 'd')
+                .replace('Đ', 'd')
+                .replaceAll("[^\\p{Alnum}\\s-]", "")
+                .replaceAll("\\s+", "-")
+                .replaceAll("-{2,}", "-")
+                .replaceAll("^-+|-+$", "")
+                .toLowerCase(Locale.ROOT);
+        return normalized.isEmpty() ? "post" : normalized;
     }
 
     private String trimExcerpt(String excerpt) {

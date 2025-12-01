@@ -99,6 +99,16 @@ public class FlashcardController {
         }
     }
     //delete decks
+    // @DeleteMapping("/decks/{id}")
+    // public ResponseEntity<String> deleteDeck(@PathVariable Long id) {
+    //     try {
+    //         deckRepository.deleteById(id);
+    //         return ResponseEntity.ok("Deck deleted");
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    //                             .body("Error: " + e.getMessage());
+    //     }
+    // }
 
 
     // New word
