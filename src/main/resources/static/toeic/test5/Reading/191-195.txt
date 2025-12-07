@@ -1,0 +1,52 @@
+<div>
+<p><strong>From:</strong> customerservice@thomsonapp.com<br>
+<strong>To:</strong> dkerry@coolmail.com<br>
+<strong>Date: </strong>July 6<br>
+<strong>Subject: </strong>Malfunction</p>
+
+<p>Dear Ms. Kerry,</p>
+
+<p>We are very sorry to hear about the malfunction with your deluxe refrigerator, MK1213, purchased from Thomson Appliances. You indicated that the ice dispenser on the door of the fridge has stopped functioning. Actually, several customers have reported the same problem. It turned out that the manufacturers made an error in the production process. Fortunately, this problem can easily be fixed by one of our technicians. Currently, our technicians are available Monday, Wednesday, and Thursday next week. Please specify what day and what time works for you.</p>
+
+<p>Additionally, if your refrigerator is under warranty, this repair will be absolutely free. Please let us know your warranty number so we can verify this before sending a technician to your house.</p>
+
+<p>We apologize for this inconvenience. Thank you again for choosing Thomson Appliances.</p>
+
+<p>Sincerely,</p>
+
+<p>Greg Lewis</p>
+
+<p>Customer Service</p>
+
+<p>-------------------------</p>
+
+<p><strong>From: </strong>dkerry@coolmail.com<br>
+<strong>To: </strong>customerservice@thomsonapp.com<br>
+<strong>Date: </strong>July 7<br>
+<strong>Subject: </strong>Re: Malfunction</p>
+
+<p>Dear Mr. Lewis,</p>
+
+<p>Thank you for your prompt response. Actually, next week I will be away on a business trip in Arkansas and I won't return until Saturday. However, I have a housekeeper who comes to clean on Monday and Friday. If your technician visits on either day, she can let him or her in.</p>
+
+<p>My warranty number is A344F56J and is still valid. I will leave this document with my housekeeper in case you need to see it during your visit.</p>
+
+<p>Dana Kerry</p>
+
+<p>-------------------------</p>
+
+<p><strong>From: </strong>customerservice@thomsonapp.com<br>
+<strong>To:</strong> dkerry@coolmail.com<br>
+<strong>Date: </strong>July 7<br>
+<strong>Subject:</strong> Repair Time</p>
+
+<p>Dear Ms. Kerry,</p>
+
+<p>Our technician will be able to come by your house on Monday. You will need to be sure to leave the warranty documents so the technician can scan them into our system. This is necessary for us to be reimbursed by the manufacturers. Our technician will come by in the morning and try to be gone by lunch; even though you have a housekeeper, they will try not to leave a mess. Safe travels and we appreciate your patience. Thank you for your loyalty to Thompson Appliances.</p>
+
+<p>Sincerely,</p>
+
+<p>Greg Lewis</p>
+
+<p>Customer Service</p>
+</div>

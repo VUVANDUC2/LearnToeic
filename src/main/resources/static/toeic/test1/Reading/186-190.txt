@@ -1,0 +1,84 @@
+<div>
+<p><strong>To</strong>: Bountiful Harvest (info@bountifulharvest.com)<br>
+<strong>From</strong>: Emily Hall (emilyhall@zipline.com)<br>
+<strong>Date</strong>: June 3<br>
+<strong>Subject</strong>: Food Delivery</p>
+
+<p>To whom it may concern,</p>
+
+<p>My name is Emily Hall and I am the owner of a vegetarian restaurant located in downtown Huntsville. I am contacting you because I am interested in receiving regular shipments of fresh, organic vegetables to my restaurant weekly. My restaurant is just starting, so I do not need a large quantity of goods. After looking into different farms in the area, I chose to contact Bountiful Harvest because of your promise to deliver certified organic food. Therefore, I would like to receive a price estimate for the cost of having fresh vegetables delivered directly to our restaurant on a weekly basis.</p>
+
+<p>Emily Hall</p>
+
+<p>-------------------------</p>
+
+<p><strong>To</strong>: Emily Hall (emilyhall@zipline.com)<br>
+<strong>From</strong>: Bountiful Harvest (info@bountifulharvest.com)<br>
+<strong>Date</strong>: June 4<br>
+<strong>Subject</strong>: RE: Food Delivery</p>
+
+<p>Dear Ms. Hall,</p>
+
+<p>Thanks for contacting our farm. At Bountiful Harvest, we offer fresh organic produce that can be delivered directly to a customer's location on a regular basis. Our vegetables are harvested from the field and delivered immediately, which means that you are getting wholesome, nutritious, organic produce to serve at your restaurant. We also offer additional items such as fresh meat, cheese, and milk. Below is a table detailing the various pricing options we offer.</p>
+
+<table class="table table-bordered">
+	<tbody>
+		<tr>
+			<td>Package Option</td>
+			<td>Features</td>
+			<td>Weight</td>
+			<td>Delivery Frequency</td>
+			<td>Price Per Delivery</td>
+		</tr>
+		<tr>
+			<td>Personal</td>
+			<td>This package feeds approximately 2-3 people and contains fresh seasonal vegetables.</td>
+			<td>5 lb.</td>
+			<td>Once a week</td>
+			<td>$15</td>
+		</tr>
+		<tr>
+			<td>Small</td>
+			<td>This package is ideal for small businesses and includes fresh seasonal vegetables.</td>
+			<td>50 lb.</td>
+			<td>Once a week</td>
+			<td>$140</td>
+		</tr>
+		<tr>
+			<td>Medium</td>
+			<td>This package is for medium-sized businesses needing a constant supply of fresh vegetables and meats.</td>
+			<td>130 lb.</td>
+			<td>Twice a week</td>
+			<td>$500</td>
+		</tr>
+		<tr>
+			<td>Large</td>
+			<td>This package is our largest package and includes vegetables, meats, and dairy products.</td>
+			<td>250 lb.</td>
+			<td>Twice a week</td>
+			<td>$800</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>The prices listed above do not include the delivery price. Customers who do not pick up their packages in person will have to pay an extra $6 per package to be delivered. However, for customers who sign up for an entire year's worth of deliveries, we will deliver your package for free. The purchase of additional items will also affect the final price of your package. Additional options are available on our website. Payments can be made via cash, credit card, check, or money order on the day of delivery.</p>
+
+<p>We know that our customers especially care about the quality of the food. Therefore, we offer a mini package free of charge so you can assess our food. Please call Greg Lemons at 555-8141 to take advantage of this opportunity.</p>
+
+<p>Indira Singh</p>
+
+<p>-------------------------</p>
+
+<p><strong>To</strong>: Bountiful Harvest(info@bountifulharvest.com)<br>
+<strong>From</strong>: Emily Hall (emilyhall@zipline.com)<br>
+<strong>Date</strong>: June 5<br>
+<strong>Subject</strong>: Harvest Schedule</p>
+
+<p>Dear Ms. Singh,</p>
+
+<p>Thank you for responding so promptly to my email. I appreciate the offer of the complimentary delivery, but I think I would like to just go ahead and set up regular deliveries. I may be interested in setting up a year's worth of deliveries, but I would first like to get a list of the range of produce that you will be offering through the different seasons. As I own a vegetarian restaurant, I will need to have an idea of the types of produce that will be delivered so I can prepare my menus accordingly. Thank you so much for your consideration, and I look forward to working with Bountiful Harvest!</p>
+
+<p>Kind regards,</p>
+
+<p>Emily Hall</p>
+</div>

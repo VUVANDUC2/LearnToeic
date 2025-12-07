@@ -1,0 +1,44 @@
+<div>
+<p><strong>Stark Bank</strong></p>
+
+<p>Announcements | My Accounts | Transfer | Loans</p>
+
+<p><strong>Overdraft Fee</strong></p>
+
+<p>On the date of June 3, you withdrew $100.00 from an ATM in Jacksonville, Florida, exceeding the limit of your debit card account. Therefore, you will be charged an overdraft fee of $30.00. This may have resulted from an accumulation of account withdrawals that were in process at the time you withdrew money from the ATM. We regret to have to make this charge whenever a member's debit card transactions exceed his or her funds.</p>
+
+<p>In the future, this mistake can be avoided by signing up for our Stark Bank mobile banking service. This service only costs $2 a month. Using your smartphone, you can access your accounts no matter where you are. You can check the amount of money in your accounts, your history of deposits and withdrawals, and most importantly, pending transactions. To sign up, please e-mail us at customerservice@starkbank.com or call us at 904-555-4514.</p>
+
+<p>-------------------------</p>
+
+<p><strong>To:</strong> Customer Service (customerservice@starkbank.com)<br>
+<strong>From:</strong> Suzie Summers (ssummers8zippynet.com)<br>
+<strong>Subject:</strong> Overdraft Fee<br>
+<strong>Date:</strong> June 5</p>
+
+<p>I am concerned that someone may have illegally accessed my account and made a withdrawal. I lost my debit card on June 2, and upon noticing the next day, I immediately froze all of my accounts. Considering these unfortunate circumstances, I politely ask that the bank refrain from charging the fee for this unforeseen overdraft.</p>
+
+<p>I would like to sign up for the banking service you recommended. It sounds like a useful service that can help me manage my finances in a more efficient manner.</p>
+
+<p>Thank you for your assistance.</p>
+
+<p>Suzie Summers</p>
+
+<p>-------------------------</p>
+
+<p><strong>To:</strong> Suzie Summers (ssummers@zippynet.com)<br>
+<strong>From:</strong> Customer Service (customerservice@starkbank.com)<br>
+<strong>Subject: </strong>Overdraft Review<br>
+<strong>Date: </strong>June 6</p>
+
+<p>Dear Ms. Summers,</p>
+
+<p>I am sorry to hear of your misfortunes. According to our account data, we see that you did contact us and freeze your accounts, though it looks like it was too late to prevent the withdrawal and subsequent overdraft of your account. It is a little bit unusual that the transaction that caused the overdraft was at an ATM machine a day after you say that you lost your card. Have you given your access pin to anybody recently? I would be happy to pass your request for overdraft relief on to our fraud department, but you will need to file a police report and then send us the case number that the investigating officer gives you. Once we receive this number, we can proceed with our review of your case.</p>
+
+<p>Thank you and good day,</p>
+
+<p>Laura Massey,</p>
+
+<p>Customer Service Specialist,<br>
+Stark Bank</p>
+</div>

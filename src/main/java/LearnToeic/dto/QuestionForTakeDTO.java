@@ -1,5 +1,8 @@
 package LearnToeic.dto;
 
+import java.util.Collections;
+import java.util.List;
+
 public class QuestionForTakeDTO {
     private Integer part;
     public Integer getPart() {
@@ -37,6 +40,8 @@ public class QuestionForTakeDTO {
     private String optionC;       // đáp án C
     private String optionD;       // đáp án D
     private Character selectedOption;
+    private List<String> imageUrls = Collections.emptyList();
+    private List<String> audioUrls = Collections.emptyList();
 
     public Character getSelectedOption() {
         return selectedOption;
@@ -44,6 +49,38 @@ public class QuestionForTakeDTO {
 
     public void setSelectedOption(Character selectedOption) {
         this.selectedOption = selectedOption;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        if (imageUrls == null || imageUrls.isEmpty()) {
+            this.imageUrls = Collections.emptyList();
+        } else {
+            this.imageUrls = List.copyOf(imageUrls);
+        }
+    }
+
+    public boolean hasImage() {
+        return imageUrls != null && !imageUrls.isEmpty();
+    }
+
+    public List<String> getAudioUrls() {
+        return audioUrls;
+    }
+
+    public void setAudioUrls(List<String> audioUrls) {
+        if (audioUrls == null || audioUrls.isEmpty()) {
+            this.audioUrls = Collections.emptyList();
+        } else {
+            this.audioUrls = List.copyOf(audioUrls);
+        }
+    }
+
+    public boolean hasAudio() {
+        return audioUrls != null && !audioUrls.isEmpty();
     }
 
     public QuestionForTakeDTO() {

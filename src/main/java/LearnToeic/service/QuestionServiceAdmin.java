@@ -59,7 +59,6 @@ public class QuestionServiceAdmin {
                     q.setOptionB(line[4]);
                     q.setOptionC(line[5]);
                     q.setOptionD(line[6]);
-                    q.setNote(line[8]);
                     questionRepository.save(q);
                 }
 

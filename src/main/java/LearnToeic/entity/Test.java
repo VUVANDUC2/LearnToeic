@@ -34,12 +34,11 @@ public class Test {
 
     public Test() {}
 
-    public Test(String testName, Date testDate, Integer totalQuestions, Integer maxScore, String description) {
+    public Test(String testName, Date testDate, Integer totalQuestions, Integer maxScore) {
         this.testName = testName;
         this.testDate = testDate;
         this.totalQuestions = totalQuestions;
         this.maxScore = maxScore;
-        this.description = description;
     }
 
     //  Getter & Setter
