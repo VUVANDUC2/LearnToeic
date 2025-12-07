@@ -47,18 +47,6 @@ public class ExamController {
         return "tests/take-home";
     }
 
-    // @GetMapping("/take/{takeId}/part/{p}")
-    // public String loadPart(@PathVariable Integer takeId, @PathVariable int p, Model model) {
-    //     var pv = examService.buildPartView(takeId, p); // lấy câu hỏi part p
-    //     var view = examService.buildTakeView(takeId);
-    //     model.addAttribute("takeId", takeId);
-    //     model.addAttribute("view", view);
-    //     model.addAttribute("pv", pv);
-    //     model.addAttribute("review", false);
-    //     model.addAttribute("selectedMap", view.selectedMap());
-    //     model.addAttribute("correctMap", null);
-    //     return "fragments/take-parts :: partBlock(pv=${pv}, takeId=${takeId})";
-    // }
     @GetMapping("/take/{takeId}/part/{p}")
 public String loadPart(@PathVariable Integer takeId,
                        @PathVariable int p,
@@ -116,42 +104,6 @@ public String loadPart(@PathVariable Integer takeId,
         return "redirect:/tests/" + takeId + "/review?part=1";
     }
 
-    // @GetMapping("/{takeId}/review")
-    // public String reviewTake(
-    //         @PathVariable Integer takeId,
-    //         @RequestParam(name="part", defaultValue="1") int part,
-    //         Model model) {
-
-    //     var vm = examService.buildTakeViewWithResults(takeId, part); // có selectedMap, correctMap, isCorrectMap, score
-    //     var pv = examService.buildPartView(takeId, part);
-
-    //     model.addAttribute("view", vm);     // gồm: testId, testName, totalQuestions, score, partMap, selectedMap, correctMap, isCorrectMap, takeId
-    //     model.addAttribute("pv", pv); // PartView hiện tại
-    //     model.addAttribute("review", true); // bật chế độ review
-    //     return "tests/take-home";
-    // }
-//     @GetMapping("/{takeId}/review")
-// public String reviewTake(
-//         @PathVariable Integer takeId,
-//         @RequestParam(name = "part", defaultValue = "1") int part,
-//         Model model
-// ) {
-//     // VM cho trang review: đã có score, partMap, selectedMap, correctMap, isCorrectMap,...
-//     TakeReviewVM view = examService.buildTakeViewWithResults(takeId, part);
-
-//     // PartView vẫn dùng lại như lúc làm bài để render câu hỏi, audio, hình,...
-//     PartView pv = examService.buildPartView(takeId, part);
-
-//     model.addAttribute("view", view);     // testId, testName, totalQuestions, score, partMap, selectedMap, correctMap, isCorrectMap, takeId,...
-//     model.addAttribute("pv", pv);         // dữ liệu chi tiết của part hiện tại (danh sách câu hỏi, options, audio, image...)
-//     model.addAttribute("part", part);     // part hiện tại (1..7) để active tab
-//     model.addAttribute("review", true);   // bật chế độ review trong template
-
-//     // Dùng lại template làm bài, nhưng trong đó if (review) thì hiển thị kiểu review
-//     model.addAttribute("selectedMap", view.selectedMap());
-//     model.addAttribute("correctMap", view.correctMap());
-//     return "tests/take-home";
-// }
 @GetMapping("/{takeId}/review")
 public String reviewTake(
         @PathVariable Integer takeId,

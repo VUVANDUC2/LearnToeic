@@ -27,6 +27,7 @@ public class ExamService {
     private final UserRepository userRepo;
     private final TestResultRepository testResultRepo;
     private final AnswerSheetRepository answerSheetRepo;
+    private final RefRepository refRepo;
 
     public PartView buildPartView(Integer takeId, int part) {
 
@@ -68,6 +69,7 @@ public class ExamService {
         pv.setPart(part);
         pv.setQuestions(dtos);
         pv.setRangeLabel(makeRangeLabel(dtos)); // "Qxx–Qyy"
+        enrichQuestionsWithRefs(testId, dtos, pv);
         return pv;
     }
     private String makeRangeLabel(List<QuestionForTakeDTO> dtos) {
@@ -75,6 +77,165 @@ public class ExamService {
         int first = dtos.get(0).getQuestionNumber();
         int last  = dtos.get(dtos.size()-1).getQuestionNumber();
         return "Q" + first + "–Q" + last;
+    }
+
+    private void enrichQuestionsWithRefs(Integer testId,
+                                         List<QuestionForTakeDTO> questions,
+                                         PartView pv) {
+        if (pv == null) return;
+        if (testId == null || questions == null || questions.isEmpty()) {
+            pv.setAudioSources(List.of());
+            return;
+        }
+
+        List<RefDTO> refs = refRepo.findByTest_TestIdOrderByStartAsc(testId)
+                .stream()
+                .map(RefDTO::fromEntity)
+                .toList();
+        if (refs.isEmpty()) {
+            pv.setAudioSources(List.of());
+            return;
+        }
+
+        QuestionRange range = resolveRange(questions);
+        Map<Integer, List<String>> imageMap =
+                buildQuestionResourceMap(refs, questions, RefType.IMAGE, range, false);
+        Map<Integer, List<String>> audioMap =
+                buildQuestionResourceMap(refs, questions, RefType.AUDIO, range, true);
+
+        for (QuestionForTakeDTO q : questions) {
+            Integer qn = q.getQuestionNumber();
+            q.setImageUrls(imageMap.getOrDefault(qn, List.of()));
+            q.setAudioUrls(audioMap.getOrDefault(qn, List.of()));
+        }
+
+        pv.setAudioSources(buildPartAudioSources(refs, range));
+    }
+
+    private QuestionRange resolveRange(List<QuestionForTakeDTO> questions) {
+        if (questions == null || questions.isEmpty()) {
+            return null;
+        }
+        Integer min = null;
+        Integer max = null;
+        for (QuestionForTakeDTO q : questions) {
+            Integer qn = q.getQuestionNumber();
+            if (qn == null) continue;
+            if (min == null || qn < min) {
+                min = qn;
+            }
+            if (max == null || qn > max) {
+                max = qn;
+            }
+        }
+        if (min == null || max == null) {
+            return null;
+        }
+        return new QuestionRange(min, max);
+    }
+
+    private Map<Integer, List<String>> buildQuestionResourceMap(
+            List<RefDTO> refs,
+            List<QuestionForTakeDTO> questions,
+            RefType refType,
+            QuestionRange range,
+            boolean attachAtRangeStartOnly) {
+
+        Map<Integer, List<String>> result = new HashMap<>();
+        if (refs == null || refs.isEmpty() || questions == null || questions.isEmpty()) {
+            return result;
+        }
+
+        for (RefDTO ref : refs) {
+            if (ref.getRefType() != refType) continue;
+            if (refType == RefType.AUDIO && range != null && coversWholeRange(ref, range)) {
+                continue; // sẽ render ở cấp Part
+            }
+
+            if (attachAtRangeStartOnly) {
+                Integer targetQn = findFirstQuestionInRange(ref, questions);
+                addResource(result, targetQn, normalizeRefPath(ref.getPath()));
+            } else {
+                for (QuestionForTakeDTO q : questions) {
+                    Integer qn = q.getQuestionNumber();
+                    if (qn != null && ref.appliesTo(qn)) {
+                        addResource(result, qn, normalizeRefPath(ref.getPath()));
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private void addResource(Map<Integer, List<String>> target, Integer qn, String path) {
+        if (target == null || qn == null || path == null) {
+            return;
+        }
+        target.computeIfAbsent(qn, k -> new ArrayList<>());
+        List<String> list = target.get(qn);
+        if (!list.contains(path)) {
+            list.add(path);
+        }
+    }
+
+    private Integer findFirstQuestionInRange(RefDTO ref, List<QuestionForTakeDTO> questions) {
+        if (ref == null || questions == null || questions.isEmpty()) {
+            return null;
+        }
+        return questions.stream()
+                .map(QuestionForTakeDTO::getQuestionNumber)
+                .filter(Objects::nonNull)
+                .filter(ref::appliesTo)
+                .min(Integer::compareTo)
+                .orElse(null);
+    }
+
+    private List<String> buildPartAudioSources(List<RefDTO> refs, QuestionRange range) {
+        if (refs == null || refs.isEmpty() || range == null) {
+            return List.of();
+        }
+        return refs.stream()
+                .filter(r -> r.getRefType() == RefType.AUDIO)
+                .filter(r -> coversWholeRange(r, range))
+                .map(RefDTO::getPath)
+                .map(this::normalizeRefPath)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+    }
+
+    private boolean coversWholeRange(RefDTO ref, QuestionRange range) {
+        if (ref == null || range == null) return false;
+        int refStart = ref.getStartQ() != null ? ref.getStartQ() : Integer.MIN_VALUE;
+        int refEnd = ref.getEndQ() != null ? ref.getEndQ() : Integer.MAX_VALUE;
+        return refStart <= range.min && refEnd >= range.max;
+    }
+
+    private String normalizeRefPath(String rawPath) {
+        if (rawPath == null) return null;
+        String path = rawPath.trim();
+        if (path.isEmpty()) return null;
+        path = path.replace('\\', '/');
+        if (path.startsWith("http://") || path.startsWith("https://")) {
+            return path;
+        }
+        if (!path.startsWith("/")) {
+            path = "/" + path;
+        }
+        while (path.contains("//")) {
+            path = path.replace("//", "/");
+        }
+        return path;
+    }
+
+    private static final class QuestionRange {
+        final int min;
+        final int max;
+        QuestionRange(int min, int max) {
+            this.min = min;
+            this.max = max;
+        }
     }
 
     public TakeHomeVM buildTakeView(Integer takeId) {
