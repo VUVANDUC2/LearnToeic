@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TOEIC Review - Part 1</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .sidebar {
+        height: 100vh;
+        overflow-y: auto;
+        padding: 1rem;
+        border-right: 1px solid #ddd;
+      }
+      .question-box {
+        cursor: pointer;
+        text-align: center;
+        font-weight: bold;
+        color: white;
+        transition: transform 0.2s;
+      }
+      .question-box:hover {
+        transform: translateY(-3px);
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .correct {
+        background-color: #198754;
+      }
+      .wrong {
+        background-color: #dc3545;
+      }
+      .answer.correct {
+        background-color: #d1e7dd;
+        border-color: #badbcc;
+      }
+      .answer.wrong {
+        background-color: #f8d7da;
+        border-color: #f5c2c7;
+      }
+      .user-choice {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid mt-3">
+      <div class="row">
+        <!-- Sidebar / Mini Boxes -->
+        <div class="col-md-3 col-lg-2 bg-light sidebar">
+          <!--Parts-->
+          <h5>TOEIC Parts</h5>
+          <div class="row g-2 mb-3">
+            <div class="col-12">
+              <a
+                data-part="1"
+                class="question-box p-2 rounded bg-primary d-block text-white text-decoration-none text-center mb-1 active"
+              >
+                Part 1
+              </a>
+            </div>
+            <div class="col-12">
+              <a
+                data-part="2"
+                class="question-box p-2 rounded bg-success d-block text-white text-decoration-none text-center mb-1"
+              >
+                Part 2
+              </a>
+            </div>
+            <div class="col-12">
+              <a
+                data-part="3"
+                class="question-box p-2 rounded bg-warning d-block text-dark text-decoration-none text-center mb-1"
+              >
+                Part 3
+              </a>
+            </div>
+            <div class="col-12">
+              <a
+                data-part="4"
+                class="question-box p-2 rounded bg-danger d-block text-white text-decoration-none text-center mb-1"
+              >
+                Part 4
+              </a>
+            </div>
+          </div>
+
+          <!--Questions-->
+          <h5>Questions</h5>
+          <div class="row g-2">
+            <div class="col-4" th:each="question : ${questions}">
+              <a
+                th:data-part-question="${question.part}"
+                class="question-box p-3 rounded d-block text-decoration-none correct"
+                th:text="${question.questionNumber}"
+              ></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 p-4">
+          <h4 class="fw-bold mb-3">Part 1: Listening Comprehension</h4>
+          <div
+            class="card mb-4"
+            th:each="question : ${questions}"
+            th:data-question-part="${question.part}"
+          >
+            <div class="card-body" th:data-question-part="${question.part}">
+              <h5 th:text="'Question ' + ${question.questionNumber}">Question 1</h5>
+              <p th:text="${question.questionText}">What does the woman imply about the meeting?</p>
+              <audio controls class="w-100 mb-3">
+                <source src="sample.mp3" type="audio/mpeg" />
+              </audio>
+              <div class="list-group">
+                <div class="list-group-item answer correct" th:text="'A' + ${question.optionA}">
+                  A. It has been postponed.
+                  <span class="badge bg-success ms-2">Correct</span>
+                </div>
+                <div
+                  class="list-group-item answer wrong user-choice"
+                  th:text="'B' + ${question.optionB}"
+                >
+                  B. It will be shorter than usual.
+                  <span class="badge bg-danger ms-2">Your Answer</span>
+                </div>
+                <div class="list-group-item answer" th:text="'C' + ${question.optionC}">
+                  C. It has been canceled.
+                </div>
+                <div class="list-group-item answer" th:text="'D' + ${question.optionD}">
+                  D. It will start earlier than planned.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4 hidden" id="q102">
+            <div class="card-body">
+              <h5>Question 2</h5>
+              <p>Where is the conversation most likely taking place?</p>
+              <div class="list-group">
+                <div class="list-group-item answer">A. In a hotel lobby.</div>
+                <div class="list-group-item answer correct user-choice">
+                  B. In an airport.
+                  <span class="badge bg-success ms-2">Correct</span>
+                </div>
+                <div class="list-group-item answer">C. At a restaurant.</div>
+                <div class="list-group-item answer">D. In an office.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4" id="q103">
+            <div class="card-body">
+              <h5>Question 3</h5>
+              <p>What does the man want to do next?</p>
+              <div class="list-group">
+                <div class="list-group-item answer wrong user-choice">
+                  A. Call his boss.
+                  <span class="badge bg-danger ms-2">Your Answer</span>
+                </div>
+                <div class="list-group-item answer correct">
+                  B. Review the report.
+                  <span class="badge bg-success ms-2">Correct</span>
+                </div>
+                <div class="list-group-item answer">C. Leave the office.</div>
+                <div class="list-group-item answer">D. Buy new equipment.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4" id="q104">
+            <div class="card-body">
+              <h5>Question 4</h5>
+              <p>What time does the train depart?</p>
+              <div class="list-group">
+                <div class="list-group-item answer">A. At 9:00 AM.</div>
+                <div class="list-group-item answer correct">
+                  B. At 9:30 AM.
+                  <span class="badge bg-success ms-2">Correct</span>
+                </div>
+                <div class="list-group-item answer wrong user-choice">
+                  C. At 10:00 AM.
+                  <span class="badge bg-danger ms-2">Your Answer</span>
+                </div>
+                <div class="list-group-item answer">D. At 10:30 AM.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const partLinks = document.querySelectorAll(".question-box[data-part]");
+
+        // Function to show/hide questions and cards
+        const showPart = (partNumber) => {
+          console.log("Showing part:", partNumber);
+
+          // Sidebar questions
+          const allQuestions = document.querySelectorAll(
+            ".col-4 > .question-box[data-part-question]"
+          );
+          allQuestions.forEach((q) => {
+            const col = q.parentElement;
+            if (q.dataset.partQuestion === partNumber) {
+              col.classList.remove("hidden");
+            } else {
+              col.classList.add("hidden");
+            }
+          });
+
+          // Main cards
+          const allCards = document.querySelectorAll(".card[data-question-part]");
+          allCards.forEach((card) => {
+            if (card.dataset.questionPart === partNumber) {
+              card.classList.remove("hidden");
+            } else {
+              card.classList.add("hidden");
+            }
+          });
+
+          // Update active class for parts
+          partLinks.forEach((link) => link.classList.remove("active"));
+          const activeLink = document.querySelector(`.question-box[data-part='${partNumber}']`);
+          if (activeLink) activeLink.classList.add("active");
+        };
+
+        // Show Part 1 initially
+        showPart("1");
+
+        // Add click listeners
+        partLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const partNumber = link.dataset.part;
+            showPart(partNumber);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

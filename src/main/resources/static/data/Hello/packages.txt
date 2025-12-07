@@ -1,0 +1,66 @@
+sudo pacman -S --needed git base-devel
+git clone https://aur.archlinux.org/yay.git
+
+cd yay
+makepkg -si
+
+
+yay -S input-remapper-git
+
+
+sudo pacman -S ttf-jetbrains-mono-nerd
+fc-cache -fv
+
+sudo pacman -S waybar
+
+yay -S swww
+
+yay -S swaync
+
+sudo pacman -S polkit-gnome
+
+yay -S hyprshot
+
+sudo pacman -S brightnessctl
+
+sudo pacman -S playerctl
+
+sudo pacman -S mlocate
+
+sudo pacman -S hyprlock
+
+mkdir -p ~/.local/share/fonts
+cp /usr/share/fonts/TTF/JetBrainsMono\ Nerd\ Font\*.ttf ~/.local/share/fonts/
+fc-cache -fv
+
+yay -S ttf-dm-sans
+
+sudo pacman -S noto-fonts-cjk
+
+yay -S ttf-weather-icons
+
+sudo pacman -S noto-fonts-emoji
+
+sudo pacman -S ttf-font-awesome
+
+yay -S ttf-material-design-icons
+
+sudo pacman -S nerd-fonts
+
+sudo pacman -S ttf-jetbrains-mono-nerd
+
+sudo pacman -S papirus-icon-theme
+
+
+fc-cache -fv
+
+
+yay -S nbfc
+
+
+sudo pacman -S dmidecode
+
+yay -S nbfc-linux-git
+
+sudo nbfc config --apply "Acer Nitro AN515-57"
+maybe start, idk

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TOEIC Admin Transcript</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        padding: 20px;
+      }
+      .transcript-card {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        padding: 64px 48px;
+        margin: auto;
+        max-width: 1800px;
+      }
+      .correct-answer {
+        color: #28a745;
+        font-weight: bold;
+      }
+      .accordion-button:not(.collapsed) {
+        background-color: #0078d7;
+        color: #fff;
+      }
+      .accordion-button {
+        font-weight: bold;
+      }
+      /* Fix for long content in all columns except Edit */
+      .table td:not(.edit-cell) {
+        word-break: break-word;
+        max-width: 180px;
+        white-space: pre-line;
+        overflow-wrap: break-word;
+      }
+      .table th {
+        white-space: nowrap;
+      }
+      .edit-cell {
+        width: 1%;
+        white-space: nowrap;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div th:replace="fragments/header :: siteHeader"></div>
+
+    <br /><br /><br />
+
+    <div class="transcript-card">
+      <h2 class="mb-4 text-center">TOEIC Admin Transcript / Answer Key</h2>
+
+      <div class="accordion" id="toeicAccordion">
+        <!-- Part 1 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingPart1">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePart1"
+              aria-expanded="true"
+              aria-controls="collapsePart1"
+            >
+              Part 1 – Photographs
+            </button>
+          </h2>
+          <div
+            id="collapsePart1"
+            class="accordion-collapse collapse show"
+            aria-labelledby="headingPart1"
+            data-bs-parent="#toeicAccordion"
+          >
+            <div class="accordion-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Question Number</th>
+                      <th>Question</th>
+                      <th>OptionA</th>
+                      <th>OptionB</th>
+                      <th>OptionC</th>
+                      <th>OptionD</th>
+                      <th>Correct Answer</th>
+                      <th>Notes</th>
+                      <th class="edit-cell">Edit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Dynamic question rows will be inserted here by script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 2 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingPart2">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePart2"
+              aria-expanded="false"
+              aria-controls="collapsePart2"
+            >
+              Part 2 – Question-Response
+            </button>
+          </h2>
+          <div
+            id="collapsePart2"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingPart2"
+            data-bs-parent="#toeicAccordion"
+          >
+            <div class="accordion-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Question Number</th>
+                      <th>Question</th>
+                      <th>OptionA</th>
+                      <th>OptionB</th>
+                      <th>OptionC</th>
+                      <th>OptionD</th>
+                      <th>Correct Answer</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Dynamic question rows will be inserted here by script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 3 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingPart3">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePart3"
+              aria-expanded="false"
+              aria-controls="collapsePart3"
+            >
+              Part 3 – Conversations
+            </button>
+          </h2>
+          <div
+            id="collapsePart3"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingPart3"
+            data-bs-parent="#toeicAccordion"
+          >
+            <div class="accordion-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Question Number</th>
+                      <th>Question</th>
+                      <th>OptionA</th>
+                      <th>OptionB</th>
+                      <th>OptionC</th>
+                      <th>OptionD</th>
+                      <th>Correct Answer</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Dynamic question rows will be inserted here by script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 4 example -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingPart4">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePart4"
+              aria-expanded="false"
+              aria-controls="collapsePart4"
+            >
+              Part 4 – Talks
+            </button>
+          </h2>
+          <div
+            id="collapsePart4"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingPart4"
+            data-bs-parent="#toeicAccordion"
+          >
+            <div class="accordion-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Question Number</th>
+                      <th>Question</th>
+                      <th>OptionA</th>
+                      <th>OptionB</th>
+                      <th>OptionC</th>
+                      <th>OptionD</th>
+                      <th>Correct Answer</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Dynamic question rows will be inserted here by script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 5 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingPart5">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePart5"
+              aria-expanded="false"
+              aria-controls="collapsePart5"
+            >
+              Part 5 – Incomplete Sentences
+            </button>
+          </h2>
+          <div
+            id="collapsePart5"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingPart5"
+            data-bs-parent="#toeicAccordion"
+          >
+            <div class="accordion-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Question Number</th>
+                      <th>Question</th>
+                      <th>OptionA</th>
+                      <th>OptionB</th>
+                      <th>OptionC</th>
+                      <th>OptionD</th>
+                      <th>Correct Answer</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Dynamic question rows will be inserted here by script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 6 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingPart6">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePart6"
+              aria-expanded="false"
+              aria-controls="collapsePart6"
+            >
+              Part 6 – Text Completion
+            </button>
+          </h2>
+          <div
+            id="collapsePart6"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingPart6"
+            data-bs-parent="#toeicAccordion"
+          >
+            <div class="accordion-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Question Number</th>
+                      <th>Question</th>
+                      <th>OptionA</th>
+                      <th>OptionB</th>
+                      <th>OptionC</th>
+                      <th>OptionD</th>
+                      <th>Correct Answer</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Dynamic question rows will be inserted here by script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 7 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingPart7">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePart7"
+              aria-expanded="false"
+              aria-controls="collapsePart7"
+            >
+              Part 7 – Reading Comprehension
+            </button>
+          </h2>
+          <div
+            id="collapsePart7"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingPart7"
+            data-bs-parent="#toeicAccordion"
+          >
+            <div class="accordion-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Question Number</th>
+                      <th>Question</th>
+                      <th>OptionA</th>
+                      <th>OptionB</th>
+                      <th>OptionC</th>
+                      <th>OptionD</th>
+                      <th>Correct Answer</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Dynamic question rows will be inserted here by script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br /><br /><br /><br /><br /><br /><br />
+    <div th:replace="fragments/footer :: siteFooter"></div>
+    <script>
+      function getTestIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("testId");
+      }
+
+      const testId = getTestIdFromUrl();
+      fetch(`/api/admin/questions/test/${testId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const partTableBodies = {
+            1: document.querySelector("#collapsePart1 tbody"),
+            2: document.querySelector("#collapsePart2 tbody"),
+            3: document.querySelector("#collapsePart3 tbody"),
+            4: document.querySelector("#collapsePart4 tbody"),
+            5: document.querySelector("#collapsePart5 tbody"),
+            6: document.querySelector("#collapsePart6 tbody"),
+            7: document.querySelector("#collapsePart7 tbody"),
+          };
+
+          data.forEach((q) => {
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-id", q.id);
+            tr.innerHTML = `
+          <th>${q.questionNumber}</th>
+          <td>${q.questionText}</td>
+          <td>${q.optionA}</td>
+          <td>${q.optionB}</td>
+          <td>${q.optionC}</td>
+          <td>${q.optionD}</td>
+          <td class="correct-answer">${q.correctOption}</td>
+          <td>${q.note || ""}</td>
+          <td class="edit-cell"><button class="btn btn-sm btn-primary edit-btn">Edit</button></td>
+        `;
+            if (partTableBodies[q.part]) {
+              partTableBodies[q.part].appendChild(tr);
+            }
+          });
+
+          function attachEditHandler(btn) {
+            btn.addEventListener("click", function editHandler() {
+              const tr = this.closest("tr");
+              if (!tr || tr.classList.contains("editing")) return;
+
+              tr.classList.add("editing");
+              const cells = tr.querySelectorAll("td, th");
+              const values = Array.from(cells).map((cell) => cell.innerText);
+
+              for (let i = 0; i < cells.length - 1; i++) {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = values[i];
+                input.className = "form-control form-control-sm";
+                cells[i].innerHTML = "";
+                cells[i].appendChild(input);
+              }
+
+              const editCell = cells[cells.length - 1];
+              editCell.innerHTML = `
+            <button class='btn btn-sm btn-success save-btn'>Save</button>
+            <button class='btn btn-sm btn-secondary cancel-btn'>Cancel</button>
+          `;
+
+              // Save handler
+              editCell
+                .querySelector(".save-btn")
+                .addEventListener("click", function () {
+                  for (let i = 0; i < cells.length - 1; i++) {
+                    values[i] = cells[i].querySelector("input").value;
+                    cells[i].innerText = values[i];
+                  }
+                  tr.classList.remove("editing");
+                  editCell.innerHTML = `<button class='btn btn-sm btn-primary edit-btn'>Edit</button>`;
+                  attachEditHandler(editCell.querySelector(".edit-btn"));
+
+                  // Send update to backend (PUT)
+                  const questionNumber = values[0];
+                  const payload = {
+                    part: null, // Add part if needed
+                    questionText: values[1],
+                    optionA: values[2],
+                    optionB: values[3],
+                    optionC: values[4],
+                    optionD: values[5],
+                    correctOption: values[6],
+                    note: values[7],
+                  };
+
+                  fetch(`/api/admin/questions/${testId}/${questionNumber}`, {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                  })
+                    .then((res) => (res.ok ? res : Promise.reject(res)))
+                    .catch(() => {
+                      alert("Failed to update row!");
+                    });
+                });
+
+              // Cancel handler
+              editCell
+                .querySelector(".cancel-btn")
+                .addEventListener("click", function () {
+                  for (let i = 0; i < cells.length - 1; i++) {
+                    cells[i].innerText = values[i];
+                  }
+                  tr.classList.remove("editing");
+                  editCell.innerHTML = `<button class='btn btn-sm btn-primary edit-btn'>Edit</button>`;
+                  attachEditHandler(editCell.querySelector(".edit-btn"));
+                });
+            });
+          }
+
+          document.querySelectorAll(".edit-btn").forEach((btn) => {
+            attachEditHandler(btn);
+          });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

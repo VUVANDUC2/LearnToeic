@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TOEIC Content Admin Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <style>
+      /* Custom styles for fixed sidebar and content spacing */
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        padding-top: 56px; /* Space for the fixed navbar */
+        overflow-y: auto; /* Enable scrolling if navigation grows long */
+      }
+      .main-content {
+        margin-left: 250px;
+        padding: 20px;
+        padding-top: 76px; /* Space for the fixed navbar */
+      }
+      @media (max-width: 992px) {
+        .sidebar {
+          display: none;
+        }
+        .main-content {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#"
+          ><i class="bi bi-gear-fill me-2"></i>TOEIC Admin Control</a
+        >
+        <div class="ms-auto">
+          <button class="btn btn-outline-light me-2">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="bg-dark text-white border-end sidebar d-flex flex-column p-3">
+      <h5 class="mt-3 mb-3 text-warning">Main Menu</h5>
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item mb-1">
+          <a href="#" class="nav-link text-white active" aria-current="page">
+            <i class="bi bi-grid-fill me-2"></i>Dashboard Overview
+          </a>
+        </li>
+
+        <li class="nav-item mb-1">
+          <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-secondary"
+          >
+            <span>Test Center</span>
+          </h6>
+          <a href="/admin/test" class="nav-link text-white">
+            <i class="bi bi-card-checklist me-2"></i>All Tests
+          </a>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-archive-fill me-2"></i>Question Bank
+          </a>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-bar-chart-fill me-2"></i>Scoring Reports
+          </a>
+        </li>
+
+        <li class="nav-item mb-1">
+          <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-secondary"
+          >
+            <span>Content & SEO</span>
+          </h6>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-pencil-square me-2"></i>Manage Blog Posts
+          </a>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-tags-fill me-2"></i>Categories & Tags
+          </a>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-chat-square-text-fill me-2"></i>Comments Moderation
+          </a>
+        </li>
+
+        <li class="nav-item mb-1">
+          <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-secondary"
+          >
+            <span>User Access</span>
+          </h6>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-people-fill me-2"></i>Manage Students
+          </a>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-person-badge-fill me-2"></i>Manage Admins/Staff
+          </a>
+        </li>
+
+        <li class="nav-item mb-1">
+          <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-secondary"
+          >
+            <span>Documents & Files</span>
+          </h6>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-file-earmark-arrow-up-fill me-2"></i>Upload Files
+            (PDF, etc.)
+          </a>
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-folder-fill me-2"></i>File Browser
+          </a>
+        </li>
+      </ul>
+      <hr class="text-secondary" />
+      <div class="dropdown">
+        <a
+          href="#"
+          class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+          id="dropdownUser1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <img
+            src="https://via.placeholder.com/32/FFFFFF/000000?text=A"
+            alt="Admin"
+            width="32"
+            height="32"
+            class="rounded-circle me-2"
+          />
+          <strong>Admin User</strong>
+        </a>
+        <ul
+          class="dropdown-menu dropdown-menu-dark text-small shadow"
+          aria-labelledby="dropdownUser1"
+        >
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="#">Sign out</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+      >
+        <h1 class="h2">Dashboard Overview</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <button type="button" class="btn btn-sm btn-outline-primary me-2">
+            <i class="bi bi-plus-lg"></i> Create New Test
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-calendar"></i> This Week
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-lg-3 col-md-6">
+          <div class="card text-center bg-light shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-pencil-square h3 text-primary"></i>
+              <h5 class="card-title mt-2">Draft Tests</h5>
+              <p class="h1">12</p>
+              <small class="text-muted">Ready for review</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="card text-center bg-light shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-people-fill h3 text-success"></i>
+              <h5 class="card-title mt-2">Active Students</h5>
+              <p class="h1">12,450</p>
+              <small class="text-muted">Total registered</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="card text-center bg-light shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-newspaper h3 text-warning"></i>
+              <h5 class="card-title mt-2">Pending Blog Edits</h5>
+              <p class="h1">3</p>
+              <small class="text-muted">Awaiting publication</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="card text-center bg-light shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-file-earmark-text-fill h3 text-info"></i>
+              <h5 class="card-title mt-2">Total Documents</h5>
+              <p class="h1">75</p>
+              <small class="text-muted">Guides & resources</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+              <i class="bi bi-clock-history me-2"></i>**Recent Blog Drafts**
+            </div>
+            <ul class="list-group list-group-flush">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                "Top 10 Tips for Listening Part 3"
+                <span class="badge bg-secondary">Draft</span>
+                <a href="#" class="btn btn-sm btn-outline-primary">Edit</a>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                "Understanding the TOEIC Scoring Scale"
+                <span class="badge bg-success">Published</span>
+                <a href="#" class="btn btn-sm btn-outline-secondary">View</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>**Recent
+              Support Tickets**
+            </div>
+            <ul class="list-group list-group-flush">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                User: John Doe - Test 105 Score Error
+                <span class="badge bg-danger">High</span>
+                <a href="#" class="btn btn-sm btn-danger">View</a>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                User: Jane Smith - Login Issue
+                <span class="badge bg-warning">Medium</span>
+                <a href="#" class="btn btn-sm btn-warning">View</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

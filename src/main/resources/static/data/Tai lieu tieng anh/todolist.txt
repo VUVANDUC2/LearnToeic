@@ -1,0 +1,7 @@
+take model
+take repo
+take service
+
+
+user ranking
+satistic

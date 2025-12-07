@@ -29,7 +29,10 @@ public class Test {
     @Column(name = "description", length = 255)
     private String description;
 
-    protected Test() {}
+    @Column(name = "status", length = 50)
+    private String status;
+
+    public Test() {}
 
     public Test(String testName, Date testDate, Integer totalQuestions, Integer maxScore, String description) {
         this.testName = testName;
@@ -87,4 +90,7 @@ public class Test {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

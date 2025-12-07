@@ -67,23 +67,23 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <!-- <script>
     // Hero swiper
-    const heroSwiper = new Swiper('.hero-swiper', {
+    const heroSwiper = new Swiper(".hero-swiper", {
       loop: true,
       autoplay: { delay: 5000 },
-      pagination: { el: '.hero .swiper-pagination', clickable: true },
-      navigation: { nextEl: '.hero .swiper-button-next', prevEl: '.hero .swiper-button-prev' }
-    })
+      pagination: { el: ".hero .swiper-pagination", clickable: true },
+      navigation: { nextEl: ".hero .swiper-button-next", prevEl: ".hero .swiper-button-prev" },
+    });
 
     // Testimonials swiper
-    const testiSwiper = new Swiper('.testi-swiper', {
+    const testiSwiper = new Swiper(".testi-swiper", {
       loop: true,
       slidesPerView: 1,
       spaceBetween: 16,
-      breakpoints: {768:{slidesPerView:2}, 992:{slidesPerView:3}},
-      pagination: { el: '#testimonials .swiper-pagination', clickable: true }
-    })
-    document.getElementById('testiPrev')?.addEventListener('click', ()=>testiSwiper.slidePrev())
-    document.getElementById('testiNext')?.addEventListener('click', ()=>testiSwiper.slideNext())
+      breakpoints: { 768: { slidesPerView: 2 }, 992: { slidesPerView: 3 } },
+      pagination: { el: "#testimonials .swiper-pagination", clickable: true },
+    });
+    document.getElementById("testiPrev")?.addEventListener("click", () => testiSwiper.slidePrev());
+    document.getElementById("testiNext")?.addEventListener("click", () => testiSwiper.slideNext());
 
     // Counter animation on view
     const counters = document.querySelectorAll('.stat-num')
