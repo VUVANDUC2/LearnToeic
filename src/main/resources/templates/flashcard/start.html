@@ -16,7 +16,11 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      window.deckName = /*[[${name}]]*/ "";
+      /*]]>*/
+    </script>
     <style>
       body {
         background-color: #f0f2f5; /* Màu nền nhẹ nhàng */
@@ -58,9 +62,11 @@
         >
           <div class="btn-group">
             <a
-              href="#edit"
+              href="#"
               class="btn btn-outline-secondary btn-sm"
               title="Chỉnh sửa"
+              data-bs-toggle="modal"
+              data-bs-target="#EditModal"
             >
               <i class="bi bi-pencil-square"></i> Edit
             </a>
@@ -369,6 +375,339 @@
             .forEach((el) => (el.style.fontSize = "1rem"));
         };
       });
+    </script>
+
+    <!--Modals-->
+    <div
+      class="modal fade"
+      id="EditModal"
+      aria-labelledby="EditModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="EditModalLabel">
+              Manage Flashcards
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="list-group">
+              <div
+                class="list-group-item py-3 d-flex align-items-center justify-content-between"
+                th:each="card : ${allCards}"
+              >
+                <!-- LEFT: Checkbox + Content -->
+                <div class="d-flex align-items-start">
+                  <input
+                    class="form-check-input me-3 mt-1"
+                    type="checkbox"
+                    th:id="'check-' + ${card.flashcardId}"
+                    th:value="${card.flashcardId}"
+                    name="flashcardIds"
+                  />
+
+                  <div>
+                    <h6 class="mb-1 fw-semibold" th:text="${card.content}">
+                      Card Content
+                    </h6>
+                    <small class="text-muted" th:text="${card.description}">
+                      Card Description
+                    </small>
+                  </div>
+                </div>
+
+                <!-- RIGHT: Edit button -->
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  type="button"
+                  th:data-id="${card.flashcardId}"
+                  th:data-content="${card.content}"
+                  th:data-description="${card.description}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#EditCardModal"
+                >
+                  <i class="bi bi-pencil-square"></i> Edit
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+
+            <!-- CREATE FLASHCARD BUTTON -->
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#CreateFlashcardModal"
+            >
+              <i class="bi bi-plus-circle"></i> Create Flashcard
+            </button>
+
+            <!-- DELETE SELECTED -->
+            <button
+              type="button"
+              class="btn btn-danger"
+              onclick="deleteSelectedCards()"
+            >
+              Delete Selected
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Second Modal for editing flashcards-->
+    <div class="modal fade" id="EditCardModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Flashcard</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <form id="editCardForm">
+              <input type="hidden" id="editCardId" />
+
+              <div class="mb-3">
+                <label class="form-label">Content</label>
+                <input type="text" id="editCardContent" class="form-control" />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea
+                  id="editCardDescription"
+                  class="form-control"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              data-bs-toggle="modal"
+              data-bs-target="#EditModal"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-primary"
+              onclick="saveCardChanges()"
+              data-bs-toggle="modal"
+              data-bs-target="#EditModal"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Crweate Flashcards-->
+    <div
+      class="modal fade"
+      id="CreateFlashcardModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Create New Flashcard</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Content</label>
+              <input type="text" id="newCardContent" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <input type="text" id="newCardDescription" class="form-control" />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button class="btn btn-primary" onclick="createFlashcard()">
+              Create
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Attach event listeners to all edit buttons
+        document.addEventListener("click", function (e) {
+          const btn = e.target.closest("button[data-id]");
+          if (!btn) return;
+
+          const id = btn.getAttribute("data-id");
+          const content = btn.getAttribute("data-content");
+          const description = btn.getAttribute("data-description");
+
+          // Fill modal
+          document.getElementById("editCardId").value = id;
+          document.getElementById("editCardContent").value = content;
+          document.getElementById("editCardDescription").value = description;
+        });
+      });
+      // Update cards
+      function saveCardChanges() {
+        const id = document.getElementById("editCardId").value;
+        const content = document.getElementById("editCardContent").value;
+        const description = document.getElementById(
+          "editCardDescription"
+        ).value;
+
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector(
+          'meta[name="_csrf_header"]'
+        ).content;
+
+        fetch("/flashcards/edit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            [csrfHeader]: csrfToken, // <<<< ADD THIS
+          },
+          body: new URLSearchParams({
+            flashcardId: id,
+            content: content,
+            description: description,
+          }),
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            if (data === "OK") {
+              const modal = bootstrap.Modal.getInstance(
+                document.getElementById("EditCardModal")
+              );
+              modal.hide();
+
+              updateCardUI(id, content, description);
+            } else {
+              console.error("Server error:", data);
+            }
+          })
+          .catch((err) => console.error(err));
+      }
+
+      // Update UI after saving without reload
+      function updateCardUI(id, content, description) {
+        // Find the list item with correct data-id
+        const button = document.querySelector(`button[data-id='${id}']`);
+        if (!button) return;
+
+        const parent = button.closest(".list-group-item");
+
+        parent.querySelector("h6").textContent = content;
+        parent.querySelector("small").textContent = description;
+
+        // Update button attributes so next edit loads correctly
+        button.setAttribute("data-content", content);
+        button.setAttribute("data-description", description);
+      }
+      // Delete selected cards
+      function deleteSelectedCards() {
+        const checked = [
+          ...document.querySelectorAll('input[name="flashcardIds"]:checked'),
+        ].map((cb) => cb.value);
+
+        if (checked.length === 0) {
+          alert("No cards selected.");
+          return;
+        }
+
+        if (!confirm(`Delete ${checked.length} card(s)?`)) return;
+
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector(
+          'meta[name="_csrf_header"]'
+        ).content;
+
+        fetch("/flashcards/delete-selected", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            [csrfHeader]: csrfToken,
+          },
+          body: JSON.stringify(checked),
+        })
+          .then((res) => res.text())
+          .then((data) => {
+            if (data === "OK") {
+              // Remove deleted items from UI
+              checked.forEach((id) => {
+                const row = document
+                  .querySelector(`#check-${id}`)
+                  .closest(".list-group-item");
+                row.remove();
+              });
+            } else {
+              console.error("Delete error:", data);
+            }
+          })
+          .catch((err) => console.error(err));
+      }
+    </script>
+
+    <!--Create Flashcard-->
+    <script>
+      async function createFlashcard() {
+        const content = document.getElementById("newCardContent").value.trim();
+        const description = document
+          .getElementById("newCardDescription")
+          .value.trim();
+        if (!content) return alert("Content cannot be empty!");
+
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector(
+          'meta[name="_csrf_header"]'
+        ).content;
+
+        // Use "name" from backend
+        const deckName = window.deckName || ""; // fallback in case template doesn't replace
+
+        const res = await fetch("/flashcards/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            [csrfHeader]: csrfToken,
+          },
+          body: JSON.stringify({ content, description, name: deckName }),
+        });
+
+        if (res.ok) location.reload();
+        else alert("Failed to create flashcard.");
+      }
     </script>
   </body>
 </html>
