@@ -3,7 +3,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "blogs")
-public class Blog {
+public class BlogAdmin {
     @Id
     private int blogId;
 
@@ -14,12 +14,13 @@ public class Blog {
     @Lob
     private String content;
 
+    @Column(name = "upvote")
     private int upVote;
 
-    public Blog() {
+    public BlogAdmin() {
     }
 
-    public Blog(int blogId, int userId, String title, String content, int upVote) {
+    public BlogAdmin(int blogId, int userId, String title, String content, int upVote) {
         this.blogId = blogId;
         this.userId = userId;
         this.title = title;

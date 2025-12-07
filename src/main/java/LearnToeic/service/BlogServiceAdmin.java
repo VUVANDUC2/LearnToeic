@@ -10,20 +10,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 @Service
-public class BlogService {
+public class BlogServiceAdmin {
     @Autowired
-    private BlogRepository blogRepository;
+    private BlogRepositoryAdmin blogRepository;
     // Get all blogs
-    public List<Blog> getAllBlogs() {
+    public List<BlogAdmin> getAllBlogs() {
         return blogRepository.findAll();
     }
 
     // Get blog by ID
-    public Blog getBlogById(int id) {
+    public BlogAdmin getBlogById(int id) {
         return blogRepository.findById(id).orElse(null);
     }
     // Paginate blogs with optional search term
-    public Page<Blog> getPaginateBlogs(String searchTerm,int page, int size)
+    public Page<BlogAdmin> getPaginateBlogs(String searchTerm,int page, int size)
     {   
         Pageable pageable = PageRequest.of(page, size);
         if(searchTerm != null && !searchTerm.trim().isEmpty())
@@ -34,8 +34,8 @@ public class BlogService {
     }
 
     //Save Blog
-    public Blog saveBlog(String title, String content) {
-        Blog blog = new Blog();
+    public BlogAdmin saveBlog(String title, String content) {
+        BlogAdmin blog = new BlogAdmin();
         blog.setBlogId(blogRepository.getMaxBlogId() + 1);
         blog.setUserId(1);
         blog.setUpVote(0);

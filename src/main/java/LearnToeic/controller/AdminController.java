@@ -28,14 +28,14 @@ import java.util.stream.Stream; // Correct import for NIO/Collection stream oper
 public class AdminController {
     @Value("${file.upload-dir}") 
     private String uploadDir;
-    private final TestService testService;
-    private final BlogService blogService;
-    private final UserService userService;
-    private final QuestionService questionService;
-    private final TakeService takeService;
+    private final TestServiceAdmin testService;
+    private final BlogServiceAdmin blogService;
+    private final UserServiceAdmin userService;
+    private final QuestionServiceAdmin questionService;
+    private final TakeServiceAdmin takeService;
     private static final String UPLOAD_DIR = "src/main/resources/static/data/";
     public static record ResourceItem(String title, String path, String type, long fileCount) {}
-    public AdminController(TestService testService, BlogService blogService, UserService userService, QuestionService questionService, TakeService takeService) {
+    public AdminController(TestServiceAdmin testService, BlogServiceAdmin blogService, UserServiceAdmin userService, QuestionServiceAdmin questionService, TakeServiceAdmin takeService) {
         this.testService = testService;
         this.blogService = blogService;
         this.userService = userService;
@@ -57,7 +57,7 @@ public class AdminController {
         @RequestParam(defaultValue = "5") int size,
         @RequestParam(value = "searchTerm", required = false) String searchTerm
     ) {
-        Page<Test> testPage = testService.getPaginateTests(searchTerm, page, size);
+        Page<TestAdmin> testPage = testService.getPaginateTests(searchTerm, page, size);
         System.out.println(searchTerm);
         model.addAttribute("tests", testPage.getContent());
         model.addAttribute("currentPage", page);
@@ -68,7 +68,7 @@ public class AdminController {
     //Test Preview Page
     @GetMapping("/admin/tests/test_page")
     public String testPage(@RequestParam int testId,Model model) {
-        List <Question> list = questionService.getQuestionsByTestId(testId);
+        List <QuestionAdmin> list = questionService.getQuestionsByTestId(testId);
         model.addAttribute("questions", list);
         model.addAttribute("title", "Admin - Test Page");
         return "admin/test_page";
@@ -81,7 +81,7 @@ public class AdminController {
         @RequestParam(defaultValue = "15") int size,
         @RequestParam(value = "searchTerm", required = false) String searchTerm
     ) {
-        Page<Blog> blogPage = blogService.getPaginateBlogs(searchTerm, page, size);
+        Page<BlogAdmin> blogPage = blogService.getPaginateBlogs(searchTerm, page, size);
         model.addAttribute("blogs", blogPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", blogPage.getTotalPages());
@@ -96,7 +96,7 @@ public class AdminController {
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(value = "searchTerm", required = false) String searchTerm
         ){
-        Page<LearnToeic.model.User> userPage = userService.getPaginateUsers(searchTerm, page, size);
+        Page<LearnToeic.model.UserAdmin> userPage = userService.getPaginateUsers(searchTerm, page, size);
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
@@ -109,7 +109,7 @@ public class AdminController {
     // Edit Blog
     @GetMapping("/admin/blogs/edit_blog")
     public String editBlogPage(@RequestParam int blogId ,Model model) {
-        Blog blog = blogService.getBlogById(blogId);
+        BlogAdmin blog = blogService.getBlogById(blogId);
         
         
         String content = blog.getContent();
@@ -159,7 +159,7 @@ public class AdminController {
         List<String> label3 = new ArrayList<>();
 
         for (int i : data3a) {
-            User user = userService.findUserById(i)
+            UserAdmin user = userService.findUserById(i)
                                 .orElseThrow(() -> new RuntimeException("User not found: " + i));
             
             label3.add(user.getFullName());
@@ -206,10 +206,6 @@ public class AdminController {
     }
 
 
-    @GetMapping("/admin/resources")
-    public String viewResources(Model model) {
-        
-    }
 
     
     @GetMapping("admin/upload_resource")
@@ -286,7 +282,7 @@ public class AdminController {
         ) throws IOException
     {
         System.out.println(status);
-        Test savedTest = testService.saveTest(testName, status);
+        TestAdmin savedTest = testService.saveTest(testName, status);
         String uniqueFolderName = String.valueOf(savedTest.getTestId());
 
         

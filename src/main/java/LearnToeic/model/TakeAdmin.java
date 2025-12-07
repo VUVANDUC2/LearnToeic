@@ -9,17 +9,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "takes")
-public class Take implements Serializable
+public class TakeAdmin implements Serializable
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "take_id")
     private Integer takeId;
 
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user_id")
-    private User user;
+    private UserAdmin user;
 
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "test_id")
-    private Test test;
+    private TestAdmin test;
 
     @Column(name = "attempt_no", nullable = false)
     private Integer attemptNo;
@@ -67,19 +67,19 @@ public class Take implements Serializable
         this.takeId = takeId;
     }
 
-    public User getUser() {
+    public UserAdmin getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserAdmin user) {
         this.user = user;
     }
 
-    public Test getTest() {
+    public TestAdmin getTest() {
         return test;
     }
 
-    public void setTest(Test test) {
+    public void setTest(TestAdmin test) {
         this.test = test;
     }
 

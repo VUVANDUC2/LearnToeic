@@ -1,9 +1,9 @@
 package LearnToeic.controller;
 
-import LearnToeic.model.Test;
-import LearnToeic.model.Question;
-import LearnToeic.service.TestService;
-import LearnToeic.service.QuestionService;
+import LearnToeic.model.TestAdmin;
+import LearnToeic.model.QuestionAdmin;
+import LearnToeic.service.TestServiceAdmin;
+import LearnToeic.service.QuestionServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +16,9 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminRestController {
-    private final TestService testService;
+    private final TestServiceAdmin testService;
 
-    public AdminRestController(TestService testService) {
+    public AdminRestController(TestServiceAdmin testService) {
         this.testService = testService;
     }
 

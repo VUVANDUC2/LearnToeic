@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserAdmin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +27,9 @@ public class User {
     private Boolean gender;
 
     // Constructor
-    public User() {}
+    public UserAdmin() {}
 
-    public User(Integer userId, String fullName, String email,String password, String role, Boolean gender) {
+    public UserAdmin(Integer userId, String fullName, String email,String password, String role, Boolean gender) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;

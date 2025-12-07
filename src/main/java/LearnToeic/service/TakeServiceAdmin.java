@@ -3,7 +3,7 @@ package LearnToeic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import LearnToeic.repository.TakeRepository;
+import LearnToeic.repository.TakeRepositoryAdmin;
 import LearnToeic.model.*;
 
 import java.util.LinkedHashMap;
@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 @Service
-public class TakeService {
-    @Autowired TakeRepository takeRepository;
+public class TakeServiceAdmin {
+    @Autowired TakeRepositoryAdmin takeRepository;
 
-    public List<Take> getAllTakes(){
+    public List<TakeAdmin> getAllTakes(){
         return takeRepository.findAll();
     }
 
-    public List<Take> getAllTakesByTestID(Integer testId)
+    public List<TakeAdmin> getAllTakesByTestID(Integer testId)
     {
         return takeRepository.findAllByTestId(testId);
     }

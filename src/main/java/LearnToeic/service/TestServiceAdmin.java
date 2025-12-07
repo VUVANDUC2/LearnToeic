@@ -1,8 +1,8 @@
 package LearnToeic.service;
 
 
-import LearnToeic.model.Test;
-import LearnToeic.repository.TestRepository;
+import LearnToeic.model.TestAdmin;
+import LearnToeic.repository.TestRepositoryAdmin;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +21,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 
 @Service
-public class TestService {
+public class TestServiceAdmin {
 
     @Autowired
-    private TestRepository testRepository;
+    private TestRepositoryAdmin testRepository;
     // Get all tests
-    public List<Test> getAllTests() {
+    public List<TestAdmin> getAllTests() {
         return testRepository.findAll();
     }
 
 
     //Paging 
-    public Page<Test> getPaginateTests(String searchTerm, int page, int size)
+    public Page<TestAdmin> getPaginateTests(String searchTerm, int page, int size)
     {   
         Pageable pageable = PageRequest.of(page, size);
         if(searchTerm != null && !searchTerm.trim().isEmpty()){
@@ -49,12 +49,12 @@ public class TestService {
         return (maxId!= null)? maxId:0;
     }
     // Get test by ID
-    public Optional<Test> getTestById(int id) {
+    public Optional<TestAdmin> getTestById(int id) {
         return testRepository.findById(id);
     }
     // Save test
-    public Test saveTest(String testName, String status) {
-        Test test = new Test();
+    public TestAdmin saveTest(String testName, String status) {
+        TestAdmin test = new TestAdmin();
         test.setTestId(getHighestTestId());
         test.setTestDate(LocalDate.now());
         test.setTotalQuestions(200);

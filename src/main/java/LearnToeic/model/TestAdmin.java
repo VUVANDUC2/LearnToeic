@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "tests")
-public class Test {
+public class TestAdmin {
     
     @Id
     private int testId;
@@ -24,10 +24,10 @@ public class Test {
 
     
     // Constructors, Getters, and Setters
-    public Test() {
+    public TestAdmin() {
     }
 
-    public Test(String testName, LocalDate testDate, int totalQuestions, Integer maxScore, String description, String status) {
+    public TestAdmin(String testName, LocalDate testDate, int totalQuestions, Integer maxScore, String description, String status) {
         this.testName = testName;
         this.testDate = testDate;
         this.totalQuestions = totalQuestions;

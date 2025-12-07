@@ -1,7 +1,7 @@
 package LearnToeic.service;
 
-import LearnToeic.model.Question;
-import LearnToeic.repository.QuestionRepository;
+import LearnToeic.model.QuestionAdmin;
+import LearnToeic.repository.QuestionRepositoryAdmin;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +16,24 @@ import java.io.Reader;
 import com.opencsv.CSVReader;
 
 @Service
-public class QuestionService {
+public class QuestionServiceAdmin {
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionRepositoryAdmin questionRepository;
 
-    public List<Question> getAllQuestions() {
+    public List<QuestionAdmin> getAllQuestions() {
         return questionRepository.findAll();
     }
 
-    public Optional<Question> getQuestionById(Integer testId, Integer questionNumber) {
+    public Optional<QuestionAdmin> getQuestionById(Integer testId, Integer questionNumber) {
         return questionRepository.findById(new LearnToeic.model.QuestionId(testId, questionNumber));
     }
 
-    public List<Question> getQuestionsById(Integer testId){
+    public List<QuestionAdmin> getQuestionsById(Integer testId){
         return questionRepository.findByTestId(testId);
     }
 
-    public Question saveQuestion(Question question) {
+    public QuestionAdmin saveQuestion(QuestionAdmin question) {
         return questionRepository.save(question);
     }
     
@@ -41,7 +41,7 @@ public class QuestionService {
         questionRepository.deleteById(new LearnToeic.model.QuestionId(testId, questionNumber));
     }
 
-    public List<Question> getQuestionsByTestId(Integer testId) {
+    public List<QuestionAdmin> getQuestionsByTestId(Integer testId) {
         return questionRepository.findByTestId(testId);
     }
 
@@ -56,7 +56,7 @@ public class QuestionService {
                 csvReader.readNext(); // skip header
                 String[] line;
                 while ((line = csvReader.readNext()) != null) {
-                    Question q = new Question();
+                    QuestionAdmin q = new QuestionAdmin();
                     q.setTestId(17);
                     q.setQuestionNumber(Integer.parseInt(line[1]));
                     q.setPart(Integer.parseInt(line[2]));
