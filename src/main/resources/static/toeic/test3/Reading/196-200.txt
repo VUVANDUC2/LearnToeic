@@ -1,0 +1,53 @@
+<div>
+<p><strong>To: </strong>Jake Baldwin (baldwinj@technet.com)<br>
+<strong>From:</strong> Dream Oasis Hotel (booking@dreamoasishotel.com)<br>
+<strong>Date:</strong> September 22<br>
+<strong>Subject:</strong> Your Reservation<br>
+<strong>Attachment</strong>: invoice.html</p>
+
+<p>Dear Mr. Baldwin,</p>
+
+<p>Thank you for reserving a room at the Dream Oasis Hotel. You have booked a room with a double bed for the nights of October 13 and 14. Your reservation number is 5259.</p>
+
+<p>I am writing to inform you that you must pay your balance by September 29 in order to confirm your reservation. Your total room fee is $165.25 for both nights. Payment can be made via credit card by visiting our website at www.dreamoasishotel.com and entering your reservation number. You may also call us and complete your payment over the phone. If payment is not received by September 29, your reservation will be canceled automatically. Please see the attached invoice for related details.</p>
+
+<p>When you arrive at the airport, the easiest way to travel to our hotel is by subway. We are located next to exit 3 at City Hall Station. If you have trouble finding us, please don't hesitate to call us at 555-2134. A staff member is available 24 hours a day to assist you.</p>
+
+<p>Thank you again for choosing our hotel,</p>
+
+<p>Amy Lee</p>
+
+<p>Customer Service Manager<br>
+Dream Oasis Hotel</p>
+
+<p>-------------------------</p>
+
+<p><strong>To:</strong> Dream Oasis Hotel (booking@dreamoasishotel.com)<br>
+<strong>From: </strong>Jake Baldwin (baldwinj@technet.com)<br>
+<strong>Date:</strong> September 23<br>
+<strong>Subject:</strong> RE: Your Reservation</p>
+
+<p>Dear Ms. Lee,</p>
+
+<p>I am writing in regard to my reservation at the Dream Oasis Hotel for October 13 and 14. I received your e-mail about the payment for my upcoming stay at the hotel. However, I would like to inquire about extending my stay for an extra night. I recently heard that there will be a local food festival held on October 16 and I would like to attend it. Therefore, I would like to stay at your hotel until October 15. Please let me know a revised room fee so that I can make the correct payment as soon as possible.</p>
+
+<p>Jake Baldwin</p>
+
+<p>-------------------------</p>
+
+<p><strong>To:</strong> Jake Baldwin (baldwinj@technet.com)<br>
+<strong>From:</strong> Amy Lee (alee@dreamoasishotel.com)<br>
+<strong>Date:</strong> September 24<br>
+<strong>Subject: </strong>The 15th</p>
+
+<p>Dear Mr. Baldwin,</p>
+
+<p>You are right to be excited about the food festival that will be held on the October 16th. Unfortunately, this event has become so popular that the city fills up for that weekend. I regret to inform you that there is no vacancy at the Dream Oasis Hotel for the night of the 15th. I went ahead and looked into some of our partner hotels in the area, but those properties also are at full occupancy. I do hope you are able to find someplace to stay in the city so you can enjoy the festival while you are in town; I just wish it could have been with us. You could try the Executive Inn in Fairview; it is a large hotel and they do have vacancies.</p>
+
+<p>Sincere apologies,</p>
+
+<p>Amy Lee</p>
+
+<p>Customer Service Manager<br>
+Dream Oasis Hotel</p>
+</div>

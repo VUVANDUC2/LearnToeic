@@ -29,9 +29,6 @@ public class Question implements Serializable{
     @Column(name = "option_d")
     private String optionD;
 
-    @Column(name = "note", columnDefinition = "TEXT")
-    private String note;
-
     //  Getter & Setter
     public QuestionId getId() {
     return id;
@@ -87,14 +84,5 @@ public class Question implements Serializable{
 
     public void setOptionD(String optionD) {
         this.optionD = optionD;
-    }
-
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 }

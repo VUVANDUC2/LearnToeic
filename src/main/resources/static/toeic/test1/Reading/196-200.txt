@@ -1,0 +1,138 @@
+<div>
+<p><strong>Auburn City Restaurant Inspection</strong></p>
+
+<p><strong>Restaurant Name:</strong>&nbsp;<u>Polito's Pizza</u><br>
+<strong>Location:</strong>&nbsp;<u>43 Clark Street</u><br>
+<strong>Inspection Date:</strong>&nbsp;<u>January 22</u></p>
+
+<p>A: Comply completely with safety and health requirements with no violations</p>
+
+<p>B: Conform to most safety and health requirements with a few minor violations</p>
+
+<p>C: Not meet some safety and health requirements with some violations</p>
+
+<p>D: Not satisfy many safety and health requirements with serious violations that could result in harm or illness for a customer</p>
+
+<p>(Fines will be imposed for any C or D level violations related to food preparation and store.)</p>
+
+<table class="table table-bordered">
+	<tbody>
+		<tr>
+			<td colspan="4"><strong>Item</strong></td>
+			<td><strong>Score</strong></td>
+		</tr>
+		<tr>
+			<td colspan="4">1. Personnel regularly wash hands and follow hygienic practices.</td>
+			<td>B</td>
+		</tr>
+		<tr>
+			<td colspan="4">2. Raw meats and vegetables are refrigerated at proper temperatures.</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td colspan="4">3. All ingredients are properly stored and labeled.</td>
+			<td>C</td>
+		</tr>
+		<tr>
+			<td colspan="4">4. Dishes and utensils are cleaned and sterilized.</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td colspan="4">5. Fire extinguishers are easily accessible.</td>
+			<td>B</td>
+		</tr>
+		<tr>
+			<td colspan="4">6. Fire exits are clearly marked.</td>
+			<td>C</td>
+		</tr>
+		<tr>
+			<td colspan="4">7. Floors are clean and dry.</td>
+			<td>B</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>To avoid additional penalties, restaurants are warned to correct violations before their next inspection. <strong>Restaurant Owner:</strong> <u>Greg Kluck</u> <strong>Inspector: </strong>M<u>elissa Tenner</u></p>
+
+<p>-------------------------</p>
+
+<p><strong>MEMO</strong></p>
+
+<p><strong>To</strong>: All Employees (employees@politospizza.com)<br>
+<strong>From</strong>: Greg Kluck (gregkluck@politospizza.com)<br>
+<strong>Subject</strong>: Inspection Results<br>
+<strong>Date</strong>: January 25</p>
+
+<p>Dear employees,</p>
+
+<p>The results from our recent inspection on January 22 indicate that there are a few problems that we need to address.</p>
+
+<p>First, it was brought to my attention that fire exit signs need to be installed again. The most serious violation concerned the improper storage and labeling of food. All ingredients stored for later use must be labeled with an exact date and detailed contents. If we do not label containers properly, spoiled food could accidently be served to customers. We received relatively low grades for employee hygiene and the cleanliness of our facilities. All employees are required to wear their uniform and hairnet at all times and wash their hands after every bathroom visit. We also need to mop floors more often and keep them dry.</p>
+
+<p>In order to correct these poor situations, I will be posting a checklist that all employees will be required to complete every morning. It will include necessary preparations to ensure that we are not breaking any regulations. This measure will go into effect on January 29.</p>
+
+<p>If you have any questions about these changes, please bring them up at the staff meeting tomorrow.</p>
+
+<p>-------------------------</p>
+
+<p><strong>NOTICE TO ALL EMPLOYEES</strong></p>
+
+<p>The checklist below must be signed by every employee on every day that they have a shift at Polito's Pizza. Only sign the task once it has been completed or checked. Failure to fill out the checklist with the date, time, and signature will be treated as a violation of Polito's new health standards.</p>
+
+<p><strong>POLITO'S CHECKLIST</strong></p>
+
+<table class="table table-bordered">
+	<tbody>
+		<tr>
+			<td colspan="2">Polito's</td>
+			<td>Sun</td>
+			<td>Mon</td>
+			<td>Tue</td>
+			<td>Wed</td>
+			<td>Thu</td>
+			<td>Fri</td>
+			<td>Sat</td>
+		</tr>
+		<tr>
+			<td colspan="2">Rotate Food</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>K.P.</td>
+		</tr>
+		<tr>
+			<td colspan="2">Mop Floors</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>K.P.</td>
+		</tr>
+		<tr>
+			<td colspan="2">Uniforms</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>K.P.</td>
+		</tr>
+		<tr>
+			<td colspan="2">Wash hands</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>K.P.</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>K.P.</td>
+		</tr>
+	</tbody>
+</table>
+</div>

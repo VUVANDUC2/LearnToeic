@@ -1,0 +1,80 @@
+<div>
+<p><strong>To: </strong>Tony Walker<br>
+<strong>From: </strong>Suzie Mason (smason@icmcorp.com)<br>
+<strong>Date:</strong> May 4<br>
+<strong>Subject: </strong>Summer Calendar<br>
+<strong>Attachment:</strong> budget.doc</p>
+
+<p>Dear Mr. Walker,</p>
+
+<p>I am finalizing the calendar of summer events for our company. Because we went over budget last year on employee appreciation events, I think it would be wise to find more affordable recreational activities. Attached is a breakdown of projected expenses for summer events that I have planned.</p>
+
+<p>July 6: Anchorage Flower Festival</p>
+
+<p>July 22: Art in the Park at Lawrence Park</p>
+
+<p>August 6: Bicycle Tours of the Anchorage Countryside</p>
+
+<p>August 19: Horseback Riding at Sweet Meadow Ranch</p>
+
+<p>I have scheduled fewer outdoor activities this year compared to last year. This year I would like to take advantage of a new outdoor recreational opportunity that I read about on the Anchorage Reporter website. You can read the article by clicking on this link: www.anchoragereporter.com/new_trails.</p>
+
+<p>Please let me know your opinion,</p>
+
+<p>Suzie Mason</p>
+
+<p>Human Resources Manager</p>
+
+<p>-------------------------</p>
+
+<p><strong>Anchorage Reporter</strong></p>
+
+<p>Bike Tours of the Anchorage Countryside to Start August 6</p>
+
+<p>May 2—The Anchorage Bike Club will be hosting an annual bike riding event this summer, beginning on August 6 and running through August 7. The event will start at 10:00 A.M. on both days at the Anchorage Community Center. If you are driving vehicle to the starting point, it would be better to use the parking lot behind the community center.</p>
+
+<p>Anchorage Bike Club President Jean Frost stated, "The rides will range from 5 to 20 miles and will take bikers through scenic areas in Anchorage. Overall, the bike tours will go ahead at a leisurely pace so that bikers of all skill levels can participate. However, local bikers with ample experience might lead a faster-paced group."</p>
+
+<p>Bikers in the tours will learn about riding techniques, bicycle maintenance, and proper nutrition half an hour before the event starts. All participants must have biking helmets on. They are also encouraged to bring their own water to prevent dehydration while biking.</p>
+
+<p>-------------------------</p>
+
+<p><strong>BICYCLE TOUR SIGN-UP SHEET</strong></p>
+
+<p>If you intend to participate in the August 6 bicycle tour, please write down your name, department, and level of experience or fitness. If we have enough people sign up as advanced, we can coordinate two separate tours. If there are not enough for two tours, we would like to encourage all riders to stay together so that everyone can join in the team building exercises we have planned. Thank you for your participation and we look forward to seeing everyone at the event!</p>
+
+<table class="table table-bordered">
+	<tbody>
+		<tr>
+			<td>Name</td>
+			<td>Department</td>
+			<td>Fitness/experience</td>
+		</tr>
+		<tr>
+			<td>Tom Cruz</td>
+			<td>Sales</td>
+			<td>Beginner</td>
+		</tr>
+		<tr>
+			<td>Vin Jones</td>
+			<td>Inventory</td>
+			<td>Beginner</td>
+		</tr>
+		<tr>
+			<td>Sally Jenkins</td>
+			<td>Inventory</td>
+			<td>Beginner</td>
+		</tr>
+		<tr>
+			<td>Barbara Blaster</td>
+			<td>Reception</td>
+			<td>Advanced</td>
+		</tr>
+		<tr>
+			<td>Hope Kinski</td>
+			<td>Sales</td>
+			<td>Beginner</td>
+		</tr>
+	</tbody>
+</table>
+</div>

@@ -50,7 +50,7 @@ public class ProfileController {
         model.addAttribute("dashboard", buildDashboard(history));
         String resetToken = jwtResetTokenUtil.generateResetToken(user.getEmail(), 15);
         model.addAttribute("resetToken", resetToken);
-        return "profile/index";
+        return "profile/profile";
     }
 
     @PostMapping("/profile")

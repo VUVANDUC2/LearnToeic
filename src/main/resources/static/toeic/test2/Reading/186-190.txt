@@ -1,0 +1,90 @@
+<div>
+<p><strong>Newton Library</strong></p>
+
+<p>April Program and Events Schedule</p>
+
+<table class="table table-bordered">
+	<tbody>
+		<tr>
+			<td><strong>Date and Time</strong></td>
+			<td><strong>Event</strong></td>
+			<td><strong>Location</strong></td>
+			<td colspan="2"><strong>Additional Notes</strong></td>
+		</tr>
+		<tr>
+			<td>April 2
+			<p>7:00 P.M.</p>
+			</td>
+			<td>A trip to the Past: Silent Film Series</td>
+			<td>Decker Hall</td>
+			<td colspan="2">Join us for a viewing of several films showcasing early American film history.</td>
+		</tr>
+		<tr>
+			<td>April 5
+			<p>3:00 P.M.</p>
+			</td>
+			<td>Youth Creative Writing Workshop</td>
+			<td>Youth Wing, Room 304</td>
+			<td colspan="2">Open to all students in high school who want to improve their writing skills.</td>
+		</tr>
+		<tr>
+			<td>April 10
+			<p>11:00 A.M.</p>
+			</td>
+			<td>Beginner English Conversation Club</td>
+			<td>Education Center, Room 102</td>
+			<td colspan="2">Join other adults who are learning to speaking English. This class is free.</td>
+		</tr>
+		<tr>
+			<td>April 16
+			<p>5:00 P.M.</p>
+			</td>
+			<td>Never Too Late to Learn</td>
+			<td>Media Lab, Room 202</td>
+			<td colspan="2">Learning to use a computer is not just for young people. Join us are we explore the sea of information, using computers. (For senior citizens)</td>
+		</tr>
+		<tr>
+			<td>April 29
+			<p>10:00 A.M.</p>
+			</td>
+			<td>Story Play</td>
+			<td>Youth Wing, Room 301</td>
+			<td colspan="2">Play with toys and hear a story. (For ages 0-5)</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>We would like to thank all of you who made financial donations that allowed for the purchase of new laptops and the construction of the Media Lab.</p>
+
+<p>-------------------------</p>
+
+<p><strong>To: </strong>Richard White (rwhite@newtonlibrary.edu)<br>
+<strong>From: </strong>Linda Carter (lcarter121@seprus.com)<br>
+<strong>Date: </strong>April 1<br>
+<strong>Subject: </strong>Beginner English Conversation Club</p>
+
+<p>Hi Mr. White,</p>
+
+<p>My name is Linda Carter and I am the instructor for the Beginner English Conversation Club to be <strong>held</strong> on April 10. I noticed that the library recently built the Media Lab with funds raised by library patrons. I was hoping to change classrooms in order to use my new educational resources by integrating computers into my English conversation class. Could you please reschedule my class to be provided in the same classroom as Never Too Late to Learn instead of the Education Center? I think my students will appreciate the practical English skills they can learn on computers. Also, could you please send an e-mail to all of the students who have signed up for the class? They will need to be informed about the room change.</p>
+
+<p>Thank you in advance for your assistance,</p>
+
+<p>Linda Carter</p>
+
+<p>-------------------------</p>
+
+<p><strong>To:</strong> Richard White (rwhite@newtonlibrary.edu)<br>
+<strong>From: </strong>Linda Carter (lcarter121@seprus.com)<br>
+<strong>Date: </strong>April 2<br>
+<strong>Subject:</strong> Room Change</p>
+
+<p>Dear Ms. Carter,</p>
+
+<p>I would be happy to move your Beginners English Conversation course to the classroom with the updated media lab; for your reference, this is room 3A. Unfortunately, I do not have the emails for all of the students who signed up for your course. Many students only provided their names. I could post a sign at the entrance to the library advertising your course and make a note of the room change, if that would be acceptable for you. Please let me know if you would like me to do this.</p>
+
+<p>Thank you and all the best,</p>
+
+<p>Richard White</p>
+
+<p>Library Projects Coordinator</p>
+</div>
