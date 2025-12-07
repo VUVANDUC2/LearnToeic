@@ -1,13 +1,9 @@
 <div th:fragment="siteHeader">
   <!-- Header / Navbar -->
-<<<<<<< HEAD
-  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="box-shadow:0 5px 10px rgba(0,0,0,.04)">
-=======
   <nav
-    class="navbar navbar-expand-lg navbar-light bg-white"
-    style="box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04)"
+    class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+    style="box-shadow: 0 5px 10px rgba(0, 0, 0, 0.04)"
   >
->>>>>>> flashcard_function
     <div class="container">
       <a class="navbar-brand fw-bold" href="/">LEARN TOEIC</a>
       <button
@@ -85,25 +81,16 @@
             Đăng nhập
           </a>
 
-<<<<<<< HEAD
-  <!-- CHƯA login -->
-  <a class="btn btn-primary px-4"
-     id="navLoginBtn"
-     sec:authorize="isAnonymous()"
-     th:href="@{/auth/login}">
-    Đăng nhập
-  </a>
+          <!-- CHƯA login -->
+          <a
+            class="btn btn-primary px-4"
+            id="navLoginBtn"
+            sec:authorize="isAnonymous()"
+            th:href="@{/auth/login}"
+          >
+            Đăng nhập
+          </a>
 
-  <!-- ĐÃ login -->
-  <div class="account-dropdown-wrapper position-relative"
-       sec:authorize="isAuthenticated()">
-
-    <button class="btn p-0 border-0 bg-transparent"
-            type="button"
-            id="userMenuBtn">
-      <span class="avatar-text-circle">
-        <span th:text="${#strings.substring(
-=======
           <!-- ĐÃ login -->
           <div
             class="account-dropdown-wrapper position-relative"
@@ -117,7 +104,6 @@
               <span class="avatar-text-circle">
                 <span
                   th:text="${#strings.substring(
->>>>>>> flashcard_function
                             #strings.listSplit(currentUser.fullName, ' ')
                                      .get(#strings.listSplit(currentUser.fullName, ' ').size() - 1),
                             0, 1).toUpperCase()}"
@@ -150,7 +136,6 @@
       </div>
     </div>
   </nav>
-<<<<<<< HEAD
 
   <style>
     .flash-bubble {
@@ -167,11 +152,17 @@
       z-index: 9000;
       pointer-events: none;
       opacity: 1;
-      transition: opacity .25s ease, transform .25s ease;
+      transition: opacity 0.25s ease, transform 0.25s ease;
     }
-    .flash-bubble.success { background: #22c55e; }
-    .flash-bubble.danger { background: #ef4444; }
-    .flash-bubble.info    { background: #0ea5e9; }
+    .flash-bubble.success {
+      background: #22c55e;
+    }
+    .flash-bubble.danger {
+      background: #ef4444;
+    }
+    .flash-bubble.info {
+      background: #0ea5e9;
+    }
     .flash-bubble.hide {
       opacity: 0;
       transform: translateY(-8px);
@@ -179,20 +170,22 @@
   </style>
 
   <script th:inline="javascript">
-    (function() {
+    (function () {
       /*<![CDATA[*/
       const flashMessage = /*[[${message} ?: null]]*/ null;
-      const flashType = /*[[${alertClass} ?: 'info']]*/ 'info';
+      const flashType = /*[[${alertClass} ?: 'info']]*/ "info";
       /*]]>*/
       if (!flashMessage) return;
 
-      const target = document.getElementById('userMenuBtn') || document.getElementById('navLoginBtn');
+      const target =
+        document.getElementById("userMenuBtn") ||
+        document.getElementById("navLoginBtn");
       if (!target) return;
 
-      const bubble = document.createElement('div');
+      const bubble = document.createElement("div");
       bubble.className = `flash-bubble ${flashType}`;
       bubble.textContent = flashMessage;
-      bubble.style.visibility = 'hidden';
+      bubble.style.visibility = "hidden";
       document.body.appendChild(bubble);
 
       const rect = target.getBoundingClientRect();
@@ -208,13 +201,11 @@
       );
 
       bubble.style.left = `${x}px`;
-      bubble.style.top  = `${y}px`;
-      bubble.style.visibility = 'visible';
+      bubble.style.top = `${y}px`;
+      bubble.style.visibility = "visible";
 
-      setTimeout(() => bubble.classList.add('hide'), 3200);
+      setTimeout(() => bubble.classList.add("hide"), 3200);
       setTimeout(() => bubble.remove(), 3800);
     })();
   </script>
-=======
->>>>>>> flashcard_function
 </div>
