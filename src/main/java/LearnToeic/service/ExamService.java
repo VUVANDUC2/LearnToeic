@@ -368,7 +368,7 @@ public class ExamService {
     }
 
     @Transactional
-public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
+    public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
 
     // 0) Lấy Take + Test
     Take take = takeRepo.findById(takeId).orElseThrow();
@@ -432,7 +432,7 @@ public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
                 return r;
             });
 
-    result.setScore(correctCount);
+    result.setScore(correctCount * 5);
     result.setTakenOn(LocalDateTime.now());
     testResultRepo.save(result);
 
@@ -520,92 +520,92 @@ public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
     //     );
     // }
     @Transactional(readOnly = true)
-public TakeReviewVM buildTakeViewWithResults(Integer takeId, int part) {
-    // 1) Take + Test
-    Take take = takeRepo.findById(takeId).orElseThrow();
-    Integer testId = take.getTest().getTestId();
-    String testName = take.getTest().getTestName();
+    public TakeReviewVM buildTakeViewWithResults(Integer takeId, int part) {
+        // 1) Take + Test
+        Take take = takeRepo.findById(takeId).orElseThrow();
+        Integer testId = take.getTest().getTestId();
+        String testName = take.getTest().getTestName();
 
-    // 2) Lấy toàn bộ câu hỏi để build partMap, correctMap, total
-    List<Question> questions =
-            questionRepo.findById_TestIdOrderById_QuestionNumber(testId);
-    int totalQuestions = questions.size();
+        // 2) Lấy toàn bộ câu hỏi để build partMap, correctMap, total
+        List<Question> questions =
+                questionRepo.findById_TestIdOrderById_QuestionNumber(testId);
+        int totalQuestions = questions.size();
 
-    Map<Integer, List<Integer>> partMap = questions.stream()
-            .collect(Collectors.groupingBy(
-                    Question::getPart,
-                    LinkedHashMap::new,
-                    Collectors.mapping(q -> q.getId().getQuestionNumber(),
-                                       Collectors.toList())
-            ));
-// Lấy toàn bộ dòng answer_sheets của test này
-List<AnswerSheet> sheets = answerSheetRepo.findById_TestId(testId);
+        Map<Integer, List<Integer>> partMap = questions.stream()
+                .collect(Collectors.groupingBy(
+                        Question::getPart,
+                        LinkedHashMap::new,
+                        Collectors.mapping(q -> q.getId().getQuestionNumber(),
+                                        Collectors.toList())
+                ));
+        // Lấy toàn bộ dòng answer_sheets của test này
+        List<AnswerSheet> sheets = answerSheetRepo.findById_TestId(testId);
 
-// Map<questionNumber/sequence, correctOptionChar>
-Map<Integer, Character> correctMap = answerSheetRepo.findById_TestId(testId)
-    .stream()
-    .collect(Collectors.toMap(
-        sheet -> sheet.getId().getSequence(), // 🔥 lấy sequence từ embedded key
-        sheet -> {
-            String opt = sheet.getCorrectOption();
-            if (opt == null || opt.isBlank()) return 'X';
-            return Character.toUpperCase(opt.trim().charAt(0));
-        },
-        (a, b) -> a,
-        LinkedHashMap::new
-    ));
-
-
-
-    // 3) Lấy toàn bộ user_answers của take này
-    List<UserAnswer> userAnswers = userAnswerRepo.findByTake_TakeId(takeId);
-
-    // selectedMap: câu → user chọn gì
-    Map<Integer, Character> selectedMap = userAnswers.stream()
+        // Map<questionNumber/sequence, correctOptionChar>
+        Map<Integer, Character> correctMap = answerSheetRepo.findById_TestId(testId)
+            .stream()
             .collect(Collectors.toMap(
-                    UserAnswer::getQuestionNumber,
-                    UserAnswer::getSelectedOption,
-                    (o, n) -> n,
-                    LinkedHashMap::new
+                sheet -> sheet.getId().getSequence(), // 🔥 lấy sequence từ embedded key
+                sheet -> {
+                    String opt = sheet.getCorrectOption();
+                    if (opt == null || opt.isBlank()) return 'X';
+                    return Character.toUpperCase(opt.trim().charAt(0));
+                },
+                (a, b) -> a,
+                LinkedHashMap::new
             ));
 
-    // isCorrectMap: câu → true/false (lấy luôn từ DB, không tính lại)
-    Map<Integer, Boolean> isCorrectMap = userAnswers.stream()
-            .collect(Collectors.toMap(
-                    UserAnswer::getQuestionNumber,
-                    ua -> ua.getIsCorrect() != null && ua.getIsCorrect(),
-                    (o, n) -> n,
-                    LinkedHashMap::new
-            ));
 
-    // 4) Score: ưu tiên lấy từ test_results
-    Integer score = testResultRepo.findByTake_TakeId(takeId)
-            .map(TestResult::getScore)
-            .orElse(null);
 
-    if (score == null) {
-        // fallback: đếm từ isCorrectMap
-        score = (int) isCorrectMap.values().stream()
+        // 3) Lấy toàn bộ user_answers của take này
+        List<UserAnswer> userAnswers = userAnswerRepo.findByTake_TakeId(takeId);
+
+        // selectedMap: câu → user chọn gì
+        Map<Integer, Character> selectedMap = userAnswers.stream()
+                .collect(Collectors.toMap(
+                        UserAnswer::getQuestionNumber,
+                        UserAnswer::getSelectedOption,
+                        (o, n) -> n,
+                        LinkedHashMap::new
+                ));
+
+        // isCorrectMap: câu → true/false (lấy luôn từ DB, không tính lại)
+        Map<Integer, Boolean> isCorrectMap = userAnswers.stream()
+                .collect(Collectors.toMap(
+                        UserAnswer::getQuestionNumber,
+                        ua -> ua.getIsCorrect() != null && ua.getIsCorrect(),
+                        (o, n) -> n,
+                        LinkedHashMap::new
+                ));
+
+        // 4) Score: ưu tiên lấy từ test_results
+        Integer score = testResultRepo.findByTake_TakeId(takeId)
+                .map(TestResult::getScore)
+                .orElse(null);
+
+        if (score == null) {
+            // fallback: đếm từ isCorrectMap
+        score = (int) (isCorrectMap.values().stream()
                 .filter(Boolean::booleanValue)
-                .count();
+                .count() * 5);
+        }
+
+        long remaining = 0; // review thì 0
+
+        return new TakeReviewVM(
+                takeId,
+                testId,
+                testName,
+                totalQuestions,
+                score,
+                part,
+                remaining,
+                partMap,
+                selectedMap,
+                correctMap,
+                isCorrectMap
+        );
     }
-
-    long remaining = 0; // review thì 0
-
-    return new TakeReviewVM(
-            takeId,
-            testId,
-            testName,
-            totalQuestions,
-            score,
-            part,
-            remaining,
-            partMap,
-            selectedMap,
-            correctMap,
-            isCorrectMap
-    );
-}
     public Map<Integer, Character> buildSelectedMap(Integer takeId) {
         List<UserAnswer> list = userAnswerRepo.findByTake_TakeId(takeId);
 
