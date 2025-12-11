@@ -38,18 +38,18 @@ public class TestServiceAdmin {
     }
 
     // Get test by ID
-    public Optional<Test> getTestById(int id) {
-        return testRepository.findById(id);
+    public Test getTestById(int id) {
+        return testRepository.findById(id).orElse(null);
     }
+
+    
 
     // Save test
     public Test saveTest(String testName, String status) {
         Test test = new Test();
-        test.setTestId(getHighestTestId());
         test.setTestDate(new Date());
         test.setTotalQuestions(200);
         test.setMaxScore(990);
-        test.setDescription("New test uploaded");
         test.setTestName(testName);
         test.setStatus(status);
         return testRepository.save(test);

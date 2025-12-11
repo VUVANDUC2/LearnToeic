@@ -1,7 +1,7 @@
 <div th:fragment="siteHeader">
   <!-- Header / Navbar -->
   <nav
-    class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+    class="navbar navbar-expand-lg navbar-light bg-white"
     style="box-shadow: 0 5px 10px rgba(0, 0, 0, 0.04)"
   >
     <div class="container">
@@ -103,12 +103,13 @@
             >
               <span class="avatar-text-circle">
                 <span
-                  th:text="${#strings.substring(
-                            #strings.listSplit(currentUser.fullName, ' ')
-                                     .get(#strings.listSplit(currentUser.fullName, ' ').size() - 1),
-                            0, 1).toUpperCase()}"
+                  th:text="${currentUser != null 
+                        ? #strings.substring(
+                              currentUser.fullName.split(' ')[currentUser.fullName.split(' ').length - 1],
+                              0, 1
+                          ).toUpperCase()
+                        : 'D'}"
                 >
-                  D
                 </span>
               </span>
             </button>

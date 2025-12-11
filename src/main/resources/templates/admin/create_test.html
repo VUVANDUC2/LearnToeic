@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title th:text="${title}">Flexy Free Bootstrap Admin Template by WrapPixel</title>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <title th:text="${title}">
+      Flexy Free Bootstrap Admin Template by WrapPixel
+    </title>
     <!-- <link
       rel="shortcut icon"
       type="image/png"
@@ -32,7 +36,11 @@
           <nav class="navbar navbar-expand-lg navbar-light">
             <ul class="navbar-nav">
               <li class="nav-item d-block d-xl-none">
-                <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
+                <a
+                  class="nav-link sidebartoggler"
+                  id="headerCollapse"
+                  href="javascript:void(0)"
+                >
                   <i class="ti ti-menu-2"></i>
                 </a>
               </li>
@@ -47,16 +55,28 @@
                   <i class="ti ti-bell"></i>
                   <div class="notification bg-primary rounded-circle"></div>
                 </a>
-                <div class="dropdown-menu dropdown-menu-animate-up" aria-labelledby="drop1">
+                <div
+                  class="dropdown-menu dropdown-menu-animate-up"
+                  aria-labelledby="drop1"
+                >
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="dropdown-item">Item 1</a>
-                    <a href="javascript:void(0)" class="dropdown-item">Item 2</a>
+                    <a href="javascript:void(0)" class="dropdown-item"
+                      >Item 1</a
+                    >
+                    <a href="javascript:void(0)" class="dropdown-item"
+                      >Item 2</a
+                    >
                   </div>
                 </div>
               </li>
             </ul>
-            <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-              <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+            <div
+              class="navbar-collapse justify-content-end px-0"
+              id="navbarNav"
+            >
+              <ul
+                class="navbar-nav flex-row ms-auto align-items-center justify-content-end"
+              >
                 <li class="nav-item dropdown">
                   <a
                     class="nav-link"
@@ -123,10 +143,16 @@
                     <div class="d-md-flex align-items-center">
                       <div>
                         <h4 class="card-title">Creating new Tests</h4>
-                        <p class="card-subtitle">Your test will be create here</p>
+                        <p class="card-subtitle">
+                          Your test will be create here
+                        </p>
                       </div>
-                      <div class="d-flex ms-auto align-items-center gap-2 mt-3 mt-md-0">
-                        <a class="btn btn-primary" href="#" role="button">Check</a>
+                      <div
+                        class="d-flex ms-auto align-items-center gap-2 mt-3 mt-md-0"
+                      >
+                        <a class="btn btn-primary" href="#" role="button"
+                          >Check</a
+                        >
                         <select
                           class="form-select theme-select border-0"
                           aria-label="Default select example"
@@ -146,7 +172,9 @@
                           action="/admin/upload"
                         >
                           <div class="col-md-6">
-                            <label for="inputTestName" class="form-label">Test Name</label>
+                            <label for="inputTestName" class="form-label"
+                              >Test Name</label
+                            >
                             <input
                               name="testName"
                               type="text"
@@ -156,7 +184,9 @@
                             />
                           </div>
                           <div class="col-md-6">
-                            <label for="inputStatus" class="form-label">Status</label>
+                            <label for="inputStatus" class="form-label"
+                              >Status</label
+                            >
                             <select
                               name="status"
                               id="inputStatus"
@@ -169,7 +199,9 @@
                           </div>
                           <!-- Image Upload-->
                           <div class="mb-3">
-                            <label for="imageUpload" class="form-label">Your Images</label>
+                            <label for="imageUpload" class="form-label"
+                              >Your Images</label
+                            >
                             <input
                               type="file"
                               class="form-control"
@@ -181,7 +213,9 @@
                           </div>
                           <!-- Audio Upload-->
                           <div class="mb-3">
-                            <label for="audioUpload" class="form-label">Your Audios</label>
+                            <label for="audioUpload" class="form-label"
+                              >Your Audios</label
+                            >
                             <input
                               type="file"
                               class="form-control"
@@ -194,7 +228,9 @@
 
                           <!-- Questions Upload-->
                           <div class="mb-3">
-                            <label for="csvUpload" class="form-label">Upload Questions CSV</label>
+                            <label for="csvUpload" class="form-label"
+                              >Upload Questions CSV</label
+                            >
                             <input
                               class="form-control"
                               type="file"
@@ -202,10 +238,19 @@
                               name="csv"
                               accept=".csv"
                             />
-                            <small class="text-muted">Upload one CSV file only</small>
+                            <small class="text-muted"
+                              >Upload one CSV file only</small
+                            >
                           </div>
+                          <input
+                            type="hidden"
+                            name="_csrf"
+                            th:value="${_csrf.token}"
+                          />
                           <!-- Summit-->
-                          <button type="submit" class="btn btn-success">Preview and submit</button>
+                          <button type="submit" class="btn btn-success">
+                            Preview and submit
+                          </button>
                         </form>
                       </div>
                     </div>

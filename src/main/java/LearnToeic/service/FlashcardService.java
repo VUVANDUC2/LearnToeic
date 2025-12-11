@@ -138,7 +138,7 @@ public class FlashcardService {
         card.setContent("Sample Content");
         card.setDescription("Sample Description");
         card.setUser(user);
-
+        card.setFamiliarPoint(0);
         flashcardRepository.save(card);
     }
 

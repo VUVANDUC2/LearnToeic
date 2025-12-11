@@ -3,14 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title th:text="${title}">Flexy Free Bootstrap Admin Template by WrapPixel</title>
+    <title th:text="${title}">
+      Flexy Free Bootstrap Admin Template by WrapPixel
+    </title>
     <!-- <link
       rel="shortcut icon"
       type="image/png"
       href="/images/logos/favicon.png"
     /> -->
     <link rel="stylesheet" href="/css/styles.min.css" />
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
 
     <style>
       #editor {
@@ -44,7 +49,11 @@
           <nav class="navbar navbar-expand-lg navbar-light">
             <ul class="navbar-nav">
               <li class="nav-item d-block d-xl-none">
-                <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
+                <a
+                  class="nav-link sidebartoggler"
+                  id="headerCollapse"
+                  href="javascript:void(0)"
+                >
                   <i class="ti ti-menu-2"></i>
                 </a>
               </li>
@@ -59,16 +68,28 @@
                   <i class="ti ti-bell"></i>
                   <div class="notification bg-primary rounded-circle"></div>
                 </a>
-                <div class="dropdown-menu dropdown-menu-animate-up" aria-labelledby="drop1">
+                <div
+                  class="dropdown-menu dropdown-menu-animate-up"
+                  aria-labelledby="drop1"
+                >
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="dropdown-item">Item 1</a>
-                    <a href="javascript:void(0)" class="dropdown-item">Item 2</a>
+                    <a href="javascript:void(0)" class="dropdown-item"
+                      >Item 1</a
+                    >
+                    <a href="javascript:void(0)" class="dropdown-item"
+                      >Item 2</a
+                    >
                   </div>
                 </div>
               </li>
             </ul>
-            <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-              <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+            <div
+              class="navbar-collapse justify-content-end px-0"
+              id="navbarNav"
+            >
+              <ul
+                class="navbar-nav flex-row ms-auto align-items-center justify-content-end"
+              >
                 <li class="nav-item dropdown">
                   <a
                     class="nav-link"
@@ -134,20 +155,11 @@
                   <div class="card-body">
                     <div class="d-md-flex align-items-center">
                       <div>
-                        <h4 class="card-title">Creating Blogs</h4>
-                        <p class="card-subtitle">Your blog will be created here</p>
+                        <h4 class="card-title">Tạo bài viết mới</h4>
+                        <p class="card-subtitle">
+                          Bài viết của bạn sẽ được tạo ở đây
+                        </p>
                       </div>
-                      <!-- <div class="d-flex ms-auto align-items-center gap-2 mt-3 mt-md-0">
-                        <a class="btn btn-primary" href="#" role="button">Check</a>
-                        <select
-                          class="form-select theme-select border-0"
-                          aria-label="Default select example"
-                        >
-                          <option value="1">TOEIC</option>
-                          <option value="2">IELT</option>
-                          <option value="3">OTHER</option>
-                        </select>
-                      </div> -->
                     </div>
                     <div class="card shadow-sm mt-3">
                       <div class="card-body">
@@ -155,34 +167,159 @@
                           class="row g-3"
                           enctype="multipart/form-data"
                           method="POST"
-                          action="/admin/create/blog"
+                          th:action="@{/admin/blog/new-docx}"
                           id="editBlogForm"
                         >
+                          <!--Tiêu đề-->
                           <div class="col-md-12">
-                            <label for="inputBlogTitle" class="form-label">Blog's Title</label>
+                            <label for="inputBlogTitle" class="form-label"
+                              >Tiêu đề</label
+                            >
                             <input
-                              name="blogTitle"
+                              name="title"
                               type="text"
                               class="form-control"
                               id="inputBlogTitle"
-                              placeholder="Blog's Titlte"
+                              placeholder="Nhập tiêu đề bài viết"
                               required
                             />
                           </div>
-
-                          <!-- Quill Editor -->
+                          <!--Chuyên mục-->
                           <div class="col-md-12">
-                            <div class="editor-container shadow rounded mb-4">
-                              <div id="toolbar" class="border-bottom bg-white px-3 py-2"></div>
-                              <div
-                                id="editor"
-                                class="p-3"
-                                style="min-height: 300px; background-color: #fff"
-                              ></div>
+                            <label for="inputBlogCategory" class="form-label"
+                              >Chuyên mục</label
+                            >
+                            <input
+                              name="category"
+                              type="text"
+                              class="form-control"
+                              id="inputBlogCategory"
+                              placeholder="Nhập chuyên mục bài viết"
+                              required
+                            />
+                          </div>
+                          <!--Chương trình-->
+                          <div class="col-md-12">
+                            <label for="inputBlogProgram" class="form-label"
+                              >Chương trình</label
+                            >
+                            <input
+                              name="program"
+                              type="text"
+                              class="form-control"
+                              id="inputBlogProgram"
+                              placeholder="Nhập chương trình bài viết"
+                              required
+                            />
+                          </div>
+                          <!--Mô tả ngắn-->
+                          <div class="col-md-12 mb-3">
+                            <label for="excerpt" class="form-label fw-bold"
+                              >Mô tả</label
+                            >
+                            <textarea
+                              class="form-control"
+                              id="excerpt"
+                              name="excerpt"
+                              rows="5"
+                              placeholder="Nhập mô tả ngắn tại đây..."
+                            ></textarea>
+                            <div class="form-text text-muted">
+                              Mô tả ngắn gọn nội dung chính (tối đa 200 ký tự).
                             </div>
                           </div>
-                          <!-- Hidden Input for Content -->
-                          <input type="hidden" name="content" id="hiddenContent" />
+                          <!--Ảnh bìa-->
+                          <div class="col-md-12 mb-3">
+                            <label
+                              for="thumbnailInput"
+                              class="form-label fw-bold"
+                              >Ảnh bìa</label
+                            >
+                            <div class="input-group">
+                              <input
+                                type="file"
+                                class="form-control"
+                                id="thumbnailInput"
+                                name="thumbnail"
+                                accept="image/*"
+                                aria-describedby="clearBtn"
+                              />
+                              <button
+                                class="btn btn-outline-danger"
+                                type="button"
+                                id="clearImgBtn"
+                                data-target="thumbnailInput"
+                              >
+                                <i class="bi bi-trash"></i> Bỏ chọn
+                              </button>
+                            </div>
+                            <div class="form-text">
+                              Định dạng hỗ trợ: .jpg, .png, .jpeg (Tối đa 5MB)
+                            </div>
+                          </div>
+                          <script>
+                            // SỬA LỖI TẠI ĐÂY: Thêm sự kiện chờ DOMContentLoaded
+                            document.addEventListener(
+                              "DOMContentLoaded",
+                              function () {
+                                const clearBtn =
+                                  document.getElementById("clearImgBtn");
+                                const inputField =
+                                  document.getElementById("thumbnailInput");
+
+                                // Kiểm tra xem nút có tồn tại không để tránh lỗi
+                                if (clearBtn && inputField) {
+                                  clearBtn.addEventListener(
+                                    "click",
+                                    function () {
+                                      inputField.value = ""; // Xóa giá trị file
+                                      // Reset lại giao diện của input (nếu trình duyệt không tự cập nhật)
+                                      inputField.type = "text";
+                                      inputField.type = "file";
+                                    }
+                                  );
+                                }
+                              }
+                            );
+                          </script>
+                          <!--Docx File-->
+                          <div class="col-md-12 mb-3">
+                            <label
+                              for="docxInputSimple"
+                              class="form-label fw-bold"
+                              >File DOCX</label
+                            >
+                            <div class="input-group">
+                              <input
+                                type="file"
+                                class="form-control"
+                                id="docxInputSimple"
+                                name="file"
+                                accept=".docx"
+                              />
+                              <button
+                                class="btn btn-outline-secondary"
+                                type="button"
+                                id="clearDocxSimple"
+                              >
+                                Bỏ chọn
+                              </button>
+                            </div>
+                            <div class="form-text">
+                              Chỉ chấp nhận file Word (.docx)
+                            </div>
+                          </div>
+
+                          <script>
+                            // Script xử lý nút bỏ chọn cho phương án đơn giản
+                            document
+                              .getElementById("clearDocxSimple")
+                              .addEventListener("click", function () {
+                                document.getElementById(
+                                  "docxInputSimple"
+                                ).value = "";
+                              });
+                          </script>
                           <!-- Submit -->
                           <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-success">
@@ -229,9 +366,11 @@
     <!--Form submmit-->
     <script>
       // On form submit, copy HTML into hidden input
-      document.getElementById("editBlogForm").addEventListener("submit", function (e) {
-        document.getElementById("hiddenContent").value = quill.root.innerHTML;
-      });
+      document
+        .getElementById("editBlogForm")
+        .addEventListener("submit", function (e) {
+          document.getElementById("hiddenContent").value = quill.root.innerHTML;
+        });
     </script>
     2
     <!-- solar icons -->
