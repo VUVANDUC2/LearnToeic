@@ -19,7 +19,7 @@ public class QuestionServiceAdmin {
 
     @Autowired
     private QuestionRepository questionRepository;
-
+    
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
@@ -68,4 +68,23 @@ public class QuestionServiceAdmin {
             }
         }
     }
+
+    public Question updateQuestion(Integer testId, Integer questionNumber, Question dto) 
+    {
+
+            QuestionId id = new QuestionId(testId, questionNumber);
+
+            Question entity = questionRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Question not found"));
+
+            entity.setQuestionText(dto.getQuestionText());
+            entity.setOptionA(dto.getOptionA());
+            entity.setOptionB(dto.getOptionB());
+            entity.setOptionC(dto.getOptionC());
+            entity.setOptionD(dto.getOptionD());
+
+            
+            return questionRepository.save(entity);
+    }
+    
 }

@@ -636,6 +636,103 @@
           cardFooter.classList.add("d-none");
         }
       }
+
+      async function saveQuestionEdit(questionId) {
+        console.log(
+          "🔍 DEBUG: saveQuestionEdit() called with questionId =",
+          questionId
+        );
+
+        try {
+          // Extract testId + questionNumber
+          const regex = /^t(.+)-q(\d+)$/;
+          const match = questionId.match(regex);
+
+          console.log("🔍 DEBUG: Regex match result:", match);
+
+          if (!match) {
+            console.error("❌ ERROR: Invalid question ID format:", questionId);
+            return;
+          }
+
+          const testId = match[1];
+          const qNumber = match[2];
+
+          console.log(
+            `🧩 DEBUG: Extracted testId = ${testId}, questionNumber = ${qNumber}`
+          );
+
+          // Read updated fields
+          const text = document.querySelector(`#${questionId}-text`)?.value;
+          const optA = document.querySelector(`#${questionId}-optA`)?.value;
+          const optB = document.querySelector(`#${questionId}-optB`)?.value;
+          const optC = document.querySelector(`#${questionId}-optC`)?.value;
+          const optD = document.querySelector(`#${questionId}-optD`)?.value;
+
+          console.log("📝 DEBUG: Extracted field values:", {
+            text,
+            optA,
+            optB,
+            optC,
+            optD,
+          });
+
+          if (!text) console.warn("⚠️ WARNING: Question text is empty!");
+
+          const payload = {
+            questionText: text,
+            optionA: optA,
+            optionB: optB,
+            optionC: optC,
+            optionD: optD,
+          };
+
+          console.log("📦 DEBUG: Final payload to send:", payload);
+
+          const url = `/api/admin/tests/${testId}/questions/${qNumber}`;
+          console.log("🌐 DEBUG: Sending PUT request to URL:", url);
+
+          const res = await fetch(url, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload),
+          });
+
+          console.log("📡 DEBUG: Response status:", res.status);
+
+          const responseText = await res.text();
+          console.log("📨 DEBUG: Raw response text:", responseText);
+
+          if (!res.ok) {
+            console.error("❌ ERROR: Server returned failure");
+            alert("❌ Failed to save question!");
+            return;
+          }
+
+          console.log("✅ SUCCESS: Question updated!");
+
+          toggleQuestionEdit(questionId, false);
+
+          const card = document.getElementById(`${questionId}-card`);
+          if (card) {
+            card.classList.add("border-success");
+            setTimeout(() => card.classList.remove("border-success"), 1500);
+          } else {
+            console.warn(
+              "⚠️ WARNING: Card element not found:",
+              `${questionId}-card`
+            );
+          }
+        } catch (err) {
+          console.error("💥 FATAL ERROR in saveQuestionEdit():", err);
+          alert("⚠️ Unexpected error. Check console for details.");
+        }
+      }
+
+      function cancelQuestionEdit(questionId) {
+        toggleQuestionEdit(questionId, false);
+      }
     </script>
   </body>
 </html>

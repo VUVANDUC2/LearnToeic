@@ -31,6 +31,16 @@ public class AdminRestController {
         }
     }
 
+    @PutMapping("/tests/{testId}/questions/{questionNumber}")
+    public Question updateQuestion(
+            @PathVariable Integer testId,
+            @PathVariable Integer questionNumber,
+            @RequestBody Question dto
+    ) {
+        return questionService.updateQuestion(testId, questionNumber, dto);
+    }
+
+
     @GetMapping("/tests/{testId}")
     public ResponseEntity<?> getTestDetails(@PathVariable int testId) {
 
