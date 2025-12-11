@@ -6,6 +6,7 @@
   >
     <div class="container">
       <a class="navbar-brand fw-bold" href="/">LEARN TOEIC</a>
+
       <button
         class="navbar-toggler"
         type="button"
@@ -17,12 +18,13 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navMain">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
           <li class="nav-item">
             <a
               class="nav-link fw-semibold"
-              href="#"
               role="button"
               th:href="@{/tests}"
               th:classappend="${requestURI != null && requestURI.startsWith('/tests') ? 'active' : ''}"
@@ -70,8 +72,11 @@
               Blog
             </a>
           </li>
+
         </ul>
+
         <div class="d-flex align-items-center gap-2">
+
           <!-- CHƯA login -->
           <a
             class="btn btn-primary px-4"
@@ -81,7 +86,6 @@
             Đăng nhập
           </a>
 
-          <!-- CHƯA login -->
           <a
             class="btn btn-primary px-4"
             id="navLoginBtn"
@@ -92,51 +96,36 @@
           </a>
 
           <!-- ĐÃ login -->
-          <div
-            class="account-dropdown-wrapper position-relative"
-            sec:authorize="isAuthenticated()"
-          >
-            <button
-              class="btn p-0 border-0 bg-transparent"
-              type="button"
-              id="userMenuBtn"
-            >
-              <span class="avatar-text-circle">
-                <span
-                  th:text="${#strings.substring(
-                            #strings.listSplit(currentUser.fullName, ' ')
-                                     .get(#strings.listSplit(currentUser.fullName, ' ').size() - 1),
-                            0, 1).toUpperCase()}"
-                >
-                  D
-                </span>
-              </span>
-            </button>
+  <div
+  class="account-dropdown-wrapper position-relative"
+  sec:authorize="isAuthenticated()">
+  <button class="btn p-0 border-0 bg-transparent" type="button" id="userMenuBtn">
+    <span th:if="${avatarData != null}" class="avatar-img-circle-wrapper">
+      <img th:src="${avatarData}" alt="User avatar" class="avatar-img-circle" />
+    </span>
+    <span th:if="${avatarData == null}" class="avatar-text-circle">
+      <span th:text="${initial}" class="user-initials">Initial</span>
+    </span>
+  </button>
 
-            <!-- menu tự làm, KHÔNG dùng class dropdown-menu nữa -->
-            <ul class="account-menu-dropdown" id="userMenu">
-              <li>
-                <a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a>
-              </li>
-              <li>
-                <a
-                  class="dropdown-item text-danger"
-                  th:href="@{/account/delete}"
-                  >Xoá tài khoản</a
-                >
-              </li>
-              <li>
-                <form th:action="@{/logout}" method="post">
-                  <button type="submit" class="dropdown-item">Đăng xuất</button>
-                </form>
-              </li>
-            </ul>
-          </div>
+  <!-- Custom Dropdown -->
+  <ul class="account-menu-dropdown" id="userMenu">
+    <li><a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a></li>
+    <li><a class="dropdown-item text-danger" th:href="@{/account/delete}">Xoá tài khoản</a></li>
+    <li>
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="dropdown-item">Đăng xuất</button>
+      </form>
+    </li>
+  </ul>
+</div>
+
         </div>
       </div>
     </div>
   </nav>
 
+  <!-- Flash bubble styles -->
   <style>
     .flash-bubble {
       position: fixed;
@@ -154,27 +143,33 @@
       opacity: 1;
       transition: opacity 0.25s ease, transform 0.25s ease;
     }
+
     .flash-bubble.success {
       background: #22c55e;
     }
+
     .flash-bubble.danger {
       background: #ef4444;
     }
+
     .flash-bubble.info {
       background: #0ea5e9;
     }
+
     .flash-bubble.hide {
       opacity: 0;
       transform: translateY(-8px);
     }
   </style>
 
+  <!-- Flash bubble script -->
   <script th:inline="javascript">
     (function () {
       /*<![CDATA[*/
       const flashMessage = /*[[${message} ?: null]]*/ null;
       const flashType = /*[[${alertClass} ?: 'info']]*/ "info";
       /*]]>*/
+
       if (!flashMessage) return;
 
       const target =
@@ -191,10 +186,12 @@
       const rect = target.getBoundingClientRect();
       const bw = bubble.offsetWidth;
       const bh = bubble.offsetHeight;
+
       const x = Math.min(
         window.innerWidth - bw - 12,
         Math.max(12, rect.right + window.scrollX + 12)
       );
+
       const y = Math.max(
         12,
         rect.top + window.scrollY + rect.height / 2 - bh / 2

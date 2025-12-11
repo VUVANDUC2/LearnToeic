@@ -26,12 +26,6 @@ public class Test {
     @Column(name = "max_score")
     private Integer maxScore;
 
-    @Column(name = "description", length = 255)
-    private String description;
-
-    @Column(name = "status", length = 50)
-    private String status;
-
     public Test() {}
 
     public Test(String testName, Date testDate, Integer totalQuestions, Integer maxScore) {
@@ -81,15 +75,4 @@ public class Test {
     public void setMaxScore(Integer maxScore) {
         this.maxScore = maxScore;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
 }

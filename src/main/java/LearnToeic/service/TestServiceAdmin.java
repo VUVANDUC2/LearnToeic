@@ -49,14 +49,14 @@ public class TestServiceAdmin {
         test.setTestDate(new Date());
         test.setTotalQuestions(200);
         test.setMaxScore(990);
-        test.setDescription("New test uploaded");
+        //test.setDescription("New test uploaded");
         test.setTestName(testName);
-        test.setStatus(status);
+        //test.setStatus(status);
         return testRepository.save(test);
     }
 
     // Delete test (update status to archived)
     public void updateTestStatus(Integer testId) {
-        testRepository.updateStatusToArchived(testId);
+        //testRepository.updateStatusToArchived(testId);
     }
 }

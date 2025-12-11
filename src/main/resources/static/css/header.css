@@ -45,6 +45,20 @@ body {
   user-select: none;
 }
 
+.avatar-img-circle-wrapper {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+}
+
+.avatar-img-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
 .account-dropdown-wrapper {
   position: relative;
 }

@@ -1,5 +1,6 @@
 package LearnToeic.config;
 
+import LearnToeic.service.CustomOidcUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,13 @@ import org.springframework.web.servlet.support.SessionFlashMapManager;
 
 @Configuration
 public class SecurityConfig {
+
+    private final CustomOidcUserService customOidcUserService;
+
+    public SecurityConfig(CustomOidcUserService customOidcUserService) {
+        this.customOidcUserService = customOidcUserService;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/auth/login"));
@@ -28,6 +36,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/tests/**", "/lessons/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/tests/**", "/take/**", "/attempts/**", "/progress/**", "/profile/**").authenticated()
                 .anyRequest().authenticated()
+            )
+            .oauth2Login(oauth2 -> oauth2
+              .loginPage("/auth/login")
+              .userInfoEndpoint(userInfo -> userInfo.oidcUserService(customOidcUserService))
+              .defaultSuccessUrl("/", true)
             )
             .formLogin(login -> login
                 .loginPage("/auth/login").permitAll()

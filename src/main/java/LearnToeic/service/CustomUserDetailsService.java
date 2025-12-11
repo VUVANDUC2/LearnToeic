@@ -25,6 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .password(u.getPassword())        // password đã mã hoá
                 .roles(u.getRole().replace("ROLE_", ""))
                 .build();
+        //return new CustomUserDetails(u);
     }
 }
 
