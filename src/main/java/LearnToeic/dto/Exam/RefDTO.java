@@ -3,12 +3,12 @@ package LearnToeic.dto.Exam;
 import LearnToeic.entity.Ref;
 
 public class RefDTO {
-    private Integer testId;     // lấy từ RefId
-    private Integer refId;      // lấy từ RefId
+    private Integer testId;
+    private Integer refId;
     private RefType refType;
-    private String path;        // file path (đường dẫn ảnh/âm thanh/text)
-    private Integer startQ;     // bắt đầu áp dụng từ câu số...
-    private Integer endQ;       // kết thúc áp dụng đến câu số...
+    private String path;
+    private Integer startQ;
+    private Integer endQ;
 
     public RefDTO() {}
 
@@ -23,10 +23,10 @@ public class RefDTO {
 
     // Factory map từ Entity -> DTO
     public static RefDTO fromEntity(Ref ref) {
-        var id = ref.getId();
+        Integer testId = ref.getTest() != null ? ref.getTest().getTestId() : null;
         return new RefDTO(
-            id != null ? id.getTestId() : null,
-            id != null ? id.getRefId()  : null,
+            testId,
+            ref.getRefId(),
             RefType.from(ref.getRefType()),
             ref.getPath(),
             ref.getStart(),

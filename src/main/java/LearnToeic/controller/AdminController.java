@@ -55,7 +55,7 @@ public class AdminController {
         model.addAttribute("title", "Admin - Dashboard");
         return "admin/dashboard";
     }
-    
+
     //Test List
     @GetMapping("/admin/tests")
     public String adminMainPage(

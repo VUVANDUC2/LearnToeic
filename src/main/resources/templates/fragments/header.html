@@ -1,7 +1,7 @@
 <div th:fragment="siteHeader">
   <!-- Header / Navbar -->
   <nav
-    class="navbar navbar-expand-lg navbar-light bg-white"
+    class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
     style="box-shadow: 0 5px 10px rgba(0, 0, 0, 0.04)"
   >
     <div class="container">
@@ -21,13 +21,16 @@
 
       <div class="collapse navbar-collapse" id="navMain">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
           <li class="nav-item">
             <a
               class="nav-link fw-semibold"
               role="button"
               th:href="@{/tests}"
-              th:classappend="${requestURI != null && requestURI.startsWith('/tests') ? 'active' : ''}"
+              th:classappend="${
+                requestURI != null && requestURI.startsWith('/tests')
+                  ? 'active'
+                  : ''
+              }"
             >
               Luyện đề
             </a>
@@ -37,7 +40,11 @@
             <a
               class="nav-link fw-semibold"
               th:href="@{/}"
-              th:classappend="${requestURI != null && requestURI == '/phuong-phap' ? 'active' : ''}"
+              th:classappend="${
+                requestURI != null && requestURI == '/phuong-phap'
+                  ? 'active'
+                  : ''
+              }"
             >
               Phương pháp
             </a>
@@ -47,7 +54,11 @@
             <a
               class="nav-link fw-semibold"
               th:href="@{/flashcards}"
-              th:classappend="${requestURI != null && requestURI == '/flashcards' ? 'active' : ''}"
+              th:classappend="${
+                requestURI != null && requestURI == '/flashcards'
+                  ? 'active'
+                  : ''
+              }"
             >
               Flashcards
             </a>
@@ -57,7 +68,11 @@
             <a
               class="nav-link fw-semibold"
               th:href="@{/resources}"
-              th:classappend="${requestURI != null && requestURI == '/resources' ? 'active' : ''}"
+              th:classappend="${
+                requestURI != null && requestURI == '/resources'
+                  ? 'active'
+                  : ''
+              }"
             >
               Tài liệu
             </a>
@@ -67,100 +82,84 @@
             <a
               class="nav-link fw-semibold"
               th:href="@{/blog}"
-              th:classappend="${requestURI != null && requestURI.startsWith('/blog') ? 'active' : ''}"
+              th:classappend="${
+                requestURI != null && requestURI.startsWith('/blog')
+                  ? 'active'
+                  : ''
+              }"
             >
               Blog
             </a>
           </li>
-
         </ul>
 
         <div class="d-flex align-items-center gap-2">
+          <!-- Chưa login -->
+          <div class="d-flex gap-2" sec:authorize="isAnonymous()">
+            <a class="btn btn-outline-primary px-4" th:href="@{/auth/signup}">
+              <i class="bi bi-person-plus"></i>
+              <span class="ms-1">Đăng ký</span>
+            </a>
 
-          <!-- CHƯA login -->
-          <a
-            class="btn btn-primary px-4"
-            sec:authorize="isAnonymous()"
-            th:href="@{/auth/login}"
+            <a
+              class="btn btn-primary px-4"
+              id="navLoginBtn"
+              th:href="@{/auth/login}"
+            >
+              <i class="bi bi-box-arrow-in-right"></i>
+              <span class="ms-1">Đăng nhập</span>
+            </a>
+          </div>
+
+          <!-- Đã login -->
+          <div
+            class="account-dropdown-wrapper position-relative"
+            sec:authorize="isAuthenticated()"
           >
-            Đăng nhập
-          </a>
+            <button
+              class="btn p-0 border-0 bg-transparent"
+              type="button"
+              id="userMenuBtn"
+            >
+              <span
+                th:if="${avatarData != null}"
+                class="avatar-img-circle-wrapper"
+              >
+                <img
+                  th:src="${avatarData}"
+                  alt="User avatar"
+                  class="avatar-img-circle"
+                />
+              </span>
 
-          <a
-            class="btn btn-primary px-4"
-            id="navLoginBtn"
-            sec:authorize="isAnonymous()"
-            th:href="@{/auth/login}"
-          >
-            Đăng nhập
-          </a>
+              <span th:if="${avatarData == null}" class="avatar-text-circle">
+                <span th:text="${initial}" class="user-initials">Initial</span>
+              </span>
+            </button>
 
-          <!-- ĐÃ login -->
-  <div
-  class="account-dropdown-wrapper position-relative"
-  sec:authorize="isAuthenticated()">
-  <button class="btn p-0 border-0 bg-transparent" type="button" id="userMenuBtn">
-    <span th:if="${avatarData != null}" class="avatar-img-circle-wrapper">
-      <img th:src="${avatarData}" alt="User avatar" class="avatar-img-circle" />
-    </span>
-    <span th:if="${avatarData == null}" class="avatar-text-circle">
-      <span th:text="${initial}" class="user-initials">Initial</span>
-    </span>
-  </button>
-
-  <!-- Custom Dropdown -->
-  <ul class="account-menu-dropdown" id="userMenu">
-    <li><a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a></li>
-    <li><a class="dropdown-item text-danger" th:href="@{/account/delete}">Xoá tài khoản</a></li>
-    <li>
-      <form th:action="@{/logout}" method="post">
-        <button type="submit" class="dropdown-item">Đăng xuất</button>
-      </form>
-    </li>
-  </ul>
-</div>
-
+            <!-- Custom Dropdown -->
+            <ul class="account-menu-dropdown" id="userMenu">
+              <li>
+                <a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a>
+              </li>
+              <li>
+                <a class="dropdown-item text-danger" th:href="@{/account/delete}"
+                  >Xoá tài khoản</a
+                >
+              </li>
+              <li>
+                <form th:action="@{/logout}" method="post">
+                  <button type="submit" class="dropdown-item">Đăng xuất</button>
+                </form>
+              </li>
+            </ul>
+          </div>
         </div>
+        <!-- /right -->
       </div>
+      <!-- /collapse -->
     </div>
   </nav>
-
-  <!-- Flash bubble styles -->
-  <style>
-    .flash-bubble {
-      position: fixed;
-      padding: 8px 12px;
-      border-radius: 10px;
-      color: #fff;
-      background: #0ea5e9;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
-      white-space: nowrap;
-      max-width: 260px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      z-index: 9000;
-      pointer-events: none;
-      opacity: 1;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-    }
-
-    .flash-bubble.success {
-      background: #22c55e;
-    }
-
-    .flash-bubble.danger {
-      background: #ef4444;
-    }
-
-    .flash-bubble.info {
-      background: #0ea5e9;
-    }
-
-    .flash-bubble.hide {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-  </style>
 
   <!-- Flash bubble script -->
   <script th:inline="javascript">
@@ -180,6 +179,7 @@
       const bubble = document.createElement("div");
       bubble.className = `flash-bubble ${flashType}`;
       bubble.textContent = flashMessage;
+
       bubble.style.visibility = "hidden";
       document.body.appendChild(bubble);
 

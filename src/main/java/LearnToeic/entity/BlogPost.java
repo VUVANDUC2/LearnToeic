@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class BlogPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false, length = 255)
     private String title;
@@ -36,7 +36,7 @@ public class BlogPost {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -72,7 +72,7 @@ public class BlogPost {
         return createdAt;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

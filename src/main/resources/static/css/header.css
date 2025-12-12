@@ -96,3 +96,38 @@ body {
 .account-menu-dropdown.show {
   display: block;
 }
+
+/* Flash bubble (toast near user menu) */
+.flash-bubble {
+  position: fixed;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #fff;
+  background: #0ea5e9;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+  white-space: nowrap;
+  max-width: 260px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.flash-bubble.success {
+  background: #22c55e;
+}
+
+.flash-bubble.danger {
+  background: #ef4444;
+}
+
+.flash-bubble.info {
+  background: #0ea5e9;
+}
+
+.flash-bubble.hide {
+  opacity: 0;
+  transform: translateY(-8px);
+}

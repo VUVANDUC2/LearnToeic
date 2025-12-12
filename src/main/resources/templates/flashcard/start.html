@@ -50,6 +50,8 @@
         }
       }
     </style>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/Home.css}">
   </head>
   <body>
     <div th:replace="~{fragments/header :: siteHeader}"></div>
@@ -560,7 +562,7 @@
         </div>
       </div>
     </div>
-
+    <script src="/js/Home.js" defer></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         // Attach event listeners to all edit buttons

@@ -11,7 +11,7 @@ public class AnswerSheet implements Serializable{
     @EmbeddedId
     private AnswerSheetId id;
 
-    @Column(name = "correct_option")
+    @Column(name = "correct_option", nullable = false)
     private String correctOption;
 
     protected AnswerSheet() {}

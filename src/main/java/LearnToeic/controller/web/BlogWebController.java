@@ -29,7 +29,7 @@ public class BlogWebController {
         model.addAttribute("totalPages", postsPage.getTotalPages());
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalElements", postsPage.getTotalElements());
-        return "blog-list";
+        return "/blog/blog-list";
     }
 
     @GetMapping("/blog/{slug}")
@@ -43,6 +43,6 @@ public class BlogWebController {
                 .filter(p -> !p.getSlug().equals(slug))
                 .limit(3)
                 .toList());
-        return "blog-detail";
+        return "/blog/blog-detail";
     }
 }
