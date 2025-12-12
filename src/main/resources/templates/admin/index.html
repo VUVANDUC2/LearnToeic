@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title th:text="${title}">Flexy Free Bootstrap Admin Template by WrapPixel</title>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <title th:text="${title}">
+      Flexy Free Bootstrap Admin Template by WrapPixel
+    </title>
     <!-- <link
       rel="shortcut icon"
       type="image/png"
@@ -34,7 +39,11 @@
           <nav class="navbar navbar-expand-lg navbar-light">
             <ul class="navbar-nav">
               <li class="nav-item d-block d-xl-none">
-                <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
+                <a
+                  class="nav-link sidebartoggler"
+                  id="headerCollapse"
+                  href="javascript:void(0)"
+                >
                   <i class="ti ti-menu-2"></i>
                 </a>
               </li>
@@ -49,16 +58,28 @@
                   <i class="ti ti-bell"></i>
                   <div class="notification bg-primary rounded-circle"></div>
                 </a>
-                <div class="dropdown-menu dropdown-menu-animate-up" aria-labelledby="drop1">
+                <div
+                  class="dropdown-menu dropdown-menu-animate-up"
+                  aria-labelledby="drop1"
+                >
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="dropdown-item">Item 1</a>
-                    <a href="javascript:void(0)" class="dropdown-item">Item 2</a>
+                    <a href="javascript:void(0)" class="dropdown-item"
+                      >Item 1</a
+                    >
+                    <a href="javascript:void(0)" class="dropdown-item"
+                      >Item 2</a
+                    >
                   </div>
                 </div>
               </li>
             </ul>
-            <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-              <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+            <div
+              class="navbar-collapse justify-content-end px-0"
+              id="navbarNav"
+            >
+              <ul
+                class="navbar-nav flex-row ms-auto align-items-center justify-content-end"
+              >
                 <li class="nav-item dropdown">
                   <a
                     class="nav-link"
@@ -130,7 +151,9 @@
                           class="form-control"
                           placeholder="Search..."
                         />
-                        <button class="btn btn-primary" type="submit">Search</button>
+                        <button class="btn btn-primary" type="submit">
+                          Search
+                        </button>
                       </div>
                     </form>
                   </div>
@@ -147,8 +170,15 @@
                           All of your tests on website will be display here
                         </p>
                       </div>
-                      <div class="d-flex ms-auto align-items-center gap-2 mt-3 mt-md-0">
-                        <a class="btn btn-primary" href="/admin/create_test" role="button">New+</a>
+                      <div
+                        class="d-flex ms-auto align-items-center gap-2 mt-3 mt-md-0"
+                      >
+                        <a
+                          class="btn btn-primary"
+                          href="/admin/create_test"
+                          role="button"
+                          >New+</a
+                        >
                         <select
                           class="form-select theme-select border-0"
                           aria-label="Default select example"
@@ -161,14 +191,20 @@
                     </div>
 
                     <div class="table-responsive mt-4">
-                      <table class="table mb-0 text-nowrap varient-table align-middle fs-3">
+                      <table
+                        class="table mb-0 text-nowrap varient-table align-middle fs-3"
+                      >
                         <thead>
                           <tr>
                             <th scope="col" class="px-0 text-muted">Test</th>
                             <th scope="col" class="px-0 text-muted">Name</th>
                             <th scope="col" class="px-0 text-muted">Status</th>
-                            <th scope="col" class="px-0 text-muted text-end">Last Modified</th>
-                            <th scope="col" class="px-0 text-muted text-end">Actions</th>
+                            <th scope="col" class="px-0 text-muted text-end">
+                              Last Modified
+                            </th>
+                            <th scope="col" class="px-0 text-muted text-end">
+                              Actions
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -182,14 +218,19 @@
                                   alt="flexy"
                                 />
                                 <div class="ms-3">
-                                  <h6 class="mb-0 fw-bolder" th:text="${test.getTestId}">
+                                  <h6
+                                    class="mb-0 fw-bolder"
+                                    th:text="${test.getTestId}"
+                                  >
                                     Sunil Joshi
                                   </h6>
                                   <span class="text-muted">Id</span>
                                 </div>
                               </div>
                             </td>
-                            <td class="px-0" th:text="${test.getTestName}">Elite Admin</td>
+                            <td class="px-0" th:text="${test.getTestName}">
+                              Elite Admin
+                            </td>
                             <td class="px-0">
                               <span
                                 class="badge"
@@ -207,8 +248,10 @@
                               <span class="action-icons active">
                                 <a
                                   th:data-test-id="${test.getTestId}"
-                                  th:href="@{/admin/tests/test_page(testId=${test.getTestId})}"
+                                  href="#"
                                   class="ps-3 edit-test-btn"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#editTestModal"
                                 >
                                   <i class="ti ti-edit fs-5"></i>
                                 </a>
@@ -229,7 +272,10 @@
                   <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-end me-3">
                       <!-- Previous button -->
-                      <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                      <li
+                        class="page-item"
+                        th:classappend="${currentPage == 0} ? 'disabled'"
+                      >
                         <a
                           class="page-link"
                           th:href="@{/admin/tests(page=${currentPage - 1})}"
@@ -257,7 +303,10 @@
                         class="page-item"
                         th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'"
                       >
-                        <a class="page-link" th:href="@{/admin/tests(page=${currentPage + 1})}">
+                        <a
+                          class="page-link"
+                          th:href="@{/admin/tests(page=${currentPage + 1})}"
+                        >
                           Next
                         </a>
                       </li>
@@ -270,7 +319,420 @@
         </div>
       </div>
     </div>
+
+    <!--Modal for editing test-->
+    <div class="modal fade" id="editTestModal" tabindex="-1">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Test</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <button
+                  class="nav-link active"
+                  data-bs-toggle="tab"
+                  data-bs-target="#tab-general"
+                >
+                  General
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#tab-questions"
+                >
+                  Questions
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#tab-images"
+                >
+                  Images
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#tab-audios"
+                >
+                  Audios
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content pt-3">
+              <!-- General Tab -->
+              <div
+                id="tab-general"
+                class="tab-pane fade show active"
+                role="tabpanel"
+              >
+                <form class="p-3 border rounded-3 bg-light">
+                  <h6 class="mb-3 text-primary border-bottom pb-2">
+                    Test Details
+                  </h6>
+
+                  <div class="row mb-3">
+                    <label
+                      for="modal-test-id"
+                      class="col-sm-3 col-form-label fw-bold"
+                      >ID:</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        readonly
+                        class="form-control-plaintext text-muted"
+                        id="modal-test-id"
+                        value="T-459021"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label
+                      for="modal-test-name"
+                      class="col-sm-3 col-form-label fw-bold"
+                      >Name:</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control is-valid"
+                        id="modal-test-name"
+                        value="Bootstrap 5 Refactor Test"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label
+                      for="modal-test-status"
+                      class="col-sm-3 col-form-label fw-bold"
+                      >Status:</label
+                    >
+                    <div class="col-sm-9">
+                      <select class="form-select" id="modal-test-status">
+                        <option value="draft">Draft</option>
+                        <option value="review" selected>In Review</option>
+                        <option value="published">Published</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <label
+                      for="modal-test-date"
+                      class="col-sm-3 col-form-label fw-bold"
+                      >Date:</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="modal-test-date"
+                        value="2025-12-09"
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div id="tab-questions" class="tab-pane fade">
+                <!-- filled dynamically -->
+              </div>
+              <div id="tab-images" class="tab-pane fade">
+                <!-- filled dynamically -->
+              </div>
+              <div id="tab-audios" class="tab-pane fade">
+                <!-- filled dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button class="btn btn-primary" id="saveTestBtn">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="/js/updateTest.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("click", async function (e) {
+          const btn = e.target.closest(".edit-test-btn");
+          if (!btn) return;
+
+          console.log("🟦 Edit button clicked");
+
+          const id = btn.getAttribute("data-test-id");
+          console.log("🟦 Test ID:", id);
+
+          // Fetch test + questions
+          const res = await fetch(`/api/admin/tests/${id}`);
+          console.log("🟦 Response:", res.status);
+
+          if (!res.ok) {
+            console.error("❌ API error:", res.status);
+            return;
+          }
+
+          const data = await res.json();
+          console.log("🟩 Received:", data);
+
+          const test = data.test;
+          const questions = data.questions;
+
+          // --- Fill General Tab ---
+          document.querySelector("#modal-test-id").value = test.testId;
+          document.querySelector("#modal-test-name").value = test.testName;
+          document.querySelector("#modal-test-status").value = test.status;
+          document.querySelector("#modal-test-date").value = test.testDate;
+
+          // --- Fill Questions Tab ---
+          const questionsTab = document.querySelector("#tab-questions");
+
+          if (!questions || questions.length === 0) {
+            questionsTab.innerHTML = "<p>No questions found.</p>";
+          } else {
+            let html = "";
+
+            questions.forEach((q, index) => {
+              const qId = `t${q.id.testId}-q${q.id.questionNumber}`;
+              // Ensure a unique ID for each question set
+              const partColor = q.part === 1 ? "bg-primary" : "bg-success";
+
+              html += `
+        <div class="card shadow-sm mb-4 border-start border-4 border-primary" id="${qId}-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                
+                <h6 class="mb-0 text-dark">
+                    <span class="fw-bold me-2">Question ${index + 1}</span>
+                    <span class="badge ${partColor} text-white">Part ${
+                q.part
+              }</span>
+                </h6>
+                
+                <button 
+                    class="btn btn-sm btn-outline-secondary" 
+                    data-question-id="${qId}"
+                    onclick="toggleQuestionEdit('${qId}', true)"
+                >
+                    <i class="bi bi-pencil me-1"></i> Edit
+                </button>
+            </div>
+            
+            <form id="${qId}-form">
+                <div class="card-body py-3">
+                    <div class="mb-3">
+                        <label for="${qId}-text" class="form-label fw-bold">Question Text:</label>
+                        <textarea class="form-control" id="${qId}-text" rows="3" readonly>${
+                q.questionText || "(no text)"
+              }</textarea>
+                    </div>
+
+                    <div class="row g-2 mb-1">
+                        <div class="col-1 text-center fw-bold">A:</div>
+                        <div class="col-11">
+                            <input type="text" class="form-control form-control-sm" id="${qId}-optA" value="${
+                q.optionA ?? ""
+              }" readonly>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-1">
+                        <div class="col-1 text-center fw-bold">B:</div>
+                        <div class="col-11">
+                            <input type="text" class="form-control form-control-sm" id="${qId}-optB" value="${
+                q.optionB ?? ""
+              }" readonly>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-1">
+                        <div class="col-1 text-center fw-bold">C:</div>
+                        <div class="col-11">
+                            <input type="text" class="form-control form-control-sm" id="${qId}-optC" value="${
+                q.optionC ?? ""
+              }" readonly>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-1">
+                        <div class="col-1 text-center fw-bold">D:</div>
+                        <div class="col-11">
+                            <input type="text" class="form-control form-control-sm" id="${qId}-optD" value="${
+                q.optionD ?? ""
+              }" readonly>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="card-footer bg-light text-end d-none" id="${qId}-footer">
+                    <button type="button" class="btn btn-sm btn-success me-2" onclick="saveQuestionEdit('${qId}')">Save</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="cancelQuestionEdit('${qId}')">Cancel</button>
+                </div>
+            </form>
+        </div>
+        `;
+            });
+
+            questionsTab.innerHTML = html;
+          }
+
+          // --- Open Modal ---
+          const modalEl = document.getElementById("editTestModal");
+          const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+          modal.show();
+
+          console.log("🟩 Modal opened");
+        });
+      });
+
+      // New/Modified function to explicitly toggle the edit mode
+      function toggleQuestionEdit(questionId, enable = true) {
+        const cardFooter = document.getElementById(questionId + "-footer");
+        const formInputs = document.querySelectorAll(
+          `#${questionId}-form input, #${questionId}-form textarea`
+        );
+        const editButton = document.querySelector(
+          `button[data-question-id="${questionId}"]`
+        );
+
+        if (enable) {
+          // --- ENABLE EDIT MODE (The Edit button was clicked) ---
+          formInputs.forEach((input) => {
+            input.removeAttribute("readonly");
+            // Optional: input.classList.add("is-valid"); // You can use this for visual feedback
+          });
+
+          // Hide the Edit button
+          editButton.classList.add("d-none");
+
+          // Show the Save/Cancel buttons
+          cardFooter.classList.remove("d-none");
+        } else {
+          // --- DISABLE EDIT MODE (Cancel/Save was clicked) ---
+          formInputs.forEach((input) => {
+            input.setAttribute("readonly", true);
+          });
+
+          // Show the Edit button
+          editButton.classList.remove("d-none");
+
+          // Hide the Save/Cancel buttons
+          cardFooter.classList.add("d-none");
+        }
+      }
+
+      async function saveQuestionEdit(questionId) {
+        console.log(
+          "🔍 DEBUG: saveQuestionEdit() called with questionId =",
+          questionId
+        );
+
+        try {
+          // Extract testId + questionNumber
+          const regex = /^t(.+)-q(\d+)$/;
+          const match = questionId.match(regex);
+
+          console.log("🔍 DEBUG: Regex match result:", match);
+
+          if (!match) {
+            console.error("❌ ERROR: Invalid question ID format:", questionId);
+            return;
+          }
+
+          const testId = match[1];
+          const qNumber = match[2];
+
+          console.log(
+            `🧩 DEBUG: Extracted testId = ${testId}, questionNumber = ${qNumber}`
+          );
+
+          // Read updated fields
+          const text = document.querySelector(`#${questionId}-text`)?.value;
+          const optA = document.querySelector(`#${questionId}-optA`)?.value;
+          const optB = document.querySelector(`#${questionId}-optB`)?.value;
+          const optC = document.querySelector(`#${questionId}-optC`)?.value;
+          const optD = document.querySelector(`#${questionId}-optD`)?.value;
+
+          console.log("📝 DEBUG: Extracted field values:", {
+            text,
+            optA,
+            optB,
+            optC,
+            optD,
+          });
+
+          if (!text) console.warn("⚠️ WARNING: Question text is empty!");
+
+          const payload = {
+            questionText: text,
+            optionA: optA,
+            optionB: optB,
+            optionC: optC,
+            optionD: optD,
+          };
+
+          console.log("📦 DEBUG: Final payload to send:", payload);
+
+          const url = `/api/admin/tests/${testId}/questions/${qNumber}`;
+          console.log("🌐 DEBUG: Sending PUT request to URL:", url);
+
+          const res = await fetch(url, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload),
+          });
+
+          console.log("📡 DEBUG: Response status:", res.status);
+
+          const responseText = await res.text();
+          console.log("📨 DEBUG: Raw response text:", responseText);
+
+          if (!res.ok) {
+            console.error("❌ ERROR: Server returned failure");
+            alert("❌ Failed to save question!");
+            return;
+          }
+
+          console.log("✅ SUCCESS: Question updated!");
+
+          toggleQuestionEdit(questionId, false);
+
+          const card = document.getElementById(`${questionId}-card`);
+          if (card) {
+            card.classList.add("border-success");
+            setTimeout(() => card.classList.remove("border-success"), 1500);
+          } else {
+            console.warn(
+              "⚠️ WARNING: Card element not found:",
+              `${questionId}-card`
+            );
+          }
+        } catch (err) {
+          console.error("💥 FATAL ERROR in saveQuestionEdit():", err);
+          alert("⚠️ Unexpected error. Check console for details.");
+        }
+      }
+
+      function cancelQuestionEdit(questionId) {
+        toggleQuestionEdit(questionId, false);
+      }
+    </script>
   </body>
 </html>

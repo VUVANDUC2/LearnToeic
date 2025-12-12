@@ -1,75 +1,111 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Tạo bài viết mới</title>
-    <link rel="stylesheet" th:href="@{/css/blog-admin.css}">
-</head>
-<body class="page">
-<header class="header">
-    <h1>Tạo bài viết mới</h1>
-</header>
+    <link rel="stylesheet" th:href="@{/css/blog-admin.css}" />
+  </head>
+  <body class="page">
+    <header class="header">
+      <h1>Tạo bài viết mới</h1>
+    </header>
 
-<main class="admin-container">
-    <div class="card">
-        <form th:action="@{/admin/blog/new-docx}" method="post" enctype="multipart/form-data" class="form">
-            <div th:if="${error}" class="alert error" th:text="${error}"></div>
+    <main class="admin-container">
+      <div class="card">
+        <form
+          th:action="@{/admin/blog/new-docx}"
+          method="post"
+          enctype="multipart/form-data"
+          class="form"
+        >
+          <div th:if="${error}" class="alert error" th:text="${error}"></div>
 
-            <label class="field">
-                <span>Tiêu đề</span>
-                <input type="text" name="title" required placeholder="Nhập tiêu đề">
-            </label>
+          <label class="field">
+            <span>Tiêu đề</span>
+            <input
+              type="text"
+              name="title"
+              required
+              placeholder="Nhập tiêu đề"
+            />
+          </label>
 
-            <label class="field">
-                <span>Chuyên mục</span>
-                <input type="text" name="category" required placeholder="VD: Grammar, Vocabulary">
-            </label>
+          <label class="field">
+            <span>Chuyên mục</span>
+            <input
+              type="text"
+              name="category"
+              required
+              placeholder="VD: Grammar, Vocabulary"
+            />
+          </label>
 
-            <label class="field">
-                <span>Chương trình</span>
-                <select name="program" required th:remove="all-but-first">
-                    <option th:each="p : ${programs}" th:value="${p}" th:text="${p}"></option>
-                </select>
-            </label>
+          <label class="field">
+            <span>Chương trình</span>
+            <select name="program" required th:remove="all-but-first">
+              <option
+                th:each="p : ${programs}"
+                th:value="${p}"
+                th:text="${p}"
+              ></option>
+            </select>
+          </label>
 
-            <label class="field">
-                <span>Mô tả</span>
-                <textarea name="excerpt" rows="3" placeholder="Nhập mô tả ngắn"></textarea>
-            </label>
+          <label class="field">
+            <span>Mô tả</span>
+            <textarea
+              name="excerpt"
+              rows="3"
+              placeholder="Nhập mô tả ngắn"
+            ></textarea>
+          </label>
 
-            <label class="field">
-                <span>Ảnh bìa</span>
-                <div class="file-row">
-                    <input type="file" name="thumbnail" id="thumbnailInput" accept="image/*">
-                    <button type="button" class="clear-btn" data-target="thumbnailInput">Bỏ chọn</button>
-                </div>
-            </label>
-
-            <label class="field">
-                <span>File DOCX</span>
-                <div class="file-row">
-                    <input type="file" name="file" id="docxInput" accept=".docx">
-                    <button type="button" class="clear-btn" data-target="docxInput">Bỏ chọn</button>
-                </div>
-            </label>
-
-            <div class="actions">
-                <button type="submit">Tạo bài viết</button>
+          <label class="field">
+            <span>Ảnh bìa</span>
+            <div class="file-row">
+              <input
+                type="file"
+                name="thumbnail"
+                id="thumbnailInput"
+                accept="image/*"
+              />
+              <button
+                type="button"
+                class="clear-btn"
+                data-target="thumbnailInput"
+              >
+                Bỏ chọn
+              </button>
             </div>
+          </label>
+
+          <label class="field">
+            <span>File DOCX</span>
+            <div class="file-row">
+              <input type="file" name="file" id="docxInput" accept=".docx" />
+              <button type="button" class="clear-btn" data-target="docxInput">
+                Bỏ chọn
+              </button>
+            </div>
+          </label>
+
+          <div class="actions">
+            <button type="submit">Tạo bài viết</button>
+          </div>
         </form>
-    </div>
-</main>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.clear-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const targetId = btn.getAttribute('data-target');
-                const input = document.getElementById(targetId);
-                if (!input) return;
-                input.value = '';
-            });
+      </div>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".clear-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const targetId = btn.getAttribute("data-target");
+            const input = document.getElementById(targetId);
+            if (!input) return;
+            input.value = "";
+          });
         });
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

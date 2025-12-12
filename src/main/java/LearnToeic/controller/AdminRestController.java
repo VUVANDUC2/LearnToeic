@@ -3,22 +3,21 @@ package LearnToeic.controller;
 import LearnToeic.entity.*;
 import LearnToeic.service.TestServiceAdmin;
 import LearnToeic.service.QuestionServiceAdmin;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import org.springframework.web.servlet.view.RedirectView;
-
+import java.util.Map;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminRestController {
     private final TestServiceAdmin testService;
+    private final QuestionServiceAdmin questionService;
 
-    public AdminRestController(TestServiceAdmin testService) {
+    public AdminRestController(TestServiceAdmin testService, QuestionServiceAdmin questionService) {
         this.testService = testService;
+        this.questionService = questionService;
     }
 
     @PutMapping("/tests/{id}/status")
@@ -31,4 +30,34 @@ public class AdminRestController {
             return ResponseEntity.badRequest().build(); // HTTP 400 Bad Request or 500 Internal Server Error
         }
     }
+
+    @PutMapping("/tests/{testId}/questions/{questionNumber}")
+    public Question updateQuestion(
+            @PathVariable Integer testId,
+            @PathVariable Integer questionNumber,
+            @RequestBody Question dto
+    ) {
+        return questionService.updateQuestion(testId, questionNumber, dto);
+    }
+
+
+    @GetMapping("/tests/{testId}")
+    public ResponseEntity<?> getTestDetails(@PathVariable int testId) {
+
+        Test test = testService.getTestById(testId);
+        if (test == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Question> questions = questionService.getQuestionsByTestId(testId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("test", test);
+        response.put("questions", questions);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
 }

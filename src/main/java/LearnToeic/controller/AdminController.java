@@ -26,6 +26,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream; // Correct import for NIO/Collection stream operations
 @Controller
 public class AdminController {
+
+
+    private static final int[] IMAGE_SEQUENCE = {
+    1,2,3,4,5,6,62,65,68,92,95,98,131,135,139,143,
+    147,149,151,153,155,158,161,165,168,172,176,
+    181,186,191,196
+    };
     @Value("${file.upload-dir}") 
     private String uploadDir;
     private final TestServiceAdmin testService;
@@ -274,28 +281,31 @@ public class AdminController {
 
     @PostMapping("/admin/upload")
     public String uploadTest(
-        @RequestParam("testName") String testName,
-        @RequestParam("status") String status,
-        @RequestParam(value = "images", required = false) MultipartFile[] images,
-        @RequestParam(value = "audios", required = false) MultipartFile[] audios,
-        @RequestParam(value = "csv", required = false) MultipartFile csv
-        ) throws IOException
-    {
-        System.out.println(status);
+            @RequestParam("testName") String testName,
+            @RequestParam("status") String status,
+            @RequestParam(value = "images", required = false) MultipartFile[] images,
+            @RequestParam(value = "audios", required = false) MultipartFile[] audios,
+            @RequestParam(value = "csv", required = false) MultipartFile csv
+    ) throws IOException {
+
         Test savedTest = testService.saveTest(testName, status);
-        String uniqueFolderName = String.valueOf(savedTest.getTestId());
+        String folderName = String.valueOf(savedTest.getTestId());
 
-        
-        Path testDirPath = Paths.get(uploadDir, uniqueFolderName);
-
+        Path testDirPath = Paths.get(uploadDir, folderName);
         Files.createDirectories(testDirPath);
 
+        // Save images
+        saveImages(testDirPath, images);
 
-        saveFiles(testDirPath, "images", images);
-        saveFiles(testDirPath, "audios", audios);
+        // Save audios to Listening
+        saveAudios(testDirPath, audios);
+
+        // Save CSV
         saveSingleFile(testDirPath, csv);
+
         return "redirect:/admin";
     }
+
 
 
     @PostMapping("/admin/create/blog")
@@ -335,17 +345,44 @@ public class AdminController {
     
     private void saveFiles(Path baseDir, String subDirName, MultipartFile[] files) throws IOException {
         if (files != null && files.length > 0) {
+
             Path subDirPath = baseDir.resolve(subDirName);
-            Files.createDirectories(subDirPath); // Create "images" or "audios" folder
-            
+            Files.createDirectories(subDirPath);
+
+            int index = 0;
+
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
-                    Path filePath = subDirPath.resolve(file.getOriginalFilename());
+
+                    String originalName = file.getOriginalFilename();
+                    String extension = "";
+
+                    int dotIndex = originalName.lastIndexOf(".");
+                    if (dotIndex != -1) {
+                        extension = originalName.substring(dotIndex);
+                    }
+
+                    String newFilename;
+
+                    // Apply renaming ONLY for images
+                    if ("images".equals(subDirName)) {
+                        newFilename = IMAGE_SEQUENCE[index] + extension;
+                        index++;
+
+                        if (index >= IMAGE_SEQUENCE.length) break;
+                    } else {
+                        // Audios keep original filename
+                        newFilename = originalName;
+                    }
+
+                    Path filePath = subDirPath.resolve(newFilename);
                     file.transferTo(filePath);
                 }
             }
         }
     }
+
+
 
 
     private void saveSingleFile(Path baseDir, MultipartFile file) throws IOException {
@@ -355,5 +392,59 @@ public class AdminController {
         }
     }
 
-    
+    private void saveImages(Path baseDir, MultipartFile[] images) throws IOException {
+        if (images == null || images.length == 0) return;
+
+        Path listeningPath = baseDir.resolve("Listening");
+        Path readingPath = baseDir.resolve("Reading");
+
+        Files.createDirectories(listeningPath);
+        Files.createDirectories(readingPath);
+
+        int index = 0;
+
+        for (MultipartFile file : images) {
+            if (file.isEmpty()) continue;
+
+            String originalName = file.getOriginalFilename();
+            String extension = "";
+
+            int dot = originalName.lastIndexOf(".");
+            if (dot != -1) extension = originalName.substring(dot);
+
+            int newNumber = IMAGE_SEQUENCE[index];
+
+            Path target;
+
+            if (newNumber < 100) {
+                // 📌 Listening folder
+                target = listeningPath.resolve(newNumber + extension);
+            } else {
+                // 📌 Reading folder
+                target = readingPath.resolve(newNumber + extension);
+            }
+
+            file.transferTo(target);
+
+            index++;
+            if (index >= IMAGE_SEQUENCE.length) break;
+        }
+    }
+
+    private void saveAudios(Path baseDir, MultipartFile[] audios) throws IOException {
+        if (audios == null || audios.length == 0) return;
+
+        Path listeningPath = baseDir.resolve("Listening");
+        Files.createDirectories(listeningPath);
+
+        for (MultipartFile file : audios) {
+            if (file.isEmpty()) continue;
+
+            Path target = listeningPath.resolve(file.getOriginalFilename());
+            file.transferTo(target);
+        }
+    }
+
 }
+
+
