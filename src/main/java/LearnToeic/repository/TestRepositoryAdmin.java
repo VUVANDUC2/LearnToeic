@@ -17,8 +17,8 @@ public interface TestRepositoryAdmin extends JpaRepository<Test, Integer> {
 
     Page<Test> findByTestNameContainingIgnoreCase(String testName, Pageable pageable);
 
-    // @Modifying
-    // @Transactional
-    // @Query("UPDATE Test t SET t.status = 'ARCHIVED' WHERE t.testId = :testId")
-    // int updateStatusToArchived(Integer testId);
+    @Modifying
+    @Transactional
+    @Query("UPDATE Test t SET t.status = 'ARCHIVED' WHERE t.testId = :testId")
+    int updateStatusToArchived(Integer testId);
 }

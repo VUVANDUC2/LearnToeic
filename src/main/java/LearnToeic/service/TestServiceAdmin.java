@@ -2,22 +2,27 @@ package LearnToeic.service;
 
 import LearnToeic.entity.Test;
 import LearnToeic.repository.TestRepositoryAdmin;
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
+import java.util.Map;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.text.SimpleDateFormat;
 
 @Service
 public class TestServiceAdmin {
 
     @Autowired
     private TestRepositoryAdmin testRepository;
-
+    @Autowired
+    private ObjectMapper objectMapper; 
     // Get all tests
     public List<Test> getAllTests() {
         return testRepository.findAll();
@@ -57,6 +62,34 @@ public class TestServiceAdmin {
 
     // Delete test (update status to archived)
     public void updateTestStatus(Integer testId) {
-        //testRepository.updateStatusToArchived(testId);
+        testRepository.updateStatusToArchived(testId);
+    }
+
+    public void updateGeneralInfo(int id, String generalJson){
+        try{
+            Map<String, Object> general = objectMapper.readValue(generalJson, Map.class);
+
+            String testName = (String) general.get("testName");
+            String status = (String) general.get("status");
+            String createdDateStr = (String) general.get("testDate");
+            if (testName == null || testName.isBlank()) {
+                throw new IllegalArgumentException("Test name is required");
+            }
+
+            Test test = getTestById(id);
+            test.setTestName(testName);
+            test.setStatus(status);
+            if (createdDateStr != null && !createdDateStr.isEmpty()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                test.setTestDate(sdf.parse(createdDateStr));
+            }
+
+            testRepository.save(test);
+        }catch(Exception e){
+            throw new RuntimeException("Failed to update test", e);
+        }
+        
+
+
     }
 }

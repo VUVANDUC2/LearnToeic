@@ -9,11 +9,6 @@
     <title th:text="${title}">
       Flexy Free Bootstrap Admin Template by WrapPixel
     </title>
-    <!-- <link
-      rel="shortcut icon"
-      type="image/png"
-      href="/images/logos/favicon.png"
-    /> -->
     <link rel="stylesheet" href="/css/styles.min.css" />
   </head>
 
@@ -321,124 +316,159 @@
     </div>
 
     <!--Modal for editing test-->
-    <div class="modal fade" id="editTestModal" tabindex="-1">
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Edit Test</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
+    <div
+      class="modal fade"
+      id="editTestModal"
+      tabindex="-1"
+      aria-labelledby="editTestModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+          <div class="modal-header bg-primary text-white p-3">
+            <h5 class="modal-title fw-bold" id="editTestModalLabel">
+              <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa Bài kiểm tra
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
 
-          <div class="modal-body">
-            <ul class="nav nav-tabs">
-              <li class="nav-item">
+          <div class="modal-body p-4">
+            <ul
+              class="nav nav-pills nav-fill mb-4 p-1 bg-light rounded-3 shadow-sm"
+              role="tablist"
+            >
+              <li class="nav-item" role="presentation">
                 <button
-                  class="nav-link active"
+                  class="nav-link active fw-semibold"
                   data-bs-toggle="tab"
                   data-bs-target="#tab-general"
+                  type="button"
+                  role="tab"
+                  aria-controls="tab-general"
+                  aria-selected="true"
                 >
-                  General
+                  <i class="bi bi-info-circle-fill me-1"></i>Chung
                 </button>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" role="presentation">
                 <button
-                  class="nav-link"
+                  class="nav-link fw-semibold"
                   data-bs-toggle="tab"
                   data-bs-target="#tab-questions"
+                  type="button"
+                  role="tab"
+                  aria-controls="tab-questions"
+                  aria-selected="false"
                 >
-                  Questions
+                  <i class="bi bi-question-circle-fill me-1"></i>Câu hỏi
                 </button>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" role="presentation">
                 <button
-                  class="nav-link"
+                  class="nav-link fw-semibold"
                   data-bs-toggle="tab"
                   data-bs-target="#tab-images"
+                  type="button"
+                  role="tab"
+                  aria-controls="tab-images"
+                  aria-selected="false"
                 >
-                  Images
+                  <i class="bi bi-image-fill me-1"></i>Hình ảnh
                 </button>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" role="presentation">
                 <button
-                  class="nav-link"
+                  class="nav-link fw-semibold"
                   data-bs-toggle="tab"
                   data-bs-target="#tab-audios"
+                  type="button"
+                  role="tab"
+                  aria-controls="tab-audios"
+                  aria-selected="false"
                 >
-                  Audios
+                  <i class="bi bi-mic-fill me-1"></i>Âm thanh
                 </button>
               </li>
             </ul>
 
-            <div class="tab-content pt-3">
-              <!-- General Tab -->
+            <div class="tab-content">
               <div
                 id="tab-general"
                 class="tab-pane fade show active"
                 role="tabpanel"
               >
-                <form class="p-3 border rounded-3 bg-light">
-                  <h6 class="mb-3 text-primary border-bottom pb-2">
-                    Test Details
-                  </h6>
+                <form class="p-4 border rounded-4 bg-white shadow-sm">
+                  <h5
+                    class="mb-4 text-primary border-bottom border-primary pb-2 fw-bold"
+                  >
+                    Thông tin chi tiết Bài kiểm tra
+                  </h5>
 
-                  <div class="row mb-3">
+                  <div class="row mb-3 align-items-center">
                     <label
                       for="modal-test-id"
-                      class="col-sm-3 col-form-label fw-bold"
+                      class="col-sm-3 col-form-label fw-bold text-end text-muted"
                       >ID:</label
                     >
                     <div class="col-sm-9">
-                      <input
-                        type="text"
-                        readonly
-                        class="form-control-plaintext text-muted"
+                      <p
+                        class="form-control-plaintext text-dark bg-light p-2 rounded"
                         id="modal-test-id"
-                        value="T-459021"
-                      />
+                      >
+                        T-459021
+                      </p>
                     </div>
                   </div>
 
-                  <div class="row mb-3">
+                  <div class="row mb-3 align-items-center">
                     <label
                       for="modal-test-name"
-                      class="col-sm-3 col-form-label fw-bold"
-                      >Name:</label
+                      class="col-sm-3 col-form-label fw-bold text-end"
+                      >Tên:</label
                     >
                     <div class="col-sm-9">
                       <input
                         type="text"
-                        class="form-control is-valid"
+                        class="form-control form-control-lg is-valid"
                         id="modal-test-name"
                         value="Bootstrap 5 Refactor Test"
                       />
+                      <div class="valid-feedback">Tên bài kiểm tra hợp lệ!</div>
                     </div>
                   </div>
 
-                  <div class="row mb-3">
+                  <div class="row mb-3 align-items-center">
                     <label
                       for="modal-test-status"
-                      class="col-sm-3 col-form-label fw-bold"
-                      >Status:</label
+                      class="col-sm-3 col-form-label fw-bold text-end"
+                      >Trạng thái:</label
                     >
                     <div class="col-sm-9">
-                      <select class="form-select" id="modal-test-status">
-                        <option value="draft">Draft</option>
-                        <option value="review" selected>In Review</option>
-                        <option value="published">Published</option>
+                      <select
+                        class="form-select form-select-lg"
+                        id="modal-test-status"
+                      >
+                        <option value="Live">Live</option>
+                        <option value="ARCHIVED" selected>ARCHIVED</option>
                       </select>
                     </div>
                   </div>
 
-                  <div class="row">
+                  <div class="row align-items-center">
                     <label
                       for="modal-test-date"
-                      class="col-sm-3 col-form-label fw-bold"
-                      >Date:</label
+                      class="col-sm-3 col-form-label fw-bold text-end"
+                      >Ngày tạo:</label
                     >
                     <div class="col-sm-9">
                       <input
                         type="date"
-                        class="form-control"
+                        class="form-control form-control-lg"
                         id="modal-test-date"
                         value="2025-12-09"
                       />
@@ -446,24 +476,159 @@
                   </div>
                 </form>
               </div>
+              <!--Questions Tab-->
+              <div id="tab-questions" class="tab-pane fade p-4">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-4"
+                >
+                  <h4 class="fw-bold text-dark mb-0">
+                    <i class="bi bi-card-list me-2 text-primary"></i>Chi tiết
+                    Câu hỏi & Đáp án
+                  </h4>
+                </div>
 
-              <div id="tab-questions" class="tab-pane fade">
-                <!-- filled dynamically -->
+                <div id="questions-card-container">
+                  <div
+                    class="card shadow-sm mb-4 border-primary border-3 border-start"
+                    data-question-id="Q1"
+                  >
+                    <div
+                      class="card-header bg-light d-flex justify-content-between align-items-center"
+                    >
+                      <h6 class="fw-bold mb-0 text-dark">
+                        <span class="badge bg-primary me-2">Câu hỏi 1</span>
+                        Câu hỏi: Phát biểu nào sau đây là đúng về hệ thống lưới
+                        (Grid System) của Bootstrap 5?
+                      </h6>
+                      <div>
+                        <button
+                          class="btn btn-sm btn-outline-primary edit-question-btn"
+                          title="Chỉnh sửa chi tiết"
+                        >
+                          <i class="bi bi-pencil-square me-1"></i> Edit
+                        </button>
+                      </div>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item">
+                        <span class="fw-bold me-2 text-secondary">A.</span>
+                        Sử dụng Flexbox cho cột, nhưng không hỗ trợ responsive.
+                      </li>
+
+                      <li
+                        class="list-group-item list-group-item-success fw-medium"
+                      >
+                        <span class="fw-bold me-2 text-success">B.</span>
+                        Hệ thống lưới dựa trên Flexbox và chia thành 12 cột.
+                        <i class="bi bi-check-circle-fill ms-2"></i>
+                      </li>
+
+                      <li class="list-group-item">
+                        <span class="fw-bold me-2 text-secondary">C.</span>
+                        Hệ thống lưới chỉ có thể sử dụng tối đa 6 cột.
+                      </li>
+
+                      <li class="list-group-item">
+                        <span class="fw-bold me-2 text-secondary">D.</span>
+                        Sử dụng Floats thay vì Flexbox.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <div id="tab-images" class="tab-pane fade">
-                <!-- filled dynamically -->
+              <!-- Tab Images -->
+              <div id="tab-images" class="tab-pane fade p-3">
+                <div class="card enhanced-card mb-4 border-0 shadow-sm">
+                  <!-- Top action bar -->
+                  <div
+                    class="image-toolbar d-flex align-items-center gap-3 px-3 py-2"
+                  >
+                    <button class="btn btn-link btn-sm preview-btn">
+                      Preview
+                    </button>
+
+                    <label class="btn btn-link btn-sm mb-0">
+                      Upload
+                      <input
+                        type="file"
+                        class="d-none upload-input"
+                        accept="image/*"
+                      />
+                    </label>
+
+                    <button
+                      class="btn btn-link btn-sm text-danger ms-auto remove-btn"
+                    >
+                      Remove
+                    </button>
+                  </div>
+
+                  <!-- Image -->
+                  <div
+                    class="image-container d-flex justify-content-center py-3"
+                  >
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Crab_Nebula.jpg/250px-Crab_Nebula.jpg"
+                      class="w-50 image-preview"
+                      alt="Crab Nebula"
+                    />
+                  </div>
+                </div>
               </div>
-              <div id="tab-audios" class="tab-pane fade">
-                <!-- filled dynamically -->
+              <!--Audio tab-->
+              <div id="tab-audios" class="tab-pane fade p-3">
+                <div class="alert alert-warning" role="alert">
+                  <i class="bi bi-mic me-2"></i>Nội dung Âm thanh sẽ được tải
+                  động tại đây.
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">
-              Close
+          <div class="modal-footer justify-content-between">
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              data-bs-dismiss="modal"
+            >
+              <i class="bi bi-x-circle me-1"></i>Hủy bỏ
             </button>
-            <button class="btn btn-primary" id="saveTestBtn">Save</button>
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg px-4"
+              id="saveTestBtn"
+            >
+              <i class="bi bi-save-fill me-1"></i>Lưu thay đổi
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Preview Modal-->
+    <!-- Full-screen Image Preview Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1">
+      <div class="modal-dialog modal-fullscreen modal-dialog-centered">
+        <div class="modal-content bg-dark">
+          <div class="modal-header border-0">
+            <h5 class="modal-title text-white">Image Preview</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div
+            class="modal-body d-flex justify-content-center align-items-center"
+          >
+            <img
+              id="previewImage"
+              src=""
+              style="max-width: 95%; max-height: 95%"
+              class="img-fluid rounded"
+              alt="Preview"
+            />
           </div>
         </div>
       </div>
@@ -473,266 +638,347 @@
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        document.addEventListener("click", async function (e) {
-          const btn = e.target.closest(".edit-test-btn");
-          if (!btn) return;
+      document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("click", async (e) => {
+          //Edit button
+          const editButton = e.target.closest(".edit-test-btn");
+          if (!editButton) return;
 
-          console.log("🟦 Edit button clicked");
+          // Test ID
+          const id = editButton.dataset.testId;
 
-          const id = btn.getAttribute("data-test-id");
-          console.log("🟦 Test ID:", id);
+          console.log("Current Test ID:", id);
 
-          // Fetch test + questions
-          const res = await fetch(`/api/admin/tests/${id}`);
-          console.log("🟦 Response:", res.status);
+          //Fetch
+          try {
+            const res = await fetch(`/api/admin/tests/${id}`);
 
-          if (!res.ok) {
-            console.error("❌ API error:", res.status);
-            return;
+            if (!res.ok) throw new Error("Test not found");
+
+            const data = await res.json();
+            console.log("Data: ", data);
+
+            fillGeneralTab(data.test);
+            fillQuestionsTab(data.questions);
+            fillImagesTab(data.images);
+            fillAudiosTab(data.audios);
+          } catch (err) {
+            console.error("Error fetching test data:", err);
           }
 
-          const data = await res.json();
-          console.log("🟩 Received:", data);
+          //Functions
+          // Fill General Tab
+          function fillGeneralTab(test) {
+            document.getElementById("modal-test-id").textContent = test.testId;
+            document.getElementById("modal-test-name").value = test.testName;
+            document.getElementById("modal-test-status").value =
+              test.status.toLowerCase();
+            document.getElementById("modal-test-date").value = test.testDate;
+          }
 
-          const test = data.test;
-          const questions = data.questions;
+          //Fill Questions Tab
+          function fillQuestionsTab(questions) {
+            const container = document.getElementById("tab-questions");
+            container.innerHTML = ""; // Clear existing content
 
-          // --- Fill General Tab ---
-          document.querySelector("#modal-test-id").value = test.testId;
-          document.querySelector("#modal-test-name").value = test.testName;
-          document.querySelector("#modal-test-status").value = test.status;
-          document.querySelector("#modal-test-date").value = test.testDate;
+            if (!questions || questions.length === 0) {
+              // Hiển thị thông báo trống
+              container.innerHTML = `
+                    <div class="alert alert-info text-center" role="alert" id="empty-questions-message">
+                        <i class="bi bi-info-circle me-2"></i>Chưa có câu hỏi nào được thêm vào bài kiểm tra này.
+                    </div>
+                `;
+              return;
+            }
 
-          // --- Fill Questions Tab ---
-          const questionsTab = document.querySelector("#tab-questions");
-
-          if (!questions || questions.length === 0) {
-            questionsTab.innerHTML = "<p>No questions found.</p>";
-          } else {
-            let html = "";
-
+            let html = `<div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold text-dark mb-0">
+                      <i class="bi bi-card-list me-2 text-primary"></i>
+                      Chi tiết Câu hỏi & Đáp án
+                    </h4>
+                  </div>
+                  <div id="questions-card-container">`;
             questions.forEach((q, index) => {
-              const qId = `t${q.id.testId}-q${q.id.questionNumber}`;
-              // Ensure a unique ID for each question set
-              const partColor = q.part === 1 ? "bg-primary" : "bg-success";
-
               html += `
-        <div class="card shadow-sm mb-4 border-start border-4 border-primary" id="${qId}-card">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                
-                <h6 class="mb-0 text-dark">
-                    <span class="fw-bold me-2">Question ${index + 1}</span>
-                    <span class="badge ${partColor} text-white">Part ${
-                q.part
-              }</span>
-                </h6>
-                
-                <button 
-                    class="btn btn-sm btn-outline-secondary" 
-                    data-question-id="${qId}"
-                    onclick="toggleQuestionEdit('${qId}', true)"
-                >
-                    <i class="bi bi-pencil me-1"></i> Edit
-                </button>
-            </div>
-            
-            <form id="${qId}-form">
-                <div class="card-body py-3">
-                    <div class="mb-3">
-                        <label for="${qId}-text" class="form-label fw-bold">Question Text:</label>
-                        <textarea class="form-control" id="${qId}-text" rows="3" readonly>${
-                q.questionText || "(no text)"
-              }</textarea>
-                    </div>
+                <div class="card shadow-sm mb-4 border-primary border-3 border-start"
+                    data-test-id="${q.id.testId}"
+                    data-question-number="${q.id.questionNumber}">
 
-                    <div class="row g-2 mb-1">
-                        <div class="col-1 text-center fw-bold">A:</div>
-                        <div class="col-11">
-                            <input type="text" class="form-control form-control-sm" id="${qId}-optA" value="${
-                q.optionA ?? ""
-              }" readonly>
-                        </div>
-                    </div>
-                    <div class="row g-2 mb-1">
-                        <div class="col-1 text-center fw-bold">B:</div>
-                        <div class="col-11">
-                            <input type="text" class="form-control form-control-sm" id="${qId}-optB" value="${
-                q.optionB ?? ""
-              }" readonly>
-                        </div>
-                    </div>
-                    <div class="row g-2 mb-1">
-                        <div class="col-1 text-center fw-bold">C:</div>
-                        <div class="col-11">
-                            <input type="text" class="form-control form-control-sm" id="${qId}-optC" value="${
-                q.optionC ?? ""
-              }" readonly>
-                        </div>
-                    </div>
-                    <div class="row g-2 mb-1">
-                        <div class="col-1 text-center fw-bold">D:</div>
-                        <div class="col-11">
-                            <input type="text" class="form-control form-control-sm" id="${qId}-optD" value="${
-                q.optionD ?? ""
-              }" readonly>
-                        </div>
-                    </div>
+                  <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0 text-dark">
+                      <span class="badge bg-primary me-2">
+                        Câu hỏi ${q.id.questionNumber}
+                      </span>
+                      ${q.questionText}
+                      <span class="badge bg-secondary ms-2">Part ${q.part}</span>
+                    </h6>
+
+                    <button class="btn btn-sm btn-outline-primary edit-question-btn">
+                      <i class="bi bi-pencil-square me-1"></i> 
+                      <span>Edit</span>
+                    </button>
+                  </div>
+
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <span class="fw-bold me-2 text-secondary">A.</span>
+                      ${q.optionA}
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold me-2 text-secondary">B.</span>
+                      ${q.optionB}
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold me-2 text-secondary">C.</span>
+                      ${q.optionC}
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold me-2 text-secondary">D.</span>
+                      ${q.optionD}
+                    </li>
+                  </ul>
                 </div>
-            
-                <div class="card-footer bg-light text-end d-none" id="${qId}-footer">
-                    <button type="button" class="btn btn-sm btn-success me-2" onclick="saveQuestionEdit('${qId}')">Save</button>
-                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="cancelQuestionEdit('${qId}')">Cancel</button>
-                </div>
-            </form>
-        </div>
-        `;
+              `;
             });
 
-            questionsTab.innerHTML = html;
+            html += `</div>`;
+            container.innerHTML = html;
           }
 
-          // --- Open Modal ---
-          const modalEl = document.getElementById("editTestModal");
-          const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-          modal.show();
+          //Fill Images Tab
+          function fillImagesTab(images) {
+            const container = document.getElementById("tab-images");
+            container.innerHTML = "";
 
-          console.log("🟩 Modal opened");
+            if (images.length === 0) {
+              container.innerHTML = `
+                <div class="alert alert-info text-center" role="alert" id="empty-images-message">
+                  <i class="bi bi-info-circle me-2"></i>Chưa có hình ảnh nào được thêm vào bài kiểm tra này.
+                </div>
+              `;
+              return;
+            }
+            let html = `<div class="card enhanced-card mb-4 border-0 shadow-sm">`;
+
+            images.listening.forEach((name) => {
+              html += `<div
+                    class="image-container d-flex justify-content-center py-3"
+                  >
+                    <div class="image-toolbar position-absolute top-0 start-0 m-2 d-flex gap-2">
+                      <button
+                        class="btn btn-light btn-sm preview-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#imagePreviewModal"
+                        data-img="/uploads/toeic/${id}/listening/${name}"
+                      >
+                        Preview
+                      </button>
+
+                      <button
+                        class="btn btn-danger btn-sm remove-btn"
+                        data-img="/uploads/toeic/${id}/reading/${name}"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <img
+                      src="/uploads/toeic/${id}/listening/${name}"
+                      class="w-50 image-preview"
+                      alt="${name}"
+                    />
+                  </div>`;
+            });
+
+            images.reading.forEach((name) => {
+              html += `<div
+                    class="image-container position-relative d-flex justify-content-center py-3"
+                  >
+                    <div class="image-toolbar position-absolute top-0 start-0 m-2 d-flex gap-2">
+                      <button
+                        class="btn btn-light btn-sm preview-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#imagePreviewModal"
+                        data-img="/uploads/toeic/${id}/reading/${name}"
+                      >
+                        Preview
+                      </button>
+
+                      <button
+                        class="btn btn-danger btn-sm remove-btn"
+                        data-img="/uploads/toeic/${id}/reading/${name}"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <img
+                      src="/uploads/toeic/${id}/reading/${name}"
+                      class="w-50 image-preview"
+                      alt="${name}"
+                    />
+                  </div>`;
+            });
+            html += `</div>`;
+            container.innerHTML = html;
+          }
+
+          //Fill audio tab
+          function fillAudiosTab(audio) {
+            container = document.getElementById("tab-audios");
+            container.innerHTML = "";
+
+            if (audio.listening.length === 0) {
+              container.innerHTML = `<h3>Không có file âm thanh nào hết</h3>`;
+              return;
+            }
+            let html =
+              '<div class="audio-container card shadow-sm border-0 p-3 my-3">';
+            audio.listening.forEach((name) => {
+              html += `<div class="d-flex align-items-center gap-3">
+                          <i class="bi bi-volume-up fs-4 text-primary"></i>
+
+                          <audio controls class="w-100">
+                            <source src="/uploads/toeic/${id}/listening/${name}" type="audio/mpeg" />
+                          </audio>
+                        </div>`;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+          }
         });
       });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const saveBtn = document.getElementById("saveTestBtn");
+        //Save general
+        saveBtn.addEventListener("click", async () => {
+          const id = document.getElementById("modal-test-id").innerText.trim();
+          console.log("Saving Test ID:", id);
 
-      // New/Modified function to explicitly toggle the edit mode
-      function toggleQuestionEdit(questionId, enable = true) {
-        const cardFooter = document.getElementById(questionId + "-footer");
-        const formInputs = document.querySelectorAll(
-          `#${questionId}-form input, #${questionId}-form textarea`
-        );
-        const editButton = document.querySelector(
-          `button[data-question-id="${questionId}"]`
-        );
-
-        if (enable) {
-          // --- ENABLE EDIT MODE (The Edit button was clicked) ---
-          formInputs.forEach((input) => {
-            input.removeAttribute("readonly");
-            // Optional: input.classList.add("is-valid"); // You can use this for visual feedback
-          });
-
-          // Hide the Edit button
-          editButton.classList.add("d-none");
-
-          // Show the Save/Cancel buttons
-          cardFooter.classList.remove("d-none");
-        } else {
-          // --- DISABLE EDIT MODE (Cancel/Save was clicked) ---
-          formInputs.forEach((input) => {
-            input.setAttribute("readonly", true);
-          });
-
-          // Show the Edit button
-          editButton.classList.remove("d-none");
-
-          // Hide the Save/Cancel buttons
-          cardFooter.classList.add("d-none");
-        }
-      }
-
-      async function saveQuestionEdit(questionId) {
-        console.log(
-          "🔍 DEBUG: saveQuestionEdit() called with questionId =",
-          questionId
-        );
-
-        try {
-          // Extract testId + questionNumber
-          const regex = /^t(.+)-q(\d+)$/;
-          const match = questionId.match(regex);
-
-          console.log("🔍 DEBUG: Regex match result:", match);
-
-          if (!match) {
-            console.error("❌ ERROR: Invalid question ID format:", questionId);
-            return;
-          }
-
-          const testId = match[1];
-          const qNumber = match[2];
-
-          console.log(
-            `🧩 DEBUG: Extracted testId = ${testId}, questionNumber = ${qNumber}`
-          );
-
-          // Read updated fields
-          const text = document.querySelector(`#${questionId}-text`)?.value;
-          const optA = document.querySelector(`#${questionId}-optA`)?.value;
-          const optB = document.querySelector(`#${questionId}-optB`)?.value;
-          const optC = document.querySelector(`#${questionId}-optC`)?.value;
-          const optD = document.querySelector(`#${questionId}-optD`)?.value;
-
-          console.log("📝 DEBUG: Extracted field values:", {
-            text,
-            optA,
-            optB,
-            optC,
-            optD,
-          });
-
-          if (!text) console.warn("⚠️ WARNING: Question text is empty!");
-
-          const payload = {
-            questionText: text,
-            optionA: optA,
-            optionB: optB,
-            optionC: optC,
-            optionD: optD,
+          const general = {
+            testName: document.getElementById("modal-test-name").value,
+            status: document.getElementById("modal-test-status").value,
+            testDate: document.getElementById("modal-test-date").value,
           };
 
-          console.log("📦 DEBUG: Final payload to send:", payload);
+          const payload = new FormData();
+          payload.append("general", JSON.stringify(general));
 
-          const url = `/api/admin/tests/${testId}/questions/${qNumber}`;
-          console.log("🌐 DEBUG: Sending PUT request to URL:", url);
+          //Send
 
-          const res = await fetch(url, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(payload),
+          try {
+            const res = await fetch(`/api/admin/update/tests/${id}`, {
+              method: "PUT",
+              body: payload,
+            });
+
+            if (!res.ok) throw new Error("Failed to update test");
+
+            alert("Lưu thành công");
+            bootstrap.Modal.getInstance(
+              document.getElementById("editTestModal")
+            ).hide();
+          } catch (err) {
+            console.error("Error updating test:", err);
+            alert("Lưu thất bại. Vui lòng thử lại.");
+          }
+        });
+
+        //Edit question button
+        document.addEventListener("click", (e) => {
+          const editBtn = e.target.closest(".edit-question-btn");
+          if (!editBtn) return;
+
+          const card = editBtn.closest(".card");
+          const isEditing = card.classList.contains("editing");
+
+          if (!isEditing) {
+            enableEdit(card, editBtn);
+          } else {
+            saveEdit(card, editBtn);
+          }
+        });
+
+        //Function enable Edit
+        function enableEdit(card, btn) {
+          card.classList.add("editing");
+
+          btn.classList.remove("btn-outline-primary");
+          btn.classList.add("btn-success");
+          btn.querySelector("span").innerText = "Save";
+          btn.querySelector("i").className = "bi bi-check-lg me-1";
+
+          // Quesion Text
+          const title = card.querySelector("h6");
+          const questionText = title.childNodes[2].textContent.trim();
+          title.childNodes[2].replaceWith(
+            createInput(questionText, "questionText")
+          );
+
+          // Options Text
+          card.querySelectorAll(".list-group-item").forEach((li, i) => {
+            const text = li.textContent.trim().slice(3);
+            li.innerHTML = `
+                <span class="fw-bold me-2 text-secondary">${String.fromCharCode(
+                  65 + i
+                )}.</span>
+                <input class="form-control form-control-sm d-inline-block w-75"
+                      value="${text}"
+                      data-option="${String.fromCharCode(65 + i)}">
+              `;
+          });
+        }
+
+        //Function Save edit
+        function saveEdit(card, btn) {
+          card.classList.remove("editing");
+
+          btn.classList.remove("btn-success");
+          btn.classList.add("btn-outline-primary");
+          btn.querySelector("span").innerText = "Edit";
+          btn.querySelector("i").className = "bi bi-pencil-square me-1";
+
+          // Save question text
+          const input = card.querySelector("input[data-name='questionText']");
+          const title = card.querySelector("h6");
+          input.replaceWith(document.createTextNode(" " + input.value + " "));
+
+          // Save options
+          card.querySelectorAll("input[data-option]").forEach((input) => {
+            const li = input.closest("li");
+            const letter = input.dataset.option;
+            li.innerHTML = `
+                <span class="fw-bold me-2 text-secondary">${letter}.</span>
+                ${input.value}
+              `;
           });
 
-          console.log("📡 DEBUG: Response status:", res.status);
+          // 🔥 Collect updated data (for backend later)
+          const updatedQuestion = {
+            testId: card.dataset.testId,
+            questionNumber: card.dataset.questionNumber,
+            questionText: title.textContent.trim(),
+            options: {
+              A: card.querySelector("li:nth-child(1)").innerText.slice(3),
+              B: card.querySelector("li:nth-child(2)").innerText.slice(3),
+              C: card.querySelector("li:nth-child(3)").innerText.slice(3),
+              D: card.querySelector("li:nth-child(4)").innerText.slice(3),
+            },
+          };
 
-          const responseText = await res.text();
-          console.log("📨 DEBUG: Raw response text:", responseText);
-
-          if (!res.ok) {
-            console.error("❌ ERROR: Server returned failure");
-            alert("❌ Failed to save question!");
-            return;
-          }
-
-          console.log("✅ SUCCESS: Question updated!");
-
-          toggleQuestionEdit(questionId, false);
-
-          const card = document.getElementById(`${questionId}-card`);
-          if (card) {
-            card.classList.add("border-success");
-            setTimeout(() => card.classList.remove("border-success"), 1500);
-          } else {
-            console.warn(
-              "⚠️ WARNING: Card element not found:",
-              `${questionId}-card`
-            );
-          }
-        } catch (err) {
-          console.error("💥 FATAL ERROR in saveQuestionEdit():", err);
-          alert("⚠️ Unexpected error. Check console for details.");
+          console.log("Updated question:", updatedQuestion);
         }
-      }
 
-      function cancelQuestionEdit(questionId) {
-        toggleQuestionEdit(questionId, false);
-      }
+        function createInput(value, name) {
+          const input = document.createElement("input");
+          input.className =
+            "form-control form-control-sm d-inline-block w-75 mx-2";
+          input.value = value;
+          input.dataset.name = name;
+          return input;
+        }
+      });
     </script>
   </body>
 </html>

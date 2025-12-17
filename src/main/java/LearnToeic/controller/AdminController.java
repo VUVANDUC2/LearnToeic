@@ -33,6 +33,9 @@ public class AdminController {
     147,149,151,153,155,158,161,165,168,172,176,
     181,186,191,196
     };
+
+
+    private static final List<String> IMAGE_EXT = List.of("jpg", "jpeg", "png");
     @Value("${file.upload-dir}") 
     private String uploadDir;
     private final TestServiceAdmin testService;
