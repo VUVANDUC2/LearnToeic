@@ -311,19 +311,23 @@
 
   <h6 class="fw-semibold mb-3">Kết quả bài làm</h6>
 
-  <!-- <div class="d-flex justify-content-between mb-2">
+  <div class="d-flex justify-content-between mb-2">
     <span>Điểm:</span>
-    <strong th:text="${score}"></strong>
-  </div> -->
+    <strong>
+      <span th:text="${score}">0</span>
+      <span>/</span>
+      <span th:text="${maxScore}">0</span>
+    </strong>
+  </div>
 
   <div class="d-flex justify-content-between mb-1">
     <span class="text-success">✔ Số câu đúng:</span>
-    <strong th:text="${score}">0</strong>
+    <strong th:text="${correctCount}">0</strong>
   </div>
 
   <div class="d-flex justify-content-between mb-1">
     <span class="text-danger">✘ Số câu sai:</span>
-    <strong th:text="${view.totalQuestions - score}">0</strong>
+    <strong th:text="${wrongCount}">0</strong>
   </div>
 </div>
 
@@ -397,8 +401,12 @@
     // _answers: object lưu câu trả lời cục bộ trên browser {qn: option}
     window._answers = {};
 
+    // _focusQn: questionNumber khi người dùng click nút số câu ở sidebar
+    // -> dùng để scroll tới đúng câu sau khi đổi part (HTMX hoặc reload)
+    window._focusQn = null;
+
     // _focusIdx: index câu trong PART khi người dùng click nút số câu ở sidebar
-    // -> dùng để scroll tới đúng câu sau khi HTMX load part
+    // -> dùng để scroll tới đúng câu sau khi HTMX load part (legacy)
     window._focusIdx = null;
     window._remainingSeconds = 0;
 
@@ -408,6 +416,22 @@
 
     function getSubmitForm() {
       return document.getElementById('submitForm') || document.getElementById('autoSubmitForm');
+    }
+
+    function scrollToQuestionNumber(questionNumber, behavior = 'smooth') {
+      const container = document.getElementById('part-container');
+      if (!container) return false;
+
+      const form = container.querySelector(
+        `.answer-form[data-qn="${questionNumber}"]`
+      );
+      const target = form?.closest('.question-card, .card') || form;
+      if (!target) return false;
+
+      setTimeout(() => {
+        target.scrollIntoView({ behavior, block: 'start' });
+      }, 100);
+      return true;
     }
 
     function buildAnswersJson() {
@@ -574,8 +598,16 @@
         });
       }
 
-      // 4. Nếu có _focusIdx (user vừa click số câu ở sidebar), scroll tới câu đó
-      if (window._focusIdx != null) {
+      // 4. Nếu có _focusQn (user vừa click số câu ở sidebar), scroll tới câu đó
+      if (window._focusQn != null) {
+        const qn = parseInt(window._focusQn, 10);
+        if (!Number.isNaN(qn)) {
+          scrollToQuestionNumber(qn);
+        }
+        window._focusQn = null;
+        window._focusIdx = null;
+      } else if (window._focusIdx != null) {
+        // fallback legacy theo index trong part
         const container = document.getElementById('part-container');
         if (container) {
           const target = container.querySelector('#q' + window._focusIdx);
@@ -663,6 +695,44 @@
       if (!IS_REVIEW) {
         wireCollectOnly();
       }
+
+      // Nếu URL có ?qn=... hoặc #qn... thì cuộn tới đúng câu (hữu ích cho trang review)
+      try {
+        const url = new URL(window.location.href);
+        const qnParam = url.searchParams.get('qn');
+        if (qnParam) {
+          const qn = parseInt(qnParam, 10);
+          if (!Number.isNaN(qn)) {
+            scrollToQuestionNumber(qn);
+            return;
+          }
+        }
+      } catch (_) {}
+
+      const hash = window.location.hash || '';
+      let match = hash.match(/^#qn(\d+)$/);
+      if (match) {
+        const qn = parseInt(match[1], 10);
+        if (!Number.isNaN(qn)) {
+          scrollToQuestionNumber(qn);
+          return;
+        }
+      }
+
+      // Legacy: #q{index} (index trong part)
+      match = hash.match(/^#q(\d+)$/);
+      if (match) {
+        const idx = parseInt(match[1], 10);
+        if (!Number.isNaN(idx)) {
+          const container = document.getElementById('part-container');
+          const target = container?.querySelector('#q' + idx);
+          if (target) {
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+          }
+        }
+      }
     });
 
     // 5b) Xóa lựa chọn khi nhấn nút "Xóa chọn"
@@ -699,22 +769,57 @@
 
     /* ================================================================
        6) Click nút số câu ở sidebar (.qbtn):
-          - Lưu index câu trong part (data-qidx) vào _focusIdx
-          - Trigger click tab part tương ứng để HTMX load part
-          - Sau khi load xong, htmx:afterSwap sẽ scroll tới #q{_focusIdx}
-       ================================================================ */
+          - REVIEW: đổi part (reload) + ?qn để cuộn tới đúng câu
+          - EXAM: đổi part bằng HTMX, sau swap sẽ cuộn tới câu đã chọn
+        ================================================================ */
     document.body.addEventListener('click', e => {
-      const btn = e.target.closest('.qbtn[data-part][data-qidx]');
+      const btn = e.target.closest('.qbtn[data-part][data-qn]');
       if (!btn) return;
 
-      e.preventDefault();
-
       const part = btn.getAttribute('data-part');
-      const qidx = btn.getAttribute('data-qidx');
-      if (!part || !qidx) return;
+      const qnAttr = btn.getAttribute('data-qn');
+      if (!part || !qnAttr) return;
 
-      // 1) Lưu index câu trong part
-      window._focusIdx = parseInt(qidx, 10);
+      // Chặn HTMX/handler khác xử lý click này
+      e.preventDefault();
+      e.stopPropagation();
+
+      const qn = parseInt(qnAttr, 10);
+      if (Number.isNaN(qn)) return;
+
+      const currentPart =
+        document.querySelector('#nav-parts .nav-link.active')?.getAttribute('data-part') ??
+        null;
+
+      const isReviewPage = IS_REVIEW || window.location.pathname.includes('/review');
+
+      // REVIEW MODE: cùng part thì cuộn luôn; khác part thì reload sang part đó + ?qn để cuộn sau khi load
+      if (isReviewPage) {
+        if (currentPart === part) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('part', part);
+          url.searchParams.set('qn', String(qn));
+          history.replaceState(null, '', url.toString());
+          scrollToQuestionNumber(qn);
+          return;
+        }
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('part', part);
+        url.searchParams.set('qn', String(qn));
+        url.hash = '';
+        window.location.href = url.toString();
+        return;
+      }
+
+      // EXAM MODE: cùng part thì cuộn luôn; khác part thì dùng HTMX load part rồi cuộn
+      if (currentPart === part) {
+        scrollToQuestionNumber(qn);
+        return;
+      }
+
+      // 1) Lưu questionNumber để scroll sau khi HTMX load part
+      window._focusQn = qn;
 
       // 2) Tìm tab part tương ứng và trigger click để HTMX load nội dung part
       const tab = document.querySelector(
@@ -723,7 +828,7 @@
       if (tab) {
         tab.click();
       }
-    });
+    }, true);
 
     /* ================================================================
        7) Trước khi submit form:

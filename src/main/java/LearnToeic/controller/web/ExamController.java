@@ -129,7 +129,10 @@ public String reviewTake(
     model.addAttribute("selectedMap", selectedMap);  // dùng cho tô màu
     model.addAttribute("correctFlagMap", correctFlagMap);
     model.addAttribute("correctMap", review.correctMap());
+    model.addAttribute("correctCount", review.correctCount());
+    model.addAttribute("wrongCount", review.wrongCount());
     model.addAttribute("score", review.score());
+    model.addAttribute("maxScore", review.maxScore() != null ? review.maxScore() : review.totalQuestions());
 
 
     return "tests/take-home";

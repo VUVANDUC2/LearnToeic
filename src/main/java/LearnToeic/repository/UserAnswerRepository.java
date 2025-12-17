@@ -10,4 +10,5 @@ import LearnToeic.entity.UserAnswer;
 public interface  UserAnswerRepository extends JpaRepository<UserAnswer,Long>{
     List<UserAnswer>findByTake_TakeId(Integer takeId);
     int countByTake_TakeIdAndSelectedOptionIsNotNull(Integer takeId);
+    int countByTake_TakeIdAndIsCorrectTrue(Integer takeId);
 }

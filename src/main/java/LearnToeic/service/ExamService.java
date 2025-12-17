@@ -373,6 +373,7 @@ public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
     // 0) Lấy Take + Test
     Take take = takeRepo.findById(takeId).orElseThrow();
     Integer testId = take.getTest().getTestId();
+    Integer maxScore = take.getTest().getMaxScore();
 
     // 1) Lấy đáp án đúng từ answer_sheets
     Map<Integer, Character> correctMap = answerSheetRepo
@@ -395,7 +396,6 @@ public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
             ));
 
     // 3) Xử lý từng câu user gửi lên: lưu selected_option + is_correct
-    int correctCount = 0;
     List<UserAnswer> toSave = new ArrayList<>();
 
     for (Map.Entry<Integer, Character> e : answers.entrySet()) {
@@ -417,12 +417,17 @@ public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
         }
 
         toSave.add(ua);
-        if (ok) correctCount++;
     }
 
     if (!toSave.isEmpty()) {
         userAnswerRepo.saveAll(toSave);
     }
+
+    int correctCount = userAnswerRepo.countByTake_TakeIdAndIsCorrectTrue(takeId);
+    int totalQuestions = Optional.ofNullable(take.getTest().getTotalQuestions())
+            .orElseGet(() -> Optional.ofNullable(questionRepo.countById_TestId(testId))
+                    .orElse(correctMap.size()));
+    int score = computeScaledScore(correctCount, totalQuestions, maxScore);
 
     // 4) Ghi vào test_results (mỗi take một result)
     TestResult result = testResultRepo.findByTake_TakeId(takeId)
@@ -432,7 +437,7 @@ public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
                 return r;
             });
 
-    result.setScore(correctCount);
+    result.setScore(score);
     result.setTakenOn(LocalDateTime.now());
     testResultRepo.save(result);
 
@@ -441,6 +446,18 @@ public void saveAllAndGrade(Integer takeId, Map<Integer, Character> answers) {
     take.setEndTime(LocalDateTime.now());
     takeRepo.save(take);
 }
+
+    private int computeScaledScore(int correctCount, int totalQuestions, Integer maxScore) {
+        if (totalQuestions <= 0) {
+            return Math.max(0, correctCount);
+        }
+
+        int effectiveMax = (maxScore != null && maxScore > 0) ? maxScore : totalQuestions;
+        int boundedCorrect = Math.min(Math.max(correctCount, 0), totalQuestions);
+        int scaled = (int) Math.round(((double) boundedCorrect * effectiveMax) / totalQuestions);
+        scaled = Math.min(Math.max(scaled, 0), effectiveMax);
+        return scaled;
+    }
 
     // @Transactional(readOnly = true)
     // public TakeReviewVM buildTakeViewWithResults(Integer takeId, int part) {
@@ -525,11 +542,13 @@ public TakeReviewVM buildTakeViewWithResults(Integer takeId, int part) {
     Take take = takeRepo.findById(takeId).orElseThrow();
     Integer testId = take.getTest().getTestId();
     String testName = take.getTest().getTestName();
+    Integer maxScore = take.getTest().getMaxScore();
 
     // 2) Lấy toàn bộ câu hỏi để build partMap, correctMap, total
     List<Question> questions =
             questionRepo.findById_TestIdOrderById_QuestionNumber(testId);
-    int totalQuestions = questions.size();
+    int totalQuestions = Optional.ofNullable(take.getTest().getTotalQuestions())
+            .orElse(questions.size());
 
     Map<Integer, List<Integer>> partMap = questions.stream()
             .collect(Collectors.groupingBy(
@@ -538,9 +557,6 @@ public TakeReviewVM buildTakeViewWithResults(Integer takeId, int part) {
                     Collectors.mapping(q -> q.getId().getQuestionNumber(),
                                        Collectors.toList())
             ));
-// Lấy toàn bộ dòng answer_sheets của test này
-List<AnswerSheet> sheets = answerSheetRepo.findById_TestId(testId);
-
 // Map<questionNumber/sequence, correctOptionChar>
 Map<Integer, Character> correctMap = answerSheetRepo.findById_TestId(testId)
     .stream()
@@ -583,11 +599,13 @@ Map<Integer, Character> correctMap = answerSheetRepo.findById_TestId(testId)
             .map(TestResult::getScore)
             .orElse(null);
 
+    int correctCount = (int) userAnswers.stream()
+            .filter(ua -> Boolean.TRUE.equals(ua.getIsCorrect()))
+            .count();
+    int wrongCount = Math.max(0, totalQuestions - correctCount);
+
     if (score == null) {
-        // fallback: đếm từ isCorrectMap
-        score = (int) isCorrectMap.values().stream()
-                .filter(Boolean::booleanValue)
-                .count();
+        score = computeScaledScore(correctCount, totalQuestions, maxScore);
     }
 
     long remaining = 0; // review thì 0
@@ -597,7 +615,10 @@ Map<Integer, Character> correctMap = answerSheetRepo.findById_TestId(testId)
             testId,
             testName,
             totalQuestions,
+            correctCount,
+            wrongCount,
             score,
+            maxScore,
             part,
             remaining,
             partMap,

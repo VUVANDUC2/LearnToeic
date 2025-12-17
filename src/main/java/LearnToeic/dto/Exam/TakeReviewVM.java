@@ -8,7 +8,10 @@ public record TakeReviewVM(
         Integer testId,
         String testName,
         Integer totalQuestions,
-        Integer score,                         // lấy từ Take hoặc tính nếu null
+        Integer correctCount,                  // số câu đúng
+        Integer wrongCount,                    // số câu sai
+        Integer score,                         // điểm (quy đổi theo maxScore)
+        Integer maxScore,
         Integer currentPart,
         long remaining,                // part đang review
         Map<Integer, List<Integer>> partMap,   // Map<partNumber, List<questionNumber>>
