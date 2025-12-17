@@ -26,9 +26,9 @@ public interface TakeRepositoryAdmin extends JpaRepository<Take, Integer> {
     List<Object[]> findUserAttemptsOrdered();
 
     @Query(value = """
-            SELECT MONTH(taken_on) AS month, COUNT(*) 
+            SELECT MONTH(end_time) AS month, COUNT(*) 
             FROM takes 
-            GROUP BY MONTH(taken_on)
+            GROUP BY MONTH(end_time)
             ORDER BY month
             """, nativeQuery = true)
     List<Object[]> findTestsTakenByMonth();

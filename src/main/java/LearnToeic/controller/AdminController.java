@@ -89,6 +89,7 @@ public class AdminController {
         @RequestParam(value = "searchTerm", required = false) String searchTerm
     ) {
         Page<BlogPost> blogPage = blogService.getPaginateBlogPosts(searchTerm, page, size);
+        
         model.addAttribute("blogs", blogPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", blogPage.getTotalPages());
@@ -146,71 +147,69 @@ public class AdminController {
         return "admin/create_test";
     }
     
-    // @GetMapping("/admin/ranking")
-    // public String rankingPage(Model model){
-    //     Map<Integer, Double> avgScore = takeService.getAverageScorePerTest();
-    //     Map<Integer, Long> testTaker = takeService.getTop5TestTakers();
-    //     Map<Integer, Long> mostDoTest = takeService.getTop10MostTakenTests();
-    //     Map<Integer, Long> testDoByMonth = takeService.getTestsTakenByMonth();
-    //     // AVG of test score
-    //     List<Integer> label1 = new ArrayList<>(avgScore.keySet());
-    //     List<Double> data1 = new ArrayList<>(avgScore.values());
-    //     //Number of user that take the test
-    //     int data2a = takeService.getDistinctUserCount();
-    //     int data2b = userService.getDistinctUserCount();
-    //     List <Integer> data2 = new ArrayList<Integer>();
-    //     data2.add(data2a);
-    //     data2.add(data2b);
-    //     //Top 5 test takers
-    //     List<Integer> data3a = new ArrayList<>(testTaker.keySet());
-    //     List<String> label3 = new ArrayList<>();
+    @GetMapping("/admin/ranking")
+    public String rankingPage(Model model){
+        
+        Map<Integer, Long> testTaker = takeService.getTop5TestTakers();
+        Map<Integer, Long> mostDoTest = takeService.getTop10MostTakenTests();
+        Map<Integer, Long> testDoByMonth = takeService.getTestsTakenByMonth();
+        // AVG of test score
+        
+        //Number of user that take the test
+        int data2a = takeService.getDistinctUserCount();
+        int data2b = userService.getDistinctUserCount();
+        List <Integer> data2 = new ArrayList<Integer>();
+        data2.add(data2a);
+        data2.add(data2b);
+        //Top 5 test takers
+        List<Integer> data3a = new ArrayList<>(testTaker.keySet());
+        List<String> label3 = new ArrayList<>();
 
-    //     for (int i : data3a) {
-    //         User user = userService.findUserById(i)
-    //                             .orElseThrow(() -> new RuntimeException("User not found: " + i));
+        for (int i : data3a) {
+            User user = userService.findUserById(i)
+                                .orElseThrow(() -> new RuntimeException("User not found: " + i));
             
-    //         label3.add(user.getFullName());
-    //     }
+            label3.add(user.getFullName());
+        }
 
-    //     for(int i: data3a){
-    //         System.out.println(i);
-    //     }
+        for(int i: data3a){
+            System.out.println(i);
+        }
 
-    //     for(String i: label3){
-    //         System.out.println(i);
-    //     }
+        for(String i: label3){
+            System.out.println(i);
+        }
 
         
         
-    //     List<Long> data3= new ArrayList<>(testTaker.values());
+        List<Long> data3= new ArrayList<>(testTaker.values());
 
-    //     //Most do test
-    //     List<Integer> label4 = new ArrayList<>(mostDoTest.keySet());
-    //     List<Long> data4 = new ArrayList<>(mostDoTest.values());
+        //Most do test
+        List<Integer> label4 = new ArrayList<>(mostDoTest.keySet());
+        List<Long> data4 = new ArrayList<>(mostDoTest.values());
         
 
-    //     //Test taken by months
-    //     List<Integer> label5 = new ArrayList<>(testDoByMonth.keySet());
+        //Test taken by months
+        List<Integer> label5 = new ArrayList<>(testDoByMonth.keySet());
 
-    //     List<Long> data5 = new ArrayList<>(testDoByMonth.values());
+        List<Long> data5 = new ArrayList<>(testDoByMonth.values());
 
-    //     model.addAttribute("chart1_label", label1);
-    //     model.addAttribute("chart1_data", data1);
+        
 
-    //     model.addAttribute("chart2_data",data2);
+        model.addAttribute("chart2_data",data2);
 
-    //     model.addAttribute("chart3_label", label3);
-    //     model.addAttribute("chart3_data", data3);
+        model.addAttribute("chart3_label", label3);
+        model.addAttribute("chart3_data", data3);
 
-    //     model.addAttribute("chart4_label", label4);
-    //     model.addAttribute("chart4_data", data4);
+        model.addAttribute("chart4_label", label4);
+        model.addAttribute("chart4_data", data4);
 
-    //     model.addAttribute("chart5_label", label5);
-    //     model.addAttribute("chart5_data", data5);
+        model.addAttribute("chart5_label", label5);
+        model.addAttribute("chart5_data", data5);
 
-    //     model.addAttribute("title","Admin -  User ranking");
-    //     return "admin/ranking";
-    // }
+        model.addAttribute("title","Admin -  User ranking");
+        return "admin/ranking";
+    }
 
 
 

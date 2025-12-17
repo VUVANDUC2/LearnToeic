@@ -25,18 +25,7 @@ public class TakeServiceAdmin {
         return takeRepository.findAllByTestId(testId);
     }
 
-    // public Map<Integer, Double> getAverageScorePerTest() {
-    //     List<Object[]> results = takeRepository.findAverageScorePerTest();
-
-    //     Map<Integer, Double> averageScores = new LinkedHashMap<>();
-    //     for (Object[] row : results) {
-    //         Integer testId = ((Number) row[0]).intValue();
-    //         Double avgScore = ((Number) row[1]).doubleValue();
-    //         averageScores.put(testId, avgScore);
-    //     }
-
-    //     return averageScores;
-    // }
+    
 
     public Map<Integer, Long> getTop5TestTakers() {
         List<Object[]> results = takeRepository.findUserAttemptsOrdered();

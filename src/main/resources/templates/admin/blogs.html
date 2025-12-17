@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title th:text="${title}">Flexy Free Bootstrap Admin Template by WrapPixel</title>
+    <title th:text="${title}">
+      Flexy Free Bootstrap Admin Template by WrapPixel
+    </title>
     <!-- <link
       rel="shortcut icon"
       type="image/png"
@@ -33,7 +35,11 @@
           <nav class="navbar navbar-expand-lg navbar-light">
             <ul class="navbar-nav">
               <li class="nav-item d-block d-xl-none">
-                <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
+                <a
+                  class="nav-link sidebartoggler"
+                  id="headerCollapse"
+                  href="javascript:void(0)"
+                >
                   <i class="ti ti-menu-2"></i>
                 </a>
               </li>
@@ -48,16 +54,28 @@
                   <i class="ti ti-bell"></i>
                   <div class="notification bg-primary rounded-circle"></div>
                 </a>
-                <div class="dropdown-menu dropdown-menu-animate-up" aria-labelledby="drop1">
+                <div
+                  class="dropdown-menu dropdown-menu-animate-up"
+                  aria-labelledby="drop1"
+                >
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="dropdown-item">Item 1</a>
-                    <a href="javascript:void(0)" class="dropdown-item">Item 2</a>
+                    <a href="javascript:void(0)" class="dropdown-item"
+                      >Item 1</a
+                    >
+                    <a href="javascript:void(0)" class="dropdown-item"
+                      >Item 2</a
+                    >
                   </div>
                 </div>
               </li>
             </ul>
-            <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-              <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+            <div
+              class="navbar-collapse justify-content-end px-0"
+              id="navbarNav"
+            >
+              <ul
+                class="navbar-nav flex-row ms-auto align-items-center justify-content-end"
+              >
                 <li class="nav-item dropdown">
                   <a
                     class="nav-link"
@@ -129,7 +147,9 @@
                           class="form-control"
                           placeholder="Search..."
                         />
-                        <button class="btn btn-primary" type="submit">Search</button>
+                        <button class="btn btn-primary" type="submit">
+                          Search
+                        </button>
                       </div>
                     </form>
                   </div>
@@ -146,8 +166,12 @@
                           All of your blogs on your website will be display here
                         </p>
                       </div>
-                      <div class="d-flex ms-auto align-items-center gap-2 mt-3 mt-md-0">
-                        <a class="btn btn-primary" href="#" role="button">New+</a>
+                      <div
+                        class="d-flex ms-auto align-items-center gap-2 mt-3 mt-md-0"
+                      >
+                        <a class="btn btn-primary" href="#" role="button"
+                          >New+</a
+                        >
                         <select
                           class="form-select theme-select border-0"
                           aria-label="Default select example"
@@ -160,14 +184,22 @@
                     </div>
 
                     <div class="table-responsive mt-4">
-                      <table class="table mb-0 text-nowrap varient-table align-middle fs-3">
+                      <table
+                        class="table mb-0 text-nowrap varient-table align-middle fs-3"
+                      >
                         <thead>
                           <tr>
                             <th scope="col" class="px-0 text-muted">Blogs</th>
                             <th scope="col" class="px-0 text-muted">Title</th>
-                            <th scope="col" class="px-0 text-muted text-center">Owned</th>
-                            <th scope="col" class="px-0 text-muted text-end">Upvotes</th>
-                            <th scope="col" class="px-0 text-muted text-end">Actions</th>
+                            <th scope="col" class="px-0 text-muted text-center">
+                              Category
+                            </th>
+                            <th scope="col" class="px-0 text-muted text-end">
+                              Create Time
+                            </th>
+                            <th scope="col" class="px-0 text-muted text-end">
+                              Actions
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -181,32 +213,40 @@
                                   alt="flexy"
                                 />
                                 <div class="ms-3">
-                                  <h6 class="mb-0 fw-bolder" th:text="${blog.getBlogId}">
+                                  <h6
+                                    class="mb-0 fw-bolder"
+                                    th:text="${blog.getId}"
+                                  >
                                     Sunil Joshi
                                   </h6>
                                   <span class="text-muted">Id</span>
                                 </div>
                               </div>
                             </td>
-                            <td class="px-0" th:text="${blog.getTitle}">Elite Admin</td>
-                            <td class="px-0 text-center" th:text="${blog.getUserId}"></td>
+                            <td class="px-0" th:text="${blog.getTitle}">
+                              Elite Admin
+                            </td>
+                            <td
+                              class="px-0 text-center"
+                              th:text="${blog.getCategory}"
+                            ></td>
                             <td
                               class="px-0 text-dark fw-medium text-center"
-                              th:text="${blog.getUpVote}"
+                              th:text="${blog.getCreatedAt}"
                             >
                               $3.9K
                             </td>
                             <td class="px-0 text-end fw-medium">
                               <span class="action-icons active">
                                 <a
-                                  th:data-test-id="${blog.getBlogId}"
-                                  th:href="@{/admin/blogs/edit_blog(blogId=${blog.blogId})}"
+                                  th:data-test-id="${blog.getId}"
+                                  th:href="@{/admin/blogs/edit_blog(blogId=${blog.getId})}"
                                   class="ps-3 edit-bloh-btn"
                                 >
                                   <i class="ti ti-edit fs-5"></i>
                                 </a>
                                 <a
-                                  th:data-test-id="${blog.getBlogId}"
+                                  th:data-test-id="${blog.getId}"
                                   href="javascript:void(0)"
                                   class="ps-3 delete-blog-btn"
                                 >
@@ -222,8 +262,14 @@
                   <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-end me-3">
                       <!-- Previous -->
-                      <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                        <a class="page-link" th:href="@{/admin/blogs(page=${currentPage - 1})}">
+                      <li
+                        class="page-item"
+                        th:classappend="${currentPage == 0} ? 'disabled'"
+                      >
+                        <a
+                          class="page-link"
+                          th:href="@{/admin/blogs(page=${currentPage - 1})}"
+                        >
                           Prev
                         </a>
                       </li>
@@ -249,7 +295,10 @@
                         class="page-item"
                         th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'"
                       >
-                        <a class="page-link" th:href="@{/admin/blogs(page=${currentPage + 1})}">
+                        <a
+                          class="page-link"
+                          th:href="@{/admin/blogs(page=${currentPage + 1})}"
+                        >
                           Next
                         </a>
                       </li>

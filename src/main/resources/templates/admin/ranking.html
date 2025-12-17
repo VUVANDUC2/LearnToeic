@@ -130,10 +130,6 @@
         <div class="container mt-5">
           <div class="row mb-4">
             <div class="col-md-4">
-              <h5 class="text-center">Top average tests score</h5>
-              <canvas id="chart1"></canvas>
-            </div>
-            <div class="col-md-4">
               <h5 class="text-center">Total users that do test</h5>
               <canvas id="chart2"></canvas>
             </div>
@@ -162,13 +158,10 @@
       const labels = ["User 1", "User 2", "User 3", "User 4", "User 5"];
       const scores = [850, 780, 920, 710, 880];
 
-
-      const label1 = [[${chart1_label}]];
-      const data1 = [[${chart1_data}]];
-
       const label2 = ["Total users that do test", "Total users"];
       const data2 = [[${chart2_data}]];
-
+      console.log(data2[0]);
+      console.log(data2[1]);
       const label3 = [[${chart3_label}]];
       const data3 = [[${chart3_data}]];
       console.log(label3[0]);
@@ -249,8 +242,14 @@
       }
 
       // Create each chart
-      createChart("chart1", "bar", "The average score of each test", label1, data1);
-      createChart("chart2", "pie", "Amount of people have done a test", label2, data2);
+
+      createChart(
+        "chart2",
+        "pie",
+        "Amount of people have done a test",
+        label2,
+        data2
+      );
       createChart(
         "chart3",
         "bar",
@@ -260,14 +259,7 @@
         100
       );
       createChart("chart4", "bar", "Take per tests", label4, data4, 50);
-      createChart(
-        "chart5",
-        "line",
-        "Tests taken by month",
-        label5,
-        data5,
-        30
-      );
+      createChart("chart5", "line", "Tests taken by month", label5, data5, 30);
       createChart(
         "chart6",
         "polarArea",
