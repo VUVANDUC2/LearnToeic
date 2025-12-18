@@ -740,6 +740,16 @@
       <!-- Nếu có q.context/passageLine → hiển thị ở đây -->
       <!-- <p class="text-muted small" th:text="${q.context}"></p> -->
 
+      <div class="mb-3" th:if="${q.hasTextHtml()}">
+        <div th:each="html : ${q.textHtmlBlocks}" th:utext="${html}"></div>
+      </div>
+
+      <div class="mb-3 question-text"
+           th:if="${q.questionText != null and !#strings.isEmpty(q.questionText)}"
+           th:text="${q.questionText}">
+        Nội dung câu hỏi
+      </div>
+
       <div class="answer-form"
      th:with="
          selChar=${selectedMap?.get(q.questionNumber)},
@@ -844,10 +854,19 @@
     </div>
     -->
 
-    <div th:each="q, it : ${pv.questions}"
-         class="card question-card p-3 p-lg-4"
-         th:attr="data-type=${q.questionType}"
-         th:id="${'q' + (it.index + 1)}">
+    <th:block th:each="q, it : ${pv.questions}">
+      <div class="card question-card p-3 p-lg-4"
+           th:if="${q.hasTextHtml()}">
+        <div class="fw-semibold mb-2"
+             th:text="${q.textHtmlTitle != null ? q.textHtmlTitle : ('Câu hỏi ' + q.questionNumber)}">
+          Câu hỏi 151-152
+        </div>
+        <div th:each="html : ${q.textHtmlBlocks}" th:utext="${html}"></div>
+      </div>
+
+      <div class="card question-card p-3 p-lg-4"
+           th:attr="data-type=${q.questionType}"
+           th:id="${'q' + (it.index + 1)}">
 
       <div class="d-flex align-items-center justify-content-between mb-2">
        <span class="badge text-bg-secondary">Câu [[${q.questionNumber}]]</span>
@@ -962,6 +981,7 @@
                 th:attr="data-qn=${q.questionNumber}">Xóa chọn</button>
       </div>
     </div>
+    </th:block>
      </div>
   </section>
 </th:block>

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.web.servlet.FlashMap;
@@ -31,16 +32,23 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/uploads/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/blog/**").permitAll()
-                .requestMatchers("/", "/auth/forgot-password", "/auth/login", "/auth/signup", "/search", "/playlist", "/error").permitAll()
-                .requestMatchers(HttpMethod.GET, "/tests/*/start").authenticated()
+                .requestMatchers("/", "/auth/forgot-password", "/auth/reset-password", "/auth/login", "/auth/signup", "/search", "/playlist", "/error").permitAll()
+                .requestMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/tests/*/start").hasAnyRole("ADMIN", "STUDENT")
                 .requestMatchers(HttpMethod.GET, "/tests/**", "/lessons/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/tests/**", "/take/**", "/attempts/**", "/progress/**", "/profile/**").authenticated()
-                .anyRequest().authenticated()
+                .requestMatchers(HttpMethod.POST, "/tests/**", "/take/**", "/attempts/**", "/progress/**", "/profile/**").hasAnyRole("ADMIN", "STUDENT")
+                .anyRequest().hasAnyRole("ADMIN", "STUDENT")
             )
             .oauth2Login(oauth2 -> oauth2
               .loginPage("/auth/login")
               .userInfoEndpoint(userInfo -> userInfo.oidcUserService(customOidcUserService))
-              .defaultSuccessUrl("/", true)
+              .successHandler((request, response, authentication) -> {
+                  addFlashMessage(request, response, "Dang nhap thanh cong!", "success");
+                  SavedRequestAwareAuthenticationSuccessHandler handler = new SavedRequestAwareAuthenticationSuccessHandler();
+                  handler.setDefaultTargetUrl(defaultTargetUrl(authentication));
+                  handler.setAlwaysUseDefaultTargetUrl(false);
+                  handler.onAuthenticationSuccess(request, response, authentication);
+              })
             )
             .formLogin(login -> login
                 .loginPage("/auth/login").permitAll()
@@ -50,7 +58,7 @@ public class SecurityConfig {
                 .successHandler((request, response, authentication) -> {
                     addFlashMessage(request, response, "Dang nhap thanh cong!", "success");
                     SavedRequestAwareAuthenticationSuccessHandler handler = new SavedRequestAwareAuthenticationSuccessHandler();
-                    handler.setDefaultTargetUrl("/");
+                    handler.setDefaultTargetUrl(defaultTargetUrl(authentication));
                     handler.setAlwaysUseDefaultTargetUrl(false);
                     handler.onAuthenticationSuccess(request, response, authentication);
                 })
@@ -67,6 +75,12 @@ public class SecurityConfig {
             );
 
         return http.build();
+    }
+
+    private String defaultTargetUrl(Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+            .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+        return isAdmin ? "/admin" : "/";
     }
 
     private void addFlashMessage(HttpServletRequest request, HttpServletResponse response,

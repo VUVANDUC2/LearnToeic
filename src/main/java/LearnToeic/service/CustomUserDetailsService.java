@@ -20,10 +20,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         User u = userRepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Email không tồn tại"));
 
+        String role = u.getRole();
+        if (role == null || role.isBlank()) role = "STUDENT";
+        role = role.trim().toUpperCase();
+        if (role.startsWith("ROLE_")) role = role.substring("ROLE_".length());
+
         return org.springframework.security.core.userdetails.User
                 .withUsername(u.getEmail())       // login dùng email
                 .password(u.getPassword())        // password đã mã hoá
-                .roles(u.getRole().replace("ROLE_", ""))
+                .roles(role)
                 .build();
         //return new CustomUserDetails(u);
     }

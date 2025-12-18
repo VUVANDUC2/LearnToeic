@@ -13,7 +13,7 @@ public class QuestionForTakeDTO {
         this.part = part;
     }
 
-    private Integer questionNumber;   // số thứ tự câu hỏi
+    private Integer questionNumber;
     private QuestionType questionType;
     public QuestionType getQuestionType() {
         if (questionType == null && part != null) {
@@ -34,14 +34,16 @@ public class QuestionForTakeDTO {
         this.questionType = questionType;
     }
 
-    private String questionText;  // nội dung câu hỏi
-    private String optionA;       // đáp án A
-    private String optionB;       // đáp án B
-    private String optionC;       // đáp án C
-    private String optionD;       // đáp án D
+    private String questionText;
+    private String optionA;
+    private String optionB;
+    private String optionC;
+    private String optionD;
     private Character selectedOption;
     private List<String> imageUrls = Collections.emptyList();
     private List<String> audioUrls = Collections.emptyList();
+    private List<String> textHtmlBlocks = Collections.emptyList();
+    private String textHtmlTitle;
 
     public Character getSelectedOption() {
         return selectedOption;
@@ -81,6 +83,30 @@ public class QuestionForTakeDTO {
 
     public boolean hasAudio() {
         return audioUrls != null && !audioUrls.isEmpty();
+    }
+
+    public List<String> getTextHtmlBlocks() {
+        return textHtmlBlocks;
+    }
+
+    public void setTextHtmlBlocks(List<String> textHtmlBlocks) {
+        if (textHtmlBlocks == null || textHtmlBlocks.isEmpty()) {
+            this.textHtmlBlocks = Collections.emptyList();
+        } else {
+            this.textHtmlBlocks = List.copyOf(textHtmlBlocks);
+        }
+    }
+
+    public boolean hasTextHtml() {
+        return textHtmlBlocks != null && !textHtmlBlocks.isEmpty();
+    }
+
+    public String getTextHtmlTitle() {
+        return textHtmlTitle;
+    }
+
+    public void setTextHtmlTitle(String textHtmlTitle) {
+        this.textHtmlTitle = textHtmlTitle;
     }
 
     public QuestionForTakeDTO() {
